@@ -19,22 +19,16 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	//Spring Arm Component to follow the camera behind the player
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class USpringArmComponent* SpringArmComp;
-
 	//Player follow camera
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class UCameraComponent* CameraComp;
+	class UCameraComponent* TopDownCameraComp;
 
 	//Called for forwards/backward input
-
 	void MoveForward(float InputAxis);
 
 	//called for left/right side input
-
 	void MoveRight(float InputAxis);
-
+	
 	//Request for Character to Crouch
 	void BeginCrouch();
 

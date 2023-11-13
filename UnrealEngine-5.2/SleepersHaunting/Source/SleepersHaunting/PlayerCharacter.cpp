@@ -3,42 +3,25 @@
 
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	// Instantiating your class Components
-
-	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
-
-	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
-
-	//Set the location and rotation of the Character Mesh Transform
+	
+	TopDownCameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCameraComp"));
+	// Attaching your class Components to the default character's Skeletal Mesh Component.
+	//TopDownCameraComp->SetupAttachment(GetMesh());
+	TopDownCameraComp->SetRelativeLocationAndRotation(FVector(0.0f, -600.0f, 500.0f), FQuat(FRotator(-30.0f, 90.0f, 0.0f)));
+	TopDownCameraComp->bUsePawnControlRotation = false;
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -90.0f), FQuat(FRotator(0.0f, -90.0f, 0.0f)));
-
-	// Attaching your class Components to the default character's Skeletal Mesh Component.
-
-	SpringArmComp->SetupAttachment(GetMesh());
-
-	CameraComp->SetupAttachment(SpringArmComp, USpringArmComponent::SocketName);
-
-	//Setting class variables of the spring arm
-
-	SpringArmComp->bUsePawnControlRotation = true;
-
-	//Setting class variables of the Character movement component
-
+	GetMesh()->SetupAttachment(TopDownCameraComp);
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
-
-	GetCharacterMovement()->bIgnoreBaseRotation = true;
+	GetCharacterMovement()->bIgnoreBaseRotation = false;
 }
 
 // Called when the game starts or when spawned
@@ -58,7 +41,9 @@ void APlayerCharacter::MoveForward(float AxisValue)
 
 		// Get forward vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, AxisValue);
+		
+		SetActorRotation(Direction.Rotation());
+		AddMovementInput(Direction.GetSafeNormal(), 1.0f);
 	}
 }
 
@@ -73,8 +58,8 @@ void APlayerCharacter::MoveRight(float AxisValue)
 		// Get right vector
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		// Add movement in that direction
-		AddMovementInput(Direction, AxisValue);
+		SetActorRotation(Direction.Rotation());
+		AddMovementInput(Direction.GetSafeNormal(), 1.0f);
 	}
 }
 
