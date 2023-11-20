@@ -7,8 +7,10 @@
 #include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
 
-class UInputMappingContext;
+class UCameraComponent;
+class USpringArmComponent;
 class UInputAction;
+class UInputMappingContext;
 
 UCLASS()
 class SLEEPERSHAUNTING_API APlayerCharacter : public ACharacter
@@ -23,6 +25,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputMappingContext* PlayerMappingContext;
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* MoveInputAction;
+	// UPROPERTY(EditAnywhere, Category = Input)
+	// TObjectPtr<UInputAction> JumpInputAction;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -30,42 +38,36 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual void PawnClientRestart() override;
+	// virtual void PawnClientRestart() override;
+	
+	/** Returns TopDownCameraComponent subobject **/
+	FORCEINLINE UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
+	/** Returns CameraBoom subobject **/
+	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+
+private:
+	/** Top down camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* TopDownCameraComponent;
+
+	/** Camera boom positioning the camera above the character */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* CameraBoom;
 	
 protected:
-	//Player follow camera
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class UCameraComponent* TopDownCameraComp;
 
 	//Called for forwards/backward input
-	void MoveForward(float InputAxis);
-
+	// void MoveForward(float InputAxis);
 	//called for left/right side input
-	void MoveRight(float InputAxis);
+	// void MoveRight(float InputAxis);
 	
-	//Request for Character to Crouch
-	void BeginCrouch();
-
-	//Request for Character to EndCrouch
-	void EndCrouch();
-
 	UFUNCTION()
 	void OnMove(const FInputActionValue& Value);
 
-	UFUNCTION()
-	void OnJumpStarted();
-
-	UFUNCTION()
-	void OnJumpCompleted();
-
-protected:
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UInputMappingContext> PlayerMappingContext;
-	
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UInputAction> MoveInputAction;
-
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UInputAction> JumpInputAction;
+	// UFUNCTION()
+	// void OnJumpStarted();
+	//
+	// UFUNCTION()
+	// void OnJumpCompleted();
 
 };
