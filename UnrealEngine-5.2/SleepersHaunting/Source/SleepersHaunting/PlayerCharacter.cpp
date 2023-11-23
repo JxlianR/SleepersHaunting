@@ -40,15 +40,17 @@ APlayerCharacter::APlayerCharacter()
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 	
+	
 	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 }
-
-
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// GetCharacterMovement()->JumpZVelocity = 420.0f;
+	// GetCharacterMovement()->AirControl = 0.2f;
 
 	if(APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -82,8 +84,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		if (JumpInputAction)
 		{
-			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started,this, &APlayerCharacter::Jump);
-			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started,this, &APlayerCharacter::StopJumping);
+			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACharacter::StopJumping);
 		}
 	}
 }
@@ -92,8 +94,12 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Your Message"));
 	// FInputActionValue::Axis2D Axis = Value.Get<FInputActionValue::Axis2D>();
-
 	const FVector2D MovementVector = Value.Get<FVector2D>();
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("OnMove Called: %s"), *MovementVector.ToString()));
+	}
 
 	if (!MovementVector.IsNearlyZero())
 	{
@@ -109,10 +115,25 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 
 void APlayerCharacter::Jump()
 {
-	Super::Jump();
+	if (CanJump())
+	{
+		FVector JumpImpulse = FVector(0.0f, 0.0f, 420.0f);
+		GetCharacterMovement()->AddImpulse(JumpImpulse, true);
+		Super::Jump();
+	}
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Jump Called"));
+	}
 }
 
 void APlayerCharacter::StopJumping()
 {
 	Super::StopJumping();
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("StopJumping Called"));
+	}
 }

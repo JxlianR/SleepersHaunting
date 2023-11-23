@@ -33,6 +33,7 @@ protected:
 	UInputAction* MoveInputAction;
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* JumpInputAction;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
