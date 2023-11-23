@@ -43,6 +43,8 @@ APlayerCharacter::APlayerCharacter()
 	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 }
 
+
+
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
@@ -77,29 +79,13 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		{
 			PlayerEnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered,this, &APlayerCharacter::OnMove);
 		}
-		
-		// if (MoveInputAction)
-		// {
-		// 	PlayerEnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered,
-		// 		this, &APlayerCharacter::OnMove);
-		// }
 
-		// if (JumpInputAction)
-		// {
-		// 	PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started,
-		// 		this, &APlayerCharacter::OnJumpStarted);
-		// 	PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Completed,
-		// 		this, &APlayerCharacter::OnJumpCompleted);
-		// }
+		if (JumpInputAction)
+		{
+			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started,this, &APlayerCharacter::Jump);
+			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started,this, &APlayerCharacter::StopJumping);
+		}
 	}
-	
-	/*PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
-	
-	PlayerInputComponent->BindAction("Jump",IE_Pressed,this,&ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump",IE_Released,this,&ACharacter::StopJumping);
-	PlayerInputComponent->BindAction("Crouch",IE_Pressed,this,&APlayerCharacter::BeginCrouch);
-	PlayerInputComponent->BindAction("Crouch",IE_Released,this,&APlayerCharacter::EndCrouch);*/
 }
 
 void APlayerCharacter::OnMove(const FInputActionValue& Value)
@@ -121,49 +107,12 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 	}
 }
 
-// void APlayerCharacter::OnJumpStarted()
-// {
-// }
-//
-// void APlayerCharacter::OnJumpCompleted()
-// {
-// }
+void APlayerCharacter::Jump()
+{
+	Super::Jump();
+}
 
-// void APlayerCharacter::PawnClientRestart()
-// {
-// 	Super::PawnClientRestart();
-//
-// 	
-// }
-
-// void APlayerCharacter::MoveForward(float AxisValue)
-// {
-// 	if ((Controller != nullptr) && (AxisValue != 0.0f))
-// 	{
-// 		// Find out which way is forward
-// 		const FRotator Rotation = Controller->GetControlRotation();
-// 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-//
-// 		// Get forward vector
-// 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-// 		
-// 		SetActorRotation(Direction.Rotation());
-// 		AddMovementInput(Direction.GetSafeNormal(), 1.0f);
-// 	}
-// }
-//
-// void APlayerCharacter::MoveRight(float AxisValue)
-// {
-// 	if ((Controller != nullptr) && (AxisValue != 0.0f))
-// 	{
-// 		// Find out which way is right
-// 		const FRotator Rotation = Controller->GetControlRotation();
-// 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-//
-// 		// Get right vector
-// 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-//
-// 		SetActorRotation(Direction.Rotation());
-// 		AddMovementInput(Direction.GetSafeNormal(), 1.0f);
-// 	}
-// }
+void APlayerCharacter::StopJumping()
+{
+	Super::StopJumping();
+}
