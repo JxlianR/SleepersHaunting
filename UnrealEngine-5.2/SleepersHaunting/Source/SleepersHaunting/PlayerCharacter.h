@@ -20,6 +20,8 @@ class SLEEPERSHAUNTING_API APlayerCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
+	virtual void Jump() override;
+	virtual void StopJumping() override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -29,8 +31,9 @@ protected:
 	UInputMappingContext* PlayerMappingContext;
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* MoveInputAction;
-	// UPROPERTY(EditAnywhere, Category = Input)
-	// TObjectPtr<UInputAction> JumpInputAction;
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* JumpInputAction;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -55,19 +58,6 @@ private:
 	USpringArmComponent* CameraBoom;
 	
 protected:
-
-	//Called for forwards/backward input
-	// void MoveForward(float InputAxis);
-	//called for left/right side input
-	// void MoveRight(float InputAxis);
-	
 	UFUNCTION()
 	void OnMove(const FInputActionValue& Value);
-
-	// UFUNCTION()
-	// void OnJumpStarted();
-	//
-	// UFUNCTION()
-	// void OnJumpCompleted();
-
 };

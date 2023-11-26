@@ -31,7 +31,7 @@ APlayerCharacter::APlayerCharacter()
 
 	// Don't rotate character to camera direction
 	bUseControllerRotationPitch = false;
-	bUseControllerRotationYaw = false;
+	bUseControllerRotationYaw = true;
 	bUseControllerRotationRoll = false;
 
 	// Configure character movement
@@ -40,6 +40,7 @@ APlayerCharacter::APlayerCharacter()
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 	
+	
 	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 }
 
@@ -47,6 +48,9 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// GetCharacterMovement()->JumpZVelocity = 420.0f;
+	// GetCharacterMovement()->AirControl = 0.2f;
 
 	if(APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -73,91 +77,63 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	if (UEnhancedInputComponent* PlayerEnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		PlayerEnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered,this, &APlayerCharacter::OnMove);
-		
-		// if (MoveInputAction)
-		// {
-		// 	PlayerEnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered,
-		// 		this, &APlayerCharacter::OnMove);
-		// }
+		if (MoveInputAction)
+		{
+			PlayerEnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered,this, &APlayerCharacter::OnMove);
+		}
 
-		// if (JumpInputAction)
-		// {
-		// 	PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started,
-		// 		this, &APlayerCharacter::OnJumpStarted);
-		// 	PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Completed,
-		// 		this, &APlayerCharacter::OnJumpCompleted);
-		// }
+		if (JumpInputAction)
+		{
+			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACharacter::StopJumping);
+		}
 	}
-	
-	/*PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
-	
-	PlayerInputComponent->BindAction("Jump",IE_Pressed,this,&ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump",IE_Released,this,&ACharacter::StopJumping);
-	PlayerInputComponent->BindAction("Crouch",IE_Pressed,this,&APlayerCharacter::BeginCrouch);
-	PlayerInputComponent->BindAction("Crouch",IE_Released,this,&APlayerCharacter::EndCrouch);*/
 }
 
 void APlayerCharacter::OnMove(const FInputActionValue& Value)
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Your Message"));
 	// FInputActionValue::Axis2D Axis = Value.Get<FInputActionValue::Axis2D>();
-
 	const FVector2D MovementVector = Value.Get<FVector2D>();
 
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("OnMove Called: %s"), *MovementVector.ToString()));
+	}
 
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	AddMovementInput(ForwardDirection, MovementVector.Y);
-	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-	AddMovementInput(RightDirection, MovementVector.X);
+	if (!MovementVector.IsNearlyZero())
+	{
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
+	
+		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		AddMovementInput(RightDirection, MovementVector.X);
+	}
 }
 
-// void APlayerCharacter::OnJumpStarted()
-// {
-// }
-//
-// void APlayerCharacter::OnJumpCompleted()
-// {
-// }
+void APlayerCharacter::Jump()
+{
+	if (CanJump())
+	{
+		FVector JumpImpulse = FVector(0.0f, 0.0f, 420.0f);
+		GetCharacterMovement()->AddImpulse(JumpImpulse, true);
+		Super::Jump();
+	}
 
-// void APlayerCharacter::PawnClientRestart()
-// {
-// 	Super::PawnClientRestart();
-//
-// 	
-// }
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Jump Called"));
+	}
+}
 
-// void APlayerCharacter::MoveForward(float AxisValue)
-// {
-// 	if ((Controller != nullptr) && (AxisValue != 0.0f))
-// 	{
-// 		// Find out which way is forward
-// 		const FRotator Rotation = Controller->GetControlRotation();
-// 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-//
-// 		// Get forward vector
-// 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-// 		
-// 		SetActorRotation(Direction.Rotation());
-// 		AddMovementInput(Direction.GetSafeNormal(), 1.0f);
-// 	}
-// }
-//
-// void APlayerCharacter::MoveRight(float AxisValue)
-// {
-// 	if ((Controller != nullptr) && (AxisValue != 0.0f))
-// 	{
-// 		// Find out which way is right
-// 		const FRotator Rotation = Controller->GetControlRotation();
-// 		const FRotator YawRotation(0, Rotation.Yaw, 0);
-//
-// 		// Get right vector
-// 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-//
-// 		SetActorRotation(Direction.Rotation());
-// 		AddMovementInput(Direction.GetSafeNormal(), 1.0f);
-// 	}
-// }
+void APlayerCharacter::StopJumping()
+{
+	Super::StopJumping();
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("StopJumping Called"));
+	}
+}
