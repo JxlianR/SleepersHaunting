@@ -42,9 +42,14 @@ void ARoomba::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Active)
+	if (Active && !Attached)
 	{
-		FollowPlayer();
+		Lifetime -= DeltaTime;
+		GetClosestPlayer();
+		FollowPlayer(DeltaTime);
+
+		if (Lifetime <= 0)
+			ChangeActiveState(false);
 	}
 }
 
@@ -63,22 +68,36 @@ void ARoomba::GetClosestPlayer()
 	}
 }
 
-void ARoomba::FollowPlayer()
+void ARoomba::FollowPlayer(float DeltaTime)
 {
-
+	FVector Direction = ClosestCharacter->GetActorLocation() - GetActorLocation();
+	Direction.Z = 0.0f;
+	SetActorLocation(GetActorLocation() + (Direction * Speed * DeltaTime));
 }
 
+void ARoomba::AttachToPlayer(APlayerCharacter* Player)
+{
+	// Needs to be tested in terms of how the roomba is behaving (where does it snap to and what happens when the player is moving)
+	const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
+	AttachToActor(Player, AttachmentRules, "Roomba");
+	Attached = true;
+}
 
 void ARoomba::ChangeActiveState(bool active)
 {
-	Active = !Active;
+	Active = active;
 
 	if (!Active)
 	{
 		SetActorLocation(StartLocation);
-		return;
+		Lifetime = InitialLifetime;
+		StartTimerToActivate();
 	}
-
-	GetClosestPlayer();
 }
+
+void ARoomba::StartTimerToActivate()
+{
+	// Timer to activate Roomba again
+}
+
 

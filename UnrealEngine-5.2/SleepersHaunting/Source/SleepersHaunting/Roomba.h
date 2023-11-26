@@ -33,7 +33,13 @@ protected:
 	void GetClosestPlayer();
 
 	UFUNCTION()
-	void FollowPlayer();
+	void FollowPlayer(float DeltaTime);
+
+	UFUNCTION()
+	void AttachToPlayer(APlayerCharacter* Player);
+
+	UFUNCTION()
+	void StartTimerToActivate();
 	
 protected:
 	UPROPERTY(VisibleAnywhere);
@@ -52,7 +58,10 @@ protected:
 	float Speed = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	float Lifetime = 30.0f;
+	float InitialLifetime = 30.0f;
+
+	UPROPERTY(EditAnywhere)
+	float TimerToActivate = 30.0f;
 
 	UPROPERTY()
 	APlayerCharacter* ClosestCharacter;
@@ -60,7 +69,11 @@ protected:
 	UPROPERTY()
 	TArray<APlayerCharacter*> Characters;
 	
-	bool Active;
+	bool Active = true;
+	
+	bool Attached;
+
+	float Lifetime = InitialLifetime;
 
 	
 	
