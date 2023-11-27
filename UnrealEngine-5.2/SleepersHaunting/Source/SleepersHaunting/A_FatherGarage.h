@@ -45,9 +45,13 @@ public:
 		void StartOpenDoorTimeline();
 
 	UFUNCTION()
+		void OnOpenDoorTimelineCompleted();
+
+
+	UFUNCTION()
 		void StartResetTimeline(); // Renamed from StartCloseDoorTimeline
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		UStaticMeshComponent* GarageDoorMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -68,6 +72,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
 		UCurveFloat* ResetDoorCurve;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UTimelineComponent* OpenDoorTimeline;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UTimelineComponent* ResetDoorTimeline;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		UTimelineComponent* CooldownDoorTimeline;
+
+
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
 		//UCurveFloat* CooldownCurve;
 
@@ -83,15 +97,6 @@ public:
 private:
 	FVector InitialDoorLocation;
 	FVector TargetDoorLocation;
-
-	UPROPERTY()
-		UTimelineComponent* OpenDoorTimeline;
-
-	UPROPERTY()
-		UTimelineComponent* ResetDoorTimeline;
-
-	UPROPERTY()
-		UTimelineComponent* CooldownDoorTimeline; 
 
 	FTimerHandle CooldownTimerHandle;
 	FTimerHandle OpenDoorTimerHandle;
