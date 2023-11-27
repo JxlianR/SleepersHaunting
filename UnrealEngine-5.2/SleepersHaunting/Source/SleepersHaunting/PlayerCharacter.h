@@ -41,6 +41,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* TestDebugInputAction;
 
+	UPROPERTY(EditAnywhere)
+	float MovementSpeed = 1.0f;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -55,6 +58,10 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
+	// Julian Code:
+	UFUNCTION()
+	void HandleRoombaEvent();
+	
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

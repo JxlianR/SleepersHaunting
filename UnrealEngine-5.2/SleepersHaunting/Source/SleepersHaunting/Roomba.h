@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "PlayerCharacter.h"
+#include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "Roomba.generated.h"
+
+DECLARE_EVENT(ARoomba, RoombaAttachedEvent);
 
 UCLASS()
 class SLEEPERSHAUNTING_API ARoomba : public AActor
@@ -25,6 +28,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	RoombaAttachedEvent OnRoombaAttachedEvent;
+
+	UFUNCTION()
+	void TriggerRoombaAttachedEvent();
+
 protected:
 	UFUNCTION()
 	void ChangeActiveState(bool active);
@@ -39,9 +47,6 @@ protected:
 	void AttachToPlayer(APlayerCharacter* Player);
 
 	UFUNCTION()
-	void StartTimerToActivate();
-
-	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 protected:
@@ -54,29 +59,35 @@ protected:
 	UPROPERTY(VisibleAnywhere);
 	TObjectPtr<USphereComponent> Collider;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	FVector StartLocation;
+
+	UPROPERTY()
+	FRotator StartRotation;
 	
 	UPROPERTY(EditAnywhere)
 	float Speed = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	float InitialLifetime = 30.0f;
+	float InitialLifetime = 10.0f;
 
 	UPROPERTY(EditAnywhere)
-	float TimerToActivate = 30.0f;
+	float InitialTimerToActivate = 10.0f;
 
 	UPROPERTY()
 	APlayerCharacter* ClosestCharacter;
 
 	UPROPERTY()
 	TArray<APlayerCharacter*> Characters;
-	
+
+private:
 	bool Active = true;
 	
 	bool Attached;
 
 	float Lifetime = InitialLifetime;
+
+	float TimerToActivate = InitialTimerToActivate;
 
 	
 	

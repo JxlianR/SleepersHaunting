@@ -8,6 +8,7 @@
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Roomba.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h" 
 
@@ -64,6 +65,11 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(PlayerMappingContext, 0);
 		}
 	}
+
+	// Bind function to event of Roomba
+	ARoomba* Roomba = Cast<ARoomba>(GetWorld());
+	if (Roomba)
+		Roomba->OnRoombaAttachedEvent.AddUObject(this, &APlayerCharacter::HandleRoombaEvent);
 }
 
 // Called every frame
@@ -103,11 +109,6 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Your Message"));
 	// FInputActionValue::Axis2D Axis = Value.Get<FInputActionValue::Axis2D>();
 	const FVector2D MovementVector = Value.Get<FVector2D>();
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("OnMove Called: %s"), *MovementVector.ToString()));
-	}
 
 	if (!MovementVector.IsNearlyZero())
 	{
@@ -173,4 +174,10 @@ void APlayerCharacter::StopJumping()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("StopJumping Called"));
 	}
+}
+
+//Julian Code:
+void APlayerCharacter::HandleRoombaEvent()
+{
+	MovementSpeed = 0;
 }

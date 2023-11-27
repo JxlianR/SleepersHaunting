@@ -4,6 +4,7 @@
 #include "Roomba.h"
 
 #include "EngineUtils.h"
+#include "Components/SphereComponent.h"
 
 // Sets default values
 ARoomba::ARoomba()
@@ -43,16 +44,29 @@ void ARoomba::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Active && !Attached)
+	//if (Attached)
+	//	return;
+	
+	if (Active)
 	{
 		Lifetime -= DeltaTime;
-		GetClosestPlayer();
-		FollowPlayer(DeltaTime);
 
 		if (Lifetime <= 0)
 			ChangeActiveState(false);
 
+		if (Attached) return;
+		
+		GetClosestPlayer();
+		FollowPlayer(DeltaTime);
+
 		return;
+	}
+
+	if (!Active)
+	{
+		TimerToActivate -= GetWorld()->DeltaTimeSeconds;
+		if (TimerToActivate <= 0)
+			ChangeActiveState(true);
 	}
 }
 
@@ -83,6 +97,7 @@ void ARoomba::AttachToPlayer(APlayerCharacter* Player)
 	// Needs to be tested in terms of how the roomba is behaving (where does it snap to and what happens when the player is moving)
 	const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, true);
 	AttachToActor(Player, AttachmentRules, "Roomba");
+	TriggerRoombaAttachedEvent();
 	Attached = true;
 }
 
@@ -92,15 +107,17 @@ void ARoomba::ChangeActiveState(bool active)
 
 	if (!Active)
 	{
+		const FDetachmentTransformRules DetachmentRules = FDetachmentTransformRules(EDetachmentRule::KeepWorld, true);
+		Attached = false;
+		DetachFromActor(DetachmentRules);
 		SetActorLocation(StartLocation);
+		SetActorRotation(StartRotation);
 		Lifetime = InitialLifetime;
-		StartTimerToActivate();
 	}
-}
-
-void ARoomba::StartTimerToActivate()
-{
-	// Timer to activate Roomba again
+	else
+	{
+		TimerToActivate = InitialTimerToActivate;
+	}
 }
 
 void ARoomba::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -111,5 +128,11 @@ void ARoomba::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 		AttachToPlayer(ClosestCharacter);
 	}
 }
+
+void ARoomba::TriggerRoombaAttachedEvent()
+{
+	OnRoombaAttachedEvent.Broadcast();
+}
+
 
 
