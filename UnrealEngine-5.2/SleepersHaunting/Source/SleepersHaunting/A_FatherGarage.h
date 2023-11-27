@@ -4,17 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/TimelineComponent.h"
 #include "A_FatherGarage.generated.h"
-//#include "Components/StaticMeshComponent.h"
-//#include "Components/TimelineComponent.h"
-
 
 UCLASS()
 class SLEEPERSHAUNTING_API AA_FatherGarage : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AA_FatherGarage();
 
@@ -22,60 +21,95 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
-	
 	virtual void Tick(float DeltaTime) override;
-	/*
-	UFUNCTION()
-		void OnInteractedPressed();
+
+	//UFUNCTION()
+		//void OpenDoor();
+
+	UFUNCTION(BlueprintCallable)
+		void SetHandler1(bool NewValue);
+
+	UFUNCTION(BlueprintCallable)
+		void SetHandler2(bool NewValue);
+
+	UFUNCTION(BlueprintCallable)
+		void SetLosingConditionTrue();
+
 
 	UFUNCTION()
-		void CoolDoorUpdate(float value);
+		void StartCooldownTimer();
 
 	UFUNCTION()
-		void OpenDoorUpdate(float value);
+		void StartOpenDoorTimeline();
 
 	UFUNCTION()
-		void ResetDoorUpdate(float value);
-		*/
+		void StartResetTimeline(); // Renamed from StartCloseDoorTimeline
 
-private:
-	/*
-	UPROPERTY(EditAnywhere)
-		float ZOffset; //Adds plus the initial location of the z.
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		UStaticMeshComponent* GarageDoorMesh;
 
-	UPROPERTY(EditAnywhere)
-		UCurveFloat* CooldownCurve;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float ZOffset;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float OpenDoorDuration;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float ResetDoorDuration; // Renamed from CloseDoorDuration
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float CooldownDuration; // Added CooldownDuration
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
 		UCurveFloat* OpenDoorCurve;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
 		UCurveFloat* ResetDoorCurve;
 
-	UPROPERTY(EditAnywhere)
-		float TargetDoorLocation;
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+		//UCurveFloat* CooldownCurve;
 
-	UPROPERTY(EditAnywhere)
-		FVector InitialDoorLocation; //Use this to store the initial postion of the garage door
+	UPROPERTY(BlueprintReadOnly)
+		bool bLosingCondition;
 
-	UPROPERTY(EditAnywhere)
-		float bCanInteract;
+	UPROPERTY(BlueprintReadOnly)
+		bool bHandler1;
 
-	UPROPERTY(EditAnywhere)
-		FKey InteractKey;
+	UPROPERTY(BlueprintReadOnly)
+		bool bHandler2;
 
-	UPROPERTY()
-		UTimelineComponent* CooldownDoorTimeline;	
+private:
+	FVector InitialDoorLocation;
+	FVector TargetDoorLocation;
 
 	UPROPERTY()
 		UTimelineComponent* OpenDoorTimeline;
 
 	UPROPERTY()
 		UTimelineComponent* ResetDoorTimeline;
-		*/
 
+	UPROPERTY()
+		UTimelineComponent* CooldownDoorTimeline; 
+
+	FTimerHandle CooldownTimerHandle;
+	FTimerHandle OpenDoorTimerHandle;
+	FTimerHandle ResetDoorTimerHandle;
+
+
+	UFUNCTION()
+		void OpenDoorUpdate(float Value);
+
+	UFUNCTION()
+		void ResetDoorUpdate(float Value); // Renamed from CloseDoorUpdate
+
+	//UFUNCTION()
+		//void CooldownDoorUpdate(float Value);
+
+	//UFUNCTION()
+		//void StartResetDoorTimer();
+
+	//UFUNCTION()
+		//void ResetDoor();
 };

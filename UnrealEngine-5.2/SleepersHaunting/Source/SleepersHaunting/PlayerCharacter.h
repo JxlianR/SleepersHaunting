@@ -5,6 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+
+//Classes
+#include "RoomsManager.h"
+
 #include "PlayerCharacter.generated.h"
 
 class UCameraComponent;
@@ -34,6 +38,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* JumpInputAction;
 
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* TestDebugInputAction;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -56,8 +63,16 @@ private:
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
+
+	//Joao Code---------------------------------------------------------------------------------------
+	//Getting the ARoomManager Class
+	ARoomsManager* RoomManagerVariable;
 	
 protected:
 	UFUNCTION()
 	void OnMove(const FInputActionValue& Value);
+
+	//Joao Code---------------------------------------------------------------------------------------
+	UFUNCTION()
+	void CallRoomManagerDebugFunctions();
 };

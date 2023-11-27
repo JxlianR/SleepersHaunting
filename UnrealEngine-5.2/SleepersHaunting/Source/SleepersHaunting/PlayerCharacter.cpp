@@ -9,6 +9,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h" 
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -51,6 +52,8 @@ void APlayerCharacter::BeginPlay()
 
 	// GetCharacterMovement()->JumpZVelocity = 420.0f;
 	// GetCharacterMovement()->AirControl = 0.2f;
+	RoomManagerVariable = Cast<ARoomsManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ARoomsManager::StaticClass()));
+
 
 	if(APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -87,6 +90,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACharacter::StopJumping);
 		}
+
+		if (TestDebugInputAction) 
+		{
+			//PlayerEnhancedInputComponent->BindAction(TestDebugInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::CallRoomManagerDebugFunctions);
+		}
 	}
 }
 
@@ -111,6 +119,35 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
+}
+
+void APlayerCharacter::CallRoomManagerDebugFunctions()
+{
+	/*
+	if (RoomManagerVariable)
+	{
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+
+		if (PlayerController)
+		{
+			// Get the key binding for the DebugAction input action
+			bool bIsDebugActionPressed = PlayerController->IsInputKeyDown(EKeys::One);
+
+			// Determine the room ID based on the pressed key
+			int32 RoomID = 1;  // Default room ID
+			if (bIsDebugActionPressed)
+			{
+				RoomID = 1;
+			}
+			// ... repeat for other keys ...
+
+			// Call RoomManager's debug functions with the specified room ID
+			RoomManagerVariable->DebugConnectedRooms(RoomID);
+			RoomManagerVariable->DebugWaypoints(RoomID);
+			RoomManagerVariable->DebugRandomConnectedRoomID(RoomID);
+		}
+	}
+	*/
 }
 
 void APlayerCharacter::Jump()
