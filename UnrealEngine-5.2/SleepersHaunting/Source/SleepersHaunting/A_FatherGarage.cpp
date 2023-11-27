@@ -163,7 +163,7 @@ void AA_FatherGarage::ResetDoorUpdate(float Value)
 		{
 			// Calculate the new location based on the curve and update the door's position
 			FVector NewLocation = FMath::Lerp(TargetDoorLocation, InitialDoorLocation, Value);
-			GarageDoorMesh->SetWorldLocation(NewLocation);
+			GarageDoorMesh->SetRelativeLocation(NewLocation);
 		}
 	}
 }
