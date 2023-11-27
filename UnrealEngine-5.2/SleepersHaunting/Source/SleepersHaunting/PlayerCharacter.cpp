@@ -67,7 +67,7 @@ void APlayerCharacter::BeginPlay()
 	}
 
 	// Bind function to event of Roomba
-	ARoomba* Roomba = Cast<ARoomba>(GetWorld());
+	ARoomba* Roomba = nullptr;
 	if (Roomba)
 		Roomba->OnRoombaAttachedEvent.AddUObject(this, &APlayerCharacter::HandleRoombaEvent);
 }
@@ -108,7 +108,7 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 {
 	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Your Message"));
 	// FInputActionValue::Axis2D Axis = Value.Get<FInputActionValue::Axis2D>();
-	const FVector2D MovementVector = Value.Get<FVector2D>();
+	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (!MovementVector.IsNearlyZero())
 	{
@@ -116,9 +116,9 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 		const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 	
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(ForwardDirection, MovementVector.Y);
+		AddMovementInput(ForwardDirection, MovementVector.Y * MovementSpeed);
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		AddMovementInput(RightDirection, MovementVector.X);
+		AddMovementInput(RightDirection, MovementVector.X * MovementSpeed);
 	}
 }
 
@@ -179,5 +179,5 @@ void APlayerCharacter::StopJumping()
 //Julian Code:
 void APlayerCharacter::HandleRoombaEvent()
 {
-	MovementSpeed = 0;
+	MovementSpeed = 0.5f;
 }
