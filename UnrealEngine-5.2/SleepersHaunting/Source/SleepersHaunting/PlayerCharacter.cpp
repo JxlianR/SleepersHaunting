@@ -67,9 +67,13 @@ void APlayerCharacter::BeginPlay()
 	}
 
 	// Bind function to event of Roomba
-	ARoomba* Roomba = nullptr;
+	ARoomba* Roomba = Cast<ARoomba>(UGameplayStatics::GetActorOfClass(GetWorld(), ARoomba::StaticClass()));
 	if (Roomba)
-		Roomba->OnRoombaAttachedEvent.AddUObject(this, &APlayerCharacter::HandleRoombaEvent);
+	{
+		FScriptDelegate RoombaAttachmentDelegate;
+		RoombaAttachmentDelegate.BindUFunction(this, "HandleRoombaEvent");
+		Roomba->OnRoombaAttachedEvent.Add(RoombaAttachmentDelegate);	
+	}
 }
 
 // Called every frame
@@ -176,7 +180,7 @@ void APlayerCharacter::StopJumping()
 	}
 }
 
-//Julian Code:
+//Julian Code: Function that gets triggered through Roomba Event
 void APlayerCharacter::HandleRoombaEvent()
 {
 	MovementSpeed = 0.5f;

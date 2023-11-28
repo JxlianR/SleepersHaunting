@@ -9,7 +9,7 @@
 #include "GameFramework/Actor.h"
 #include "Roomba.generated.h"
 
-DECLARE_EVENT(ARoomba, RoombaAttachedEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttachedToPlayer);
 
 UCLASS()
 class SLEEPERSHAUNTING_API ARoomba : public AActor
@@ -28,7 +28,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	RoombaAttachedEvent OnRoombaAttachedEvent;
+	FOnAttachedToPlayer OnRoombaAttachedEvent;
 
 	UFUNCTION()
 	void TriggerRoombaAttachedEvent();
