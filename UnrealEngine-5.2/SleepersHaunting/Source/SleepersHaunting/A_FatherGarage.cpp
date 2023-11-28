@@ -30,7 +30,7 @@ AA_FatherGarage::AA_FatherGarage()
 
 	if (ResetDoorCurve)
 	{
-		FOnTimelineFloat ResetDoorUpdateFunction;
+		FOnTimelineFloat ResetDoorUpdateFunction;	
 		ResetDoorUpdateFunction.BindUFunction(this, FName("ResetDoorUpdate"));
 		ResetDoorTimeline->AddInterpFloat(ResetDoorCurve, ResetDoorUpdateFunction);
 	}
@@ -147,9 +147,12 @@ void AA_FatherGarage::OpenDoorUpdate(float Value)
 	{
 		if (GarageDoorMesh)
 		{
+			
 			// Calculate the new location based on the curve and update the door's position
 			FVector NewLocation = FMath::Lerp(InitialDoorLocation, TargetDoorLocation, Value);
-			GarageDoorMesh->SetRelativeLocation(NewLocation);
+			//FVector NewLocation = FMath::Lerp(FVector::ZeroVector, FVector(0.0f, 0.0f, ZOffset), Value);
+			//GarageDoorMesh->SetRelativeLocation(NewLocation);
+			SetActorLocation(NewLocation);
 		}
 	}
 }
@@ -163,7 +166,9 @@ void AA_FatherGarage::ResetDoorUpdate(float Value)
 		{
 			// Calculate the new location based on the curve and update the door's position
 			FVector NewLocation = FMath::Lerp(TargetDoorLocation, InitialDoorLocation, Value);
-			GarageDoorMesh->SetRelativeLocation(NewLocation);
+			//GarageDoorMesh->SetRelativeLocation(NewLocation);
+			SetActorLocation(NewLocation);
+
 		}
 	}
 }
