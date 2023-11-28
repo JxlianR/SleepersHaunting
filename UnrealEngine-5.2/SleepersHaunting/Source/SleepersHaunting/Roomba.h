@@ -7,12 +7,14 @@
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
+#include "JumpableInterface.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "Roomba.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttachedToPlayer);
 
 UCLASS()
-class SLEEPERSHAUNTING_API ARoomba : public AActor
+class SLEEPERSHAUNTING_API ARoomba : public AActor, public IJumpableInterface
 {
 	GENERATED_BODY()
 	
@@ -32,6 +34,8 @@ public:
 
 	UFUNCTION()
 	void TriggerRoombaAttachedEvent();
+
+	virtual void JumpedOn_Implementation() override;
 
 protected:
 	UFUNCTION()
@@ -69,7 +73,7 @@ protected:
 	float Speed = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	float InitialLifetime = 10.0f;
+	float InitialLifetime = 30.0f;
 
 	UPROPERTY(EditAnywhere)
 	float InitialTimerToActivate = 10.0f;
@@ -88,8 +92,4 @@ private:
 	float Lifetime = InitialLifetime;
 
 	float TimerToActivate = InitialTimerToActivate;
-
-	
-	
-
 };

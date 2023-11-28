@@ -126,6 +126,41 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 	}
 }
 
+void APlayerCharacter::Jump()
+{
+	if (CanJump())
+	{
+		FVector JumpImpulse = FVector(0.0f, 0.0f, 420.0f);
+		GetCharacterMovement()->AddImpulse(JumpImpulse, true);
+		Super::Jump();
+	}
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Jump Called"));
+	}
+
+	TArray<AActor*> Actors;
+	GetOverlappingActors(Actors);
+
+	for(AActor* Actor : Actors)
+	{
+		IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Actor);
+		if (JumpableInterface)
+			JumpableInterface->Execute_JumpedOn(Actor);
+	}
+}
+
+void APlayerCharacter::StopJumping()
+{
+	Super::StopJumping();
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("StopJumping Called"));
+	}
+}
+
 void APlayerCharacter::CallRoomManagerDebugFunctions()
 {
 	/*
@@ -153,31 +188,6 @@ void APlayerCharacter::CallRoomManagerDebugFunctions()
 		}
 	}
 	*/
-}
-
-void APlayerCharacter::Jump()
-{
-	if (CanJump())
-	{
-		FVector JumpImpulse = FVector(0.0f, 0.0f, 420.0f);
-		GetCharacterMovement()->AddImpulse(JumpImpulse, true);
-		Super::Jump();
-	}
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Jump Called"));
-	}
-}
-
-void APlayerCharacter::StopJumping()
-{
-	Super::StopJumping();
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("StopJumping Called"));
-	}
 }
 
 //Julian Code: Function that gets triggered through Roomba Event

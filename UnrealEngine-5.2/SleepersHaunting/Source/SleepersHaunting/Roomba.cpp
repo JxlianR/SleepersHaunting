@@ -5,6 +5,7 @@
 
 #include "EngineUtils.h"
 #include "Components/SphereComponent.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 
 // Sets default values
 ARoomba::ARoomba()
@@ -22,7 +23,6 @@ ARoomba::ARoomba()
 	Collider->SetupAttachment(Roomba);
 
 	Collider->OnComponentBeginOverlap.AddDynamic(this, &ARoomba::OnOverlapBegin);
-
 }
 
 // Called when the game starts or when spawned
@@ -44,8 +44,8 @@ void ARoomba::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//if (Attached)
-	//	return;
+	if (Attached)
+		return;
 	
 	if (Active)
 	{
@@ -53,8 +53,6 @@ void ARoomba::Tick(float DeltaTime)
 
 		if (Lifetime <= 0)
 			ChangeActiveState(false);
-
-		if (Attached) return;
 		
 		GetClosestPlayer();
 		FollowPlayer(DeltaTime);
@@ -95,7 +93,7 @@ void ARoomba::FollowPlayer(float DeltaTime)
 void ARoomba::AttachToPlayer(APlayerCharacter* Player)
 {
 	// Needs to be tested in terms of how the roomba is behaving (where does it snap to and what happens when the player is moving)
-	const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, true);
+	const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, false);
 	AttachToActor(Player, AttachmentRules, "Roomba");
 	TriggerRoombaAttachedEvent();
 	Attached = true;
@@ -132,6 +130,11 @@ void ARoomba::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 void ARoomba::TriggerRoombaAttachedEvent()
 {
 	OnRoombaAttachedEvent.Broadcast();
+}
+
+void ARoomba::JumpedOn_Implementation()
+{
+	ChangeActiveState(false);
 }
 
 
