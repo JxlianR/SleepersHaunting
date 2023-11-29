@@ -8,6 +8,8 @@ AA_SecurityMonitor::AA_SecurityMonitor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	CurrentCameraIndex = 0;
+
 
 }
 
@@ -28,27 +30,29 @@ void AA_SecurityMonitor::SetNumCameras()
 void AA_SecurityMonitor::NextCamera()
 {
 	CurrentCameraIndex = (CurrentCameraIndex + 1) % NumCameras;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("CurrentCameraIndex: %d"), CurrentCameraIndex));
 	UpdateMonitorView();
 }
 
 void AA_SecurityMonitor::PreviousCamera()
 {
 	CurrentCameraIndex = (CurrentCameraIndex - 1 + NumCameras) % NumCameras;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("CurrentCameraIndex: %d"), CurrentCameraIndex));
 	UpdateMonitorView();
 }
 
 void AA_SecurityMonitor::UpdateMonitorView()
 {
 	UStaticMeshComponent* MonitorScreenMesh = FindComponentByClass<UStaticMeshComponent>();
+
 	if (MonitorScreenMesh)
 	{
-		UMaterialInstanceDynamic* MID = MonitorScreenMesh->CreateAndSetMaterialInstanceDynamic(0);
-		if (MID)
+		if (CurrentCameraIndex >= 0 && CurrentCameraIndex < CameraMaterials.Num())
 		{
-			MID->SetTextureParameterValue("CameraTexture", CameraRenderTargets[CurrentCameraIndex]);
+			UMaterialInterface* NewMaterial = CameraMaterials[CurrentCameraIndex];
+			// Set the new material
+			MonitorScreenMesh->SetMaterial(0, NewMaterial);
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Changed Camera"));
 		}
 	}
 }
-
-
-

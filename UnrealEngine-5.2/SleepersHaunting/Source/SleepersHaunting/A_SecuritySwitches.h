@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/BoxComponent.h"
 #include "A_SecurityMonitor.h"
+#include "PlayerCharacter.h"
+
 #include "A_SecuritySwitches.generated.h"
 
 UCLASS()
@@ -25,8 +28,25 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Switch")
 		void ActivateSwitch();
 
+	UPROPERTY(VisibleAnywhere);
+	TObjectPtr<UStaticMeshComponent> SecuritySwitch;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Garage Handler")
 		class AA_SecurityMonitor* FindSecurityCamera;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite);
+	TObjectPtr<UBoxComponent> Collider;
+
+	UPROPERTY()
+		APlayerCharacter* ClosestCharacter;
+
+	UPROPERTY()
+		TArray<APlayerCharacter*> Characters;
+
+	UFUNCTION()
+		void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void GetClosestPlayer();
 };
 

@@ -24,7 +24,7 @@ public:
 		TArray<UTextureRenderTarget2D*> CameraRenderTargets;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
-		int32 CurrentCameraIndex = 0;
+		int32 CurrentCameraIndex;
 
 	UFUNCTION(BlueprintCallable, Category = "Camera")
 		void NextCamera();
@@ -38,6 +38,8 @@ public:
 private:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		TArray<UMaterialInterface*> CameraMaterials;
+
+
 
 	int32 NumCameras = 0; // Automatically set during BeginPlay
 
