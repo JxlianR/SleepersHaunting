@@ -37,7 +37,9 @@ protected:
 	UInputAction* MoveInputAction;
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* JumpInputAction;
-
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* GrabInputAction;
+	
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* TestDebugInputAction;
 
@@ -78,8 +80,13 @@ private:
 protected:
 	UFUNCTION()
 	void OnMove(const FInputActionValue& Value);
+	
+public:
+	UFUNCTION()
+	void TryGrab();
 
 	//Joao Code---------------------------------------------------------------------------------------
+protected:
 	UFUNCTION()
 	void CallRoomManagerDebugFunctions();
 };

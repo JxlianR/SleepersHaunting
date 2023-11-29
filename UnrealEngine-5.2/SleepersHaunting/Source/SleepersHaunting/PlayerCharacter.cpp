@@ -10,7 +10,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "Roomba.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Kismet/GameplayStatics.h" 
+#include "Kismet/GameplayStatics.h"
+#include "GrabbableObject.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -101,6 +102,12 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACharacter::StopJumping);
 		}
 
+		if (GrabInputAction)
+		{
+			PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::TryGrab);
+		}
+			
+
 		if (TestDebugInputAction) 
 		{
 			//PlayerEnhancedInputComponent->BindAction(TestDebugInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::CallRoomManagerDebugFunctions);
@@ -123,6 +130,25 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 		AddMovementInput(ForwardDirection, MovementVector.Y * MovementSpeed);
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(RightDirection, MovementVector.X * MovementSpeed);
+	}
+}
+
+void APlayerCharacter::TryGrab()
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Grab Called"));
+	}
+	TArray<AActor*> Actors;
+	GetOverlappingActors(Actors);
+
+	for(AActor* Actor : Actors)
+	{
+		IGrabbableInterface* GrabbableInterface = Cast<IGrabbableInterface>(Actor);
+		if (GrabbableInterface)
+		{
+			GrabbableInterface->Execute_Grab(this, Actor);
+		}
 	}
 }
 
