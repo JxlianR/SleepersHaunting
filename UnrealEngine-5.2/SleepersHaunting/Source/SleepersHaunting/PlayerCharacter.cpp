@@ -166,15 +166,15 @@ void APlayerCharacter::Jump()
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Jump Called"));
 	}
 
-	TArray<AActor*> Actors;
-	GetOverlappingActors(Actors);
-
-	for(AActor* Actor : Actors)
-	{
-		IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Actor);
-		if (JumpableInterface)
-			JumpableInterface->Execute_JumpedOn(Actor);
-	}
+	// TArray<AActor*> Actors;
+	// GetOverlappingActors(Actors);
+	//
+	// for(AActor* Actor : Actors)
+	// {
+	// 	IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Actor);
+	// 	if (JumpableInterface)
+	// 		JumpableInterface->Execute_JumpedOn(Actor);
+	// }
 }
 
 void APlayerCharacter::StopJumping()
@@ -220,4 +220,18 @@ void APlayerCharacter::CallRoomManagerDebugFunctions()
 void APlayerCharacter::HandleRoombaEvent()
 {
 	MovementSpeed = 0.5f;
+}
+
+void APlayerCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,
+	bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+{
+	//Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+	float CharacterZVelocity = GetVelocity().Z;
+
+	if (CharacterZVelocity >= 1.0f)
+	{
+		IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Other);
+		if (JumpableInterface)
+			JumpableInterface->Execute_JumpedOn(Other);
+	}
 }

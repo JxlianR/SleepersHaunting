@@ -5,6 +5,7 @@
 
 #include "EngineUtils.h"
 #include "Components/SphereComponent.h"
+#include "Net/UnrealNetwork.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 
 // Sets default values
@@ -23,6 +24,8 @@ ARoomba::ARoomba()
 	Collider->SetupAttachment(Roomba);
 
 	Collider->OnComponentBeginOverlap.AddDynamic(this, &ARoomba::OnOverlapBegin);
+
+	SetReplicates(true);
 }
 
 // Called when the game starts or when spawned
@@ -44,8 +47,8 @@ void ARoomba::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Attached)
-		return;
+	//if (Attached)
+	//	return;
 	
 	if (Active)
 	{
@@ -53,6 +56,8 @@ void ARoomba::Tick(float DeltaTime)
 
 		if (Lifetime <= 0)
 			ChangeActiveState(false);
+
+		if (Attached) return;
 		
 		GetClosestPlayer();
 		FollowPlayer(DeltaTime);
@@ -68,29 +73,42 @@ void ARoomba::Tick(float DeltaTime)
 	}
 }
 
-void ARoomba::GetClosestPlayer()
+void ARoomba::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	float HighestDistance = 0;
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ARoomba, ClosestCharacter);
+	DOREPLIFETIME(ARoomba, AttachedCharacter);
+	DOREPLIFETIME(ARoomba, StartLocation);
+	DOREPLIFETIME(ARoomba, Characters);
+}
 
-	for(APlayerCharacter* Character : Characters)
+
+void ARoomba::GetClosestPlayer_Implementation()
+{
+	ShortestDistance = 1000000.0f;
+
+	for(int i = 0; i < Characters.Num(); i++)
 	{
-		float Distance = GetDistanceTo(Character);
-		if (Distance > HighestDistance)
+		if (ClosestCharacter == Characters[i]) continue;
+		
+		float Distance = GetDistanceTo(Characters[i]);
+		if (Distance < ShortestDistance)
 		{
-			HighestDistance = Distance;
-			ClosestCharacter = Character;
+			ShortestDistance = Distance;
+			ClosestCharacter = Characters[i];
 		}
 	}
 }
 
-void ARoomba::FollowPlayer(float DeltaTime)
+void ARoomba::FollowPlayer_Implementation(float DeltaTime)
 {
+	if (ClosestCharacter == nullptr) return;
 	FVector Direction = ClosestCharacter->GetActorLocation() - GetActorLocation();
 	Direction.Z = 0.0f;
 	SetActorLocation(GetActorLocation() + (Direction * Speed * DeltaTime));
 }
 
-void ARoomba::AttachToPlayer(APlayerCharacter* Player)
+void ARoomba::AttachToPlayer_Implementation(APlayerCharacter* Player)
 {
 	// Needs to be tested in terms of how the roomba is behaving (where does it snap to and what happens when the player is moving)
 	const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, false);
@@ -99,7 +117,7 @@ void ARoomba::AttachToPlayer(APlayerCharacter* Player)
 	Attached = true;
 }
 
-void ARoomba::ChangeActiveState(bool active)
+void ARoomba::ChangeActiveState_Implementation(bool active)
 {
 	Active = active;
 
@@ -108,6 +126,9 @@ void ARoomba::ChangeActiveState(bool active)
 		const FDetachmentTransformRules DetachmentRules = FDetachmentTransformRules(EDetachmentRule::KeepWorld, true);
 		Attached = false;
 		DetachFromActor(DetachmentRules);
+		AttachedCharacter = nullptr;
+		ClosestCharacter = nullptr;
+		ShortestDistance = 100000.0f;
 		SetActorLocation(StartLocation);
 		SetActorRotation(StartRotation);
 		Lifetime = InitialLifetime;
@@ -121,7 +142,13 @@ void ARoomba::ChangeActiveState(bool active)
 void ARoomba::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor == ClosestCharacter)
+	OnOverlapFunction(OverlappedComponent, OtherActor, OtherComponent, OtherBodyIndex, bFromSweep, SweepResult);
+}
+
+void ARoomba::OnOverlapFunction_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor == ClosestCharacter && AttachedCharacter == nullptr)
 	{
 		AttachToPlayer(ClosestCharacter);
 	}

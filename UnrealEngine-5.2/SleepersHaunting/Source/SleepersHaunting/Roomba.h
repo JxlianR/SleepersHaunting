@@ -4,11 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "PlayerCharacter.h"
-#include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
 #include "JumpableInterface.h"
-#include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "Roomba.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttachedToPlayer);
@@ -30,6 +28,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void  GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	FOnAttachedToPlayer OnRoombaAttachedEvent;
 
 	UFUNCTION()
@@ -38,20 +38,23 @@ public:
 	virtual void JumpedOn_Implementation() override;
 
 protected:
-	UFUNCTION()
+	UFUNCTION(Client, Reliable)
 	void ChangeActiveState(bool active);
 
-	UFUNCTION()
+	UFUNCTION(Client, Reliable)
 	void GetClosestPlayer();
 
-	UFUNCTION()
+	UFUNCTION(Client, Reliable)
 	void FollowPlayer(float DeltaTime);
 
-	UFUNCTION()
+	UFUNCTION(Client, Reliable)
 	void AttachToPlayer(APlayerCharacter* Player);
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION(Client, Reliable)
+	void OnOverlapFunction(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 protected:
 	UPROPERTY(VisibleAnywhere);
@@ -63,7 +66,7 @@ protected:
 	UPROPERTY(VisibleAnywhere);
 	TObjectPtr<USphereComponent> Collider;
 
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	FVector StartLocation;
 
 	UPROPERTY()
@@ -73,15 +76,21 @@ protected:
 	float Speed = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	float InitialLifetime = 30.0f;
+	float InitialLifetime = 10.0f;
 
 	UPROPERTY(EditAnywhere)
 	float InitialTimerToActivate = 10.0f;
 
-	UPROPERTY()
+	UPROPERTY(Replicated, VisibleAnywhere)
 	APlayerCharacter* ClosestCharacter;
 
-	UPROPERTY()
+	UPROPERTY(Replicated)
+	APlayerCharacter* AttachedCharacter;
+
+	UPROPERTY(Replicated)
+	float ShortestDistance;
+
+	UPROPERTY(VisibleAnywhere, Replicated)
 	TArray<APlayerCharacter*> Characters;
 
 private:
