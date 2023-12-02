@@ -33,13 +33,8 @@ void ARoomba::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UWorld* World = GetWorld();
-
 	StartLocation = GetActorLocation();
-	for(APlayerCharacter* Character : TActorRange<APlayerCharacter>(World))
-	{
-		Characters.Add(Character);
-	}
+	GetCharacters();
 }
 
 // Called every frame
@@ -58,9 +53,9 @@ void ARoomba::Tick(float DeltaTime)
 			ChangeActiveState(false);
 
 		if (Attached) return;
-		
+
 		GetClosestPlayer();
-		FollowPlayer(DeltaTime);
+		FollowPlayer();
 
 		return;
 	}
@@ -80,13 +75,11 @@ void ARoomba::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 	DOREPLIFETIME(ARoomba, AttachedCharacter);
 	DOREPLIFETIME(ARoomba, StartLocation);
 	DOREPLIFETIME(ARoomba, Characters);
+	DOREPLIFETIME(ARoomba, ShortestDistance);
 }
-
 
 void ARoomba::GetClosestPlayer_Implementation()
 {
-	ShortestDistance = 1000000.0f;
-
 	for(int i = 0; i < Characters.Num(); i++)
 	{
 		if (ClosestCharacter == Characters[i]) continue;
@@ -100,12 +93,12 @@ void ARoomba::GetClosestPlayer_Implementation()
 	}
 }
 
-void ARoomba::FollowPlayer_Implementation(float DeltaTime)
+void ARoomba::FollowPlayer_Implementation()
 {
 	if (ClosestCharacter == nullptr) return;
 	FVector Direction = ClosestCharacter->GetActorLocation() - GetActorLocation();
 	Direction.Z = 0.0f;
-	SetActorLocation(GetActorLocation() + (Direction * Speed * DeltaTime));
+	SetActorLocation(GetActorLocation() + (Direction * Speed * GetWorld()->DeltaTimeSeconds));
 }
 
 void ARoomba::AttachToPlayer_Implementation(APlayerCharacter* Player)
@@ -132,6 +125,12 @@ void ARoomba::ChangeActiveState_Implementation(bool active)
 		SetActorLocation(StartLocation);
 		SetActorRotation(StartRotation);
 		Lifetime = InitialLifetime;
+
+		UWorld* World = GetWorld();
+		for(APlayerCharacter* Character : TActorRange<APlayerCharacter>(World))
+		{
+			Characters.Add(Character);
+		}
 	}
 	else
 	{
@@ -162,6 +161,17 @@ void ARoomba::TriggerRoombaAttachedEvent()
 void ARoomba::JumpedOn_Implementation()
 {
 	ChangeActiveState(false);
+}
+
+void ARoomba::GetCharacters()
+{
+	UWorld* World = GetWorld();
+	Characters.Empty();
+	
+	for(APlayerCharacter* Character : TActorRange<APlayerCharacter>(World))
+	{
+		Characters.Add(Character);
+	}
 }
 
 

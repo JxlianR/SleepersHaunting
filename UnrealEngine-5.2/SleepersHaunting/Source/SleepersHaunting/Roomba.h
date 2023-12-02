@@ -37,23 +37,26 @@ public:
 
 	virtual void JumpedOn_Implementation() override;
 
+	UFUNCTION()
+	void GetCharacters();
+
 protected:
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(Server, Reliable)
 	void ChangeActiveState(bool active);
 
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(Server, Reliable)
 	void GetClosestPlayer();
 
-	UFUNCTION(Client, Reliable)
-	void FollowPlayer(float DeltaTime);
+	UFUNCTION(Server, Reliable)
+	void FollowPlayer();
 
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(Server, Reliable)
 	void AttachToPlayer(APlayerCharacter* Player);
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UFUNCTION(Client, Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	void OnOverlapFunction(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 protected:
@@ -88,7 +91,7 @@ protected:
 	APlayerCharacter* AttachedCharacter;
 
 	UPROPERTY(Replicated)
-	float ShortestDistance;
+	float ShortestDistance = 100000.0f;
 
 	UPROPERTY(VisibleAnywhere, Replicated)
 	TArray<APlayerCharacter*> Characters;
