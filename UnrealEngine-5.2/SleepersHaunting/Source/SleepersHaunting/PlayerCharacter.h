@@ -84,7 +84,7 @@ public:
 	UFUNCTION()
 	void HandleRoombaAttachedEvent(APlayerCharacter* Character);
 
-	UFUNCTION()
+	UFUNCTION()3
 	void HandleRoombaDetachedEvent();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Class")
