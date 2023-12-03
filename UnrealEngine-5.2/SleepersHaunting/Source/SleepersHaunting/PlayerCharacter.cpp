@@ -77,9 +77,9 @@ void APlayerCharacter::BeginPlay()
 		RoombaDetachmentDelegate.BindUFunction(this, "HandleRoombaDetachedEvent");
 		Roomba->OnRoombaAttachedEvent.Add(RoombaAttachmentDelegate);
 		Roomba->OnRoombaDetachedEvent.Add(RoombaDetachmentDelegate);
-	}
 
-	Roomba->GetCharacters();
+		Roomba->GetCharacters();
+	}
 }
 
 // Called every frame
