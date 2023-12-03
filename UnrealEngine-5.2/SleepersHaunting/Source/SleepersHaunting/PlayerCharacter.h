@@ -35,15 +35,30 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputMappingContext* PlayerMappingContext;
+	
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* MoveInputAction;
+	
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* JumpInputAction;
+	
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* GrabInputAction;
 	
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* TestDebugInputAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* CloseLeftSlideDoor;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* CloseRightSlideDoor;
+    	
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* UseLeftHandler;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* UseRightHandler;
 
 	UPROPERTY(EditAnywhere)
 	float MovementSpeed = 1.0f;
@@ -96,6 +111,30 @@ protected:
 	void CallRoomManagerDebugFunctions();
 	
 	//Julian Code
+	UFUNCTION()
+	void OnCloseLeftSlideDoor();
+
+	UFUNCTION()
+	void OnCloseLeftSlideDoorEnd();
+	
+	UFUNCTION()
+	void OnCloseRightSlideDoor();
+
+	UFUNCTION()
+	void OnCloseRightSlideDoorEnd();
+
+	UFUNCTION()
+	void OnUseLeftHandler();
+
+	UFUNCTION()
+	void OnUseLeftHandlerEnd();
+
+	UFUNCTION()
+	void OnUseRightHandler();
+
+	UFUNCTION()
+	void OnUseRightHandlerEnd();
+	
 	UFUNCTION()
 	void NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 };

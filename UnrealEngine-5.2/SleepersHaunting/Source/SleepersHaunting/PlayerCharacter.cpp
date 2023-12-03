@@ -103,6 +103,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		if (JumpInputAction)
 		{
+			// Ask nelson if this doesnt make sense or if it needs to be started and canceled as TriggerEvents
 			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
 			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACharacter::StopJumping);
 		}
@@ -111,11 +112,34 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		{
 			PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::TryGrab);
 		}
-			
-
+		
 		if (TestDebugInputAction) 
 		{
 			//PlayerEnhancedInputComponent->BindAction(TestDebugInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::CallRoomManagerDebugFunctions);
+		}
+
+		if (CloseLeftSlideDoor)
+		{
+			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Started, this, &APlayerCharacter::OnCloseLeftSlideDoor);
+			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Canceled, this, &APlayerCharacter::OnCloseLeftSlideDoorEnd);
+		}
+
+		if (CloseRightSlideDoor)
+		{
+			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Started, this, &APlayerCharacter::OnCloseRightSlideDoor);
+			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Canceled, this, &APlayerCharacter::OnCloseRightSlideDoorEnd);
+		}
+		
+		if (UseLeftHandler)
+		{
+			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Started, this, &APlayerCharacter::OnUseLeftHandler);
+			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Canceled, this, &APlayerCharacter::OnUseLeftHandlerEnd);
+		}
+
+		if (UseRightHandler)
+		{
+			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Started, this, &APlayerCharacter::OnUseRightHandler);
+			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Canceled, this, &APlayerCharacter::OnUseRightHandlerEnd);
 		}
 	}
 }
@@ -222,7 +246,48 @@ void APlayerCharacter::CallRoomManagerDebugFunctions()
 	*/
 }
 
-//Julian Code: Function that gets triggered through Roomba Event
+//Julian Code:
+void APlayerCharacter::OnCloseLeftSlideDoor()
+{
+	
+}
+
+void APlayerCharacter::OnCloseLeftSlideDoorEnd()
+{
+	
+}
+
+void APlayerCharacter::OnCloseRightSlideDoor()
+{
+	
+}
+
+void APlayerCharacter::OnCloseRightSlideDoorEnd()
+{
+	
+}
+
+void APlayerCharacter::OnUseLeftHandler()
+{
+	
+}
+
+void APlayerCharacter::OnUseLeftHandlerEnd()
+{
+	
+}
+
+void APlayerCharacter::OnUseRightHandler()
+{
+	
+}
+
+void APlayerCharacter::OnUseRightHandlerEnd()
+{
+	
+}
+
+//Function that gets triggered through Roomba Event
 void APlayerCharacter::HandleRoombaAttachedEvent(APlayerCharacter* Character)
 {
 	//if (Character != this) return;

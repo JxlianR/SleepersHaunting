@@ -166,6 +166,7 @@ void ARoomba::TriggerRoombaDetachedEvent()
 
 void ARoomba::JumpedOn_Implementation()
 {
+	if (Attached == false) return;
 	ChangeActiveState(false);
 }
 
