@@ -249,42 +249,42 @@ void APlayerCharacter::CallRoomManagerDebugFunctions()
 //Julian Code:
 void APlayerCharacter::OnCloseLeftSlideDoor()
 {
-	
+	SlideDoorLeftReference->SetDoorTrue();
 }
 
 void APlayerCharacter::OnCloseLeftSlideDoorEnd()
 {
-	
+	SlideDoorLeftReference->SetDoorFalse();
 }
 
 void APlayerCharacter::OnCloseRightSlideDoor()
 {
-	
+	SlideDoorRightReference->SetDoorTrue();
 }
 
 void APlayerCharacter::OnCloseRightSlideDoorEnd()
 {
-	
+	SlideDoorRightReference->SetDoorFalse();
 }
 
 void APlayerCharacter::OnUseLeftHandler()
 {
-	
+	GarageHandlerLeftReference->SetHandlerTrue();
 }
 
 void APlayerCharacter::OnUseLeftHandlerEnd()
 {
-	
+	GarageHandlerLeftReference->SetHandlerFalse();
 }
 
 void APlayerCharacter::OnUseRightHandler()
 {
-	
+	GarageHandlerRightReference->SetHandlerTrue();
 }
 
 void APlayerCharacter::OnUseRightHandlerEnd()
 {
-	
+	GarageHandlerRightReference->SetHandlerFalse();
 }
 
 //Function that gets triggered through Roomba Event

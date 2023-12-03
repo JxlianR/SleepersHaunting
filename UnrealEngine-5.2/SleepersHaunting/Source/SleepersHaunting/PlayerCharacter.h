@@ -8,6 +8,8 @@
 
 //Classes
 #include "RoomsManager.h"
+#include "GarageHandler.h"
+#include "SlideDoors.h"
 
 #include "PlayerCharacter.generated.h"
 
@@ -83,6 +85,15 @@ public:
 
 	UFUNCTION()
 	void HandleRoombaDetachedEvent();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Class")
+		class ASlideDoors* SlideDoorLeftReference;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Class")
+		class ASlideDoors* SlideDoorRightReference;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Class")
+		class AGarageHandler* GarageHandlerLeftReference;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Class")
+		class AGarageHandler* GarageHandlerRightReference;
 	
 private:
 	/** Top down camera */
@@ -96,6 +107,8 @@ private:
 	//Joao Code---------------------------------------------------------------------------------------
 	//Getting the ARoomManager Class
 	ARoomsManager* RoomManagerVariable;
+
+
 	
 protected:
 	UFUNCTION()
