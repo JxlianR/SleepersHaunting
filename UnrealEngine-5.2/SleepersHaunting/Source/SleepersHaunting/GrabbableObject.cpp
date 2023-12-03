@@ -23,6 +23,8 @@ void AGrabbableObject::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+USkeletalMeshComponent* PlayerMesh;
+	
 void AGrabbableObject::GrabObject(ACharacter* PlayerCharacter)
 {
     if (PlayerCharacter)
@@ -30,7 +32,7 @@ void AGrabbableObject::GrabObject(ACharacter* PlayerCharacter)
         FName HandSocketName = FName("hand_rSocket");
 
         // Get the player's mesh component
-        USkeletalMeshComponent* PlayerMesh = PlayerCharacter->GetMesh();
+        PlayerMesh = PlayerCharacter->GetMesh();
 
         if (PlayerMesh)
         {
@@ -38,7 +40,7 @@ void AGrabbableObject::GrabObject(ACharacter* PlayerCharacter)
             AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, HandSocketName);
 
             // Disable physics (if applicable)
-            //SetSimulatePhysics(false);
+            PlayerMesh->SetSimulatePhysics(false);
         }
     }
 }
@@ -49,7 +51,7 @@ void AGrabbableObject::ReleaseObject()
     DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
     // Enable physics again
-    //SetSimulatePhysics(true);
+    PlayerMesh->SetSimulatePhysics(true);
 	SetActorTickEnabled(true);
 
     // Optionally, you might want to add some impulse or velocity to the object upon release

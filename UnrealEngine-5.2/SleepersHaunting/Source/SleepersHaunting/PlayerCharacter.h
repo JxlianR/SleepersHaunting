@@ -9,6 +9,7 @@
 //Classes
 #include "RoomsManager.h"
 #include "GarageHandler.h"
+#include "GrabbableInterface.h"
 #include "SlideDoors.h"
 
 #include "PlayerCharacter.generated.h"
@@ -121,7 +122,7 @@ protected:
 	// Reference to the currently grabbed object
 	TScriptInterface<IGrabbableInterface> CurrentlyGrabbedObject;
 	private:
-	AActor CurrentlyGrabbedActor;
+	AActor* CurrentlyGrabbedActor;
 
 	//Joao Code---------------------------------------------------------------------------------------
 protected:
