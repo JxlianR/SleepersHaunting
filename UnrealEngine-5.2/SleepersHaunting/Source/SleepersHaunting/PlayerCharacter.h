@@ -64,7 +64,10 @@ public:
 
 	// Julian Code:
 	UFUNCTION()
-	void HandleRoombaEvent();
+	void HandleRoombaAttachedEvent(APlayerCharacter* Character);
+
+	UFUNCTION()
+	void HandleRoombaDetachedEvent();
 	
 private:
 	/** Top down camera */

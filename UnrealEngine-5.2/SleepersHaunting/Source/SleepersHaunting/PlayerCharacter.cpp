@@ -72,8 +72,11 @@ void APlayerCharacter::BeginPlay()
 	if (Roomba)
 	{
 		FScriptDelegate RoombaAttachmentDelegate;
-		RoombaAttachmentDelegate.BindUFunction(this, "HandleRoombaEvent");
-		Roomba->OnRoombaAttachedEvent.Add(RoombaAttachmentDelegate);	
+		FScriptDelegate RoombaDetachmentDelegate;
+		RoombaAttachmentDelegate.BindUFunction(this, "HandleRoombaAttachedEvent");
+		RoombaDetachmentDelegate.BindUFunction(this, "HandleRoombaDetachedEvent");
+		Roomba->OnRoombaAttachedEvent.Add(RoombaAttachmentDelegate);
+		Roomba->OnRoombaDetachedEvent.Add(RoombaDetachmentDelegate);
 	}
 
 	Roomba->GetCharacters();
@@ -122,6 +125,7 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Your Message"));
 	// FInputActionValue::Axis2D Axis = Value.Get<FInputActionValue::Axis2D>();
 	FVector2D MovementVector = Value.Get<FVector2D>();
+	MovementVector.Normalize();
 
 	if (!MovementVector.IsNearlyZero())
 	{
@@ -219,21 +223,32 @@ void APlayerCharacter::CallRoomManagerDebugFunctions()
 }
 
 //Julian Code: Function that gets triggered through Roomba Event
-void APlayerCharacter::HandleRoombaEvent()
+void APlayerCharacter::HandleRoombaAttachedEvent(APlayerCharacter* Character)
 {
+	//if (Character != this) return;
 	MovementSpeed = 0.5f;
 }
+
+void APlayerCharacter::HandleRoombaDetachedEvent()
+{
+	MovementSpeed = 1.0f;
+}
+
 
 void APlayerCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,
 	bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
-	//Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
-	float CharacterZVelocity = GetVelocity().Z;
+	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+	float CharacterZVelocity = NormalImpulse.Z;
 
-	if (CharacterZVelocity >= 1.0f)
+	IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Other);
+	if (JumpableInterface)
+		JumpableInterface->Execute_JumpedOn(Other);
+	
+	/*if (NormalImpulse.Y > 0.0f)
 	{
 		IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Other);
 		if (JumpableInterface)
 			JumpableInterface->Execute_JumpedOn(Other);
-	}
+	}*/
 }

@@ -119,6 +119,7 @@ void ARoomba::ChangeActiveState_Implementation(bool active)
 		const FDetachmentTransformRules DetachmentRules = FDetachmentTransformRules(EDetachmentRule::KeepWorld, true);
 		Attached = false;
 		DetachFromActor(DetachmentRules);
+		TriggerRoombaDetachedEvent();
 		AttachedCharacter = nullptr;
 		ClosestCharacter = nullptr;
 		ShortestDistance = 100000.0f;
@@ -155,7 +156,12 @@ void ARoomba::OnOverlapFunction_Implementation(UPrimitiveComponent* OverlappedCo
 
 void ARoomba::TriggerRoombaAttachedEvent()
 {
-	OnRoombaAttachedEvent.Broadcast();
+	OnRoombaAttachedEvent.Broadcast(AttachedCharacter);
+}
+
+void ARoomba::TriggerRoombaDetachedEvent()
+{
+	OnRoombaDetachedEvent.Broadcast();
 }
 
 void ARoomba::JumpedOn_Implementation()

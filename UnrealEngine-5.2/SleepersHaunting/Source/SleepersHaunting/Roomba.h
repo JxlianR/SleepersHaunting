@@ -9,7 +9,8 @@
 #include "JumpableInterface.h"
 #include "Roomba.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttachedToPlayer);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttachedToPlayer, APlayerCharacter*, Character);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDetachedFromPlayer);
 
 UCLASS()
 class SLEEPERSHAUNTING_API ARoomba : public AActor, public IJumpableInterface
@@ -28,12 +29,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void  GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	FOnAttachedToPlayer OnRoombaAttachedEvent;
+	FOnDetachedFromPlayer OnRoombaDetachedEvent;
 
 	UFUNCTION()
 	void TriggerRoombaAttachedEvent();
+
+	UFUNCTION()
+	void TriggerRoombaDetachedEvent();
 
 	virtual void JumpedOn_Implementation() override;
 
