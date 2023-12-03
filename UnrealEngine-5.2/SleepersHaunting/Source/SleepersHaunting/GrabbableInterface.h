@@ -6,7 +6,6 @@
 #include "UObject/Interface.h"
 #include "GrabbableInterface.generated.h"
 
-// This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UGrabbableInterface : public UInterface
 {
@@ -18,6 +17,9 @@ class SLEEPERSHAUNTING_API IGrabbableInterface
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Grabbable")
-	void Grab(AActor* Actor);
-};
+    // Function to grab the object
+    virtual void GrabObject(ACharacter* PlayerCharacter) = 0;
+
+    // Function to release the object
+    virtual void ReleaseObject() = 0;
+};	

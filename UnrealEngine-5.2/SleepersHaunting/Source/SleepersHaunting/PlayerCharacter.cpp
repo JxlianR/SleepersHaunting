@@ -109,9 +109,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		}
 
 		if (GrabInputAction)
-		{
-			PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::TryGrab);
-		}
+			{
+				// Bind the input functions
+				PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Grab);
+				PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Release);
+			}
 		
 		if (TestDebugInputAction) 
 		{
@@ -163,22 +165,21 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 	}
 }
 
-void APlayerCharacter::TryGrab()
+void APlayerCharacter::Grab()
 {
-	if (GEngine)
+	// Assuming you have a reference to the currently grabbed object
+	if (CurrentlyGrabbedObject.GetObject())
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Grab Called"));
+		CurrentlyGrabbedObject->GrabObject(this);  // Pass a reference to the player character
 	}
-	TArray<AActor*> Actors;
-	GetOverlappingActors(Actors);
+}
 
-	for(AActor* Actor : Actors)
+void APlayerCharacter::Release()
+{
+	// Assuming you have a reference to the currently grabbed object
+	if (CurrentlyGrabbedObject.GetObject())
 	{
-		IGrabbableInterface* GrabbableInterface = Cast<IGrabbableInterface>(Actor);
-		if (GrabbableInterface)
-		{
-			GrabbableInterface->Execute_Grab(this, Actor);
-		}
+		CurrentlyGrabbedObject->ReleaseObject();
 	}
 }
 

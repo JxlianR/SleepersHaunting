@@ -114,9 +114,14 @@ protected:
 	UFUNCTION()
 	void OnMove(const FInputActionValue& Value);
 	
-public:
-	UFUNCTION()
-	void TryGrab();
+	// Function to handle grabbing input
+	void Grab();
+	// Function to handle releasing input
+	void Release();
+	// Reference to the currently grabbed object
+	TScriptInterface<IGrabbableInterface> CurrentlyGrabbedObject;
+	private:
+	AActor CurrentlyGrabbedActor;
 
 	//Joao Code---------------------------------------------------------------------------------------
 protected:

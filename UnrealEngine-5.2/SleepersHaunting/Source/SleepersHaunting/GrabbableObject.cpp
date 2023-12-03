@@ -2,6 +2,8 @@
 
 
 #include "GrabbableObject.h"
+#include "GameFramework/Character.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 AGrabbableObject::AGrabbableObject()
@@ -11,23 +13,51 @@ AGrabbableObject::AGrabbableObject()
 
 }
 
-// Called when the game starts or when spawned
 void AGrabbableObject::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
-
-// Called every frame
 void AGrabbableObject::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-void AGrabbableObject::Grab_Implementation(AActor* Actor)
+void AGrabbableObject::GrabObject(ACharacter* PlayerCharacter)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("grab"));
-	// FVector Loc = FVector(10,0,7);
-	// SetActorLocation(Loc);
+    if (PlayerCharacter)
+    {
+        FName HandSocketName = FName("hand_rSocket");
+
+        // Get the player's mesh component
+        USkeletalMeshComponent* PlayerMesh = PlayerCharacter->GetMesh();
+
+        if (PlayerMesh)
+        {
+            // Attach the object's root component to the player's hand socket
+            AttachToComponent(PlayerMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, HandSocketName);
+
+            // Disable physics (if applicable)
+            //SetSimulatePhysics(false);
+        }
+    }
 }
 
+void AGrabbableObject::ReleaseObject()
+{
+    // Detach the object from the player's hand
+    DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+    // Enable physics again
+    //SetSimulatePhysics(true);
+	SetActorTickEnabled(true);
+
+    // Optionally, you might want to add some impulse or velocity to the object upon release
+    FVector ReleaseImpulse = FVector::ForwardVector * 1000.0f; // Adjust the impulse as needed
+    UPrimitiveComponent* RootComp = Cast<UPrimitiveComponent>(RootComponent);
+    if (RootComp)
+    {
+		RootComp->SetSimulatePhysics(true);
+        RootComp->AddImpulse(ReleaseImpulse, NAME_None, true);
+    }
+}
