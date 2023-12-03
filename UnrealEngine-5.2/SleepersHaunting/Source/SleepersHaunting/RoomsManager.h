@@ -12,11 +12,11 @@ struct FWaypointInfo //All Waypoints Info
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FVector WaypointPosition;
+		UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		FVector WaypointPosition;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool IsOccupied;
+		bool IsOccupied;
 };
 
 USTRUCT(BlueprintType, Blueprintable)
@@ -24,14 +24,14 @@ struct FRoomInfo //All rooms info
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)//The current room ID
-	int32 RoomID;
+		UPROPERTY(EditAnywhere, BlueprintReadOnly)//The current room ID
+		int32 RoomID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)//To place which rooms are connected to the current room
-	TArray<int32> ConnectedRooms;
+		TArray<int32> ConnectedRooms;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)//Gets the Waypoint info and which waypoint they have.
-	TArray<FWaypointInfo> WaypointsInfo;
+		TArray<FWaypointInfo> WaypointsInfo;
 
 };
 
@@ -39,8 +39,8 @@ UCLASS()
 class SLEEPERSHAUNTING_API ARoomsManager : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ARoomsManager();
 
@@ -52,36 +52,37 @@ public:
 
 	//Returns all connected rooms
 	UFUNCTION(BlueprintCallable, Category = "Rooms")
-	TArray<int32> GetConnectedRooms(int32 RoomID) const;
+		TArray<int32> GetConnectedRooms(int32 RoomID) const;
 
 	// Returns the waypoints of the specified room
 	UFUNCTION(BlueprintCallable, Category = "Rooms")
-	TArray<FWaypointInfo> GetCurrentRoomWaypoints(int32 RoomID) const;
+		TArray<FWaypointInfo> GetCurrentRoomWaypoints(int32 RoomID) const;
 
 	// Returns a specific waypoint by index
 	UFUNCTION(BlueprintCallable, Category = "Rooms")
-	FWaypointInfo GetWaypointByIndex(int32 RoomID, int32 WaypointIndex) const;
+		FWaypointInfo GetWaypointByIndex(int32 RoomID, int32 WaypointIndex) const;
 
 	//Functions for the enemy
-	// Debug connected rooms IDs for the specified room
 	UFUNCTION(BlueprintCallable, Category = "Debug")
-	void DebugConnectedRooms(int32 RoomID) const;
+		void DebugConnectedRooms(int32 RoomID) const;
+	UFUNCTION(BlueprintCallable, Category = "Debug")
+		void DebugWaypoints(int32 RoomID) const;
+	UFUNCTION(BlueprintCallable, Category = "Debug")
+		void DebugRandomConnectedRoomID(int32 RoomID) const;
 
-	// Debug waypoints for the specified room
-	UFUNCTION(BlueprintCallable, Category = "Debug")
-	void DebugWaypoints(int32 RoomID) const;
 
-	// Debug a random connected room ID for the specified room
-	UFUNCTION(BlueprintCallable, Category = "Debug")
-	void DebugRandomConnectedRoomID(int32 RoomID) const;
+	UFUNCTION(BlueprintCallable, Category = "Rooms")
+		int32 GetRandomConnectedRoomID(int32 RoomID) const;
+	UFUNCTION(BlueprintCallable, Category = "Rooms")
+		FVector GetSpecificWaypoint(int32 RoomID, bool bUseFirstWaypoint) const;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rooms")
-	TArray<FRoomInfo> RoomData;
+		TArray<FRoomInfo> RoomData;
 
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

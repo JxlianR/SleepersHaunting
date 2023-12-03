@@ -12,6 +12,7 @@ ARoomsManager::ARoomsManager()
 void ARoomsManager::BeginPlay()
 {
 	Super::BeginPlay();
+	DebugRandomConnectedRoomID(3);
 
 }
 
@@ -85,7 +86,8 @@ FWaypointInfo ARoomsManager::GetWaypointByIndex(int32 RoomID, int32 WaypointInde
 	else
 	{
 		// Log a warning if the index is out of bounds
-		UE_LOG(LogTemp, Warning, TEXT("Invalid waypoint index for room ID %d: %d"), RoomID, WaypointIndex);
+		FString Message = FString::Printf(TEXT("Invalid waypoint index for room ID %d: %d"), RoomID, WaypointIndex);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, Message);
 		return FWaypointInfo(); // Return a default-constructed FWaypointInfo
 	}
 }
@@ -149,10 +151,14 @@ void ARoomsManager::DebugConnectedRooms(int32 RoomID) const
 {
 	TArray<int32> ConnectedRooms = GetConnectedRooms(RoomID);
 
-	UE_LOG(LogTemp, Warning, TEXT("Connected Rooms for Room %d:"), RoomID);
+	FString Message = FString::Printf(TEXT("Connected Rooms for Room %d:"), RoomID);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, Message);
+
 	for (int32 ConnectedRoomID : ConnectedRooms)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%d"), ConnectedRoomID);
+		Message = FString::Printf(TEXT("%d"), ConnectedRoomID);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, Message);
+
 	}
 }
 
@@ -160,11 +166,15 @@ void ARoomsManager::DebugWaypoints(int32 RoomID) const
 {
 	TArray<FWaypointInfo> Waypoints = GetCurrentRoomWaypoints(RoomID);
 
-	UE_LOG(LogTemp, Warning, TEXT("Waypoints for Room %d:"), RoomID);
+	FString Message = FString::Printf(TEXT("Waypoints for Room %d:"), RoomID);
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, Message);
+
 	for (int32 Index = 0; Index < Waypoints.Num(); ++Index)
 	{
 		const FWaypointInfo& Waypoint = Waypoints[Index];
-		UE_LOG(LogTemp, Warning, TEXT("Waypoint %d - Is Occupied: %s"), Index, Waypoint.IsOccupied ? TEXT("True") : TEXT("False"));
+		Message = FString::Printf(TEXT("Waypoint %d - Is Occupied: %s"), Index, Waypoint.IsOccupied ? TEXT("True") : TEXT("False"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, Message);
+
 	}
 }
 
@@ -180,10 +190,62 @@ void ARoomsManager::DebugRandomConnectedRoomID(int32 RoomID) const
 		// Get the random connected room ID
 		int32 RandomConnectedRoomID = ConnectedRooms[RandomIndex];
 
-		UE_LOG(LogTemp, Warning, TEXT("Random Connected Room ID for Room %d: %d"), RoomID, RandomConnectedRoomID);
+		FString Message = FString::Printf(TEXT("Random Connected Room ID for Room %d: %d"), RoomID, RandomConnectedRoomID);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, Message);
 	}
 	else
 	{
+		FString Message = FString::Printf(TEXT("Room %d has no connected rooms."), RoomID);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, Message);
+	}
+}
+
+
+
+
+//Important functions for the Twins
+int32 ARoomsManager::GetRandomConnectedRoomID(int32 RoomID) const
+{
+	TArray<int32> ConnectedRooms = GetConnectedRooms(RoomID);
+
+	if (ConnectedRooms.Num() > 0)
+	{
+		// Get a random index within the range of connected rooms
+		int32 RandomIndex = FMath::RandRange(0, ConnectedRooms.Num() - 1);
+
+		// Return the random connected room ID
+		return ConnectedRooms[RandomIndex];
+	}
+	else
+	{
+		// Log a warning if the room has no connected rooms
 		UE_LOG(LogTemp, Warning, TEXT("Room %d has no connected rooms."), RoomID);
+		return -1; // You can choose a suitable default value for no connected rooms
+	}
+}
+
+FVector ARoomsManager::GetSpecificWaypoint(int32 RoomID, bool bUseFirstWaypoint) const
+{
+	TArray<FWaypointInfo> Waypoints = GetCurrentRoomWaypoints(RoomID);
+
+	if (Waypoints.Num() > 0)
+	{
+		// Get the index based on the boolean parameter
+		int32 WaypointIndex = bUseFirstWaypoint ? 0 : 1;
+
+		if (WaypointIndex >= 0 && WaypointIndex < Waypoints.Num())
+		{
+			return Waypoints[WaypointIndex].WaypointPosition;
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Invalid waypoint index for room ID %d: %d"), RoomID, WaypointIndex);
+			return FVector::ZeroVector; // You can choose a suitable default value
+		}
+	}
+	else
+	{
+		// Log a warning if the room has no waypoints
+		return FVector::ZeroVector; // You can choose a suitable default value
 	}
 }
