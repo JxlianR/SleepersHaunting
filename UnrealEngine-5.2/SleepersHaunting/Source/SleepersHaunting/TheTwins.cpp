@@ -156,6 +156,48 @@ void ATheTwins::TwinAttack()
 	}
 }
 
+void ATheTwins::PauseAllTwinTimers()
+{
+	// Pause the movement timer if it's active
+	if (GetWorldTimerManager().IsTimerActive(CDMovementTimerHandle))
+	{
+		GetWorldTimerManager().PauseTimer(CDMovementTimerHandle);
+	}
+
+	// Pause the special attack timer if it's active
+	if (GetWorldTimerManager().IsTimerActive(SAttackTimerHandle))
+	{
+		GetWorldTimerManager().PauseTimer(SAttackTimerHandle);
+	}
+
+	// Pause the attack timer if it's active
+	if (GetWorldTimerManager().IsTimerActive(CDAttackTimerHandle))
+	{
+		GetWorldTimerManager().PauseTimer(CDAttackTimerHandle);
+	}
+}
+
+void ATheTwins::ResumeAllTwinTimers()
+{
+	// Resume the movement timer if it was active
+	if (GetWorldTimerManager().IsTimerPaused(CDMovementTimerHandle))
+	{
+		GetWorldTimerManager().UnPauseTimer(CDMovementTimerHandle);
+	}
+
+	// Resume the special attack timer if it was active
+	if (GetWorldTimerManager().IsTimerPaused(SAttackTimerHandle))
+	{
+		GetWorldTimerManager().UnPauseTimer(SAttackTimerHandle);
+	}
+
+	// Resume the attack timer if it was active
+	if (GetWorldTimerManager().IsTimerPaused(CDAttackTimerHandle))
+	{
+		GetWorldTimerManager().UnPauseTimer(CDAttackTimerHandle);
+	}
+}
+
 void ATheTwins::EnableAttack()
 {
 	CanAttack = true;

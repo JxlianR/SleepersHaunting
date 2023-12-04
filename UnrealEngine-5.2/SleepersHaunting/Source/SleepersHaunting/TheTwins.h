@@ -66,6 +66,10 @@ public:
 		void TwinAttack();
 	UFUNCTION(BlueprintCallable, Category = "Twins")
 		void EnableAttack();
+	UFUNCTION(BlueprintCallable, Category = "Twins")
+		void PauseAllTwinTimers();
+	UFUNCTION(BlueprintCallable, Category = "Twins")
+		void ResumeAllTwinTimers();
 
 
 private:
