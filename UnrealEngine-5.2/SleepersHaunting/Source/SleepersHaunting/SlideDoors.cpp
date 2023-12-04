@@ -36,6 +36,11 @@ bool ASlideDoors::IsDoorLocked()
 void ASlideDoors::SetDoorFalse()
 {
 	lockedDoor = false;
+
+	FVector NewLocation = GetActorLocation();
+	NewLocation.X -= 130.0f;
+	SetActorLocation(NewLocation);
+
 	if (powerSystemReference)
 		powerSystemReference->DecreasePowerConsumption();
 }
@@ -43,6 +48,11 @@ void ASlideDoors::SetDoorFalse()
 void ASlideDoors::SetDoorTrue()
 {
 	lockedDoor = true;
+
+	FVector NewLocation = GetActorLocation();
+	NewLocation.X += 130.0f;
+	SetActorLocation(NewLocation);
+
 	if (powerSystemReference)
 		powerSystemReference->IncreasePowerConsumption();
 }
