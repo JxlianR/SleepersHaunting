@@ -34,10 +34,10 @@ public:
 	FOnAttachedToPlayer OnRoombaAttachedEvent;
 	FOnDetachedFromPlayer OnRoombaDetachedEvent;
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void TriggerRoombaAttachedEvent();
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void TriggerRoombaDetachedEvent();
 
 	virtual void JumpedOn_Implementation() override;
@@ -96,6 +96,9 @@ protected:
 	APlayerCharacter* AttachedCharacter;
 
 	UPROPERTY(Replicated)
+	bool Attached;
+
+	UPROPERTY(Replicated)
 	float ShortestDistance = 100000.0f;
 
 	UPROPERTY(VisibleAnywhere, Replicated)
@@ -103,8 +106,6 @@ protected:
 
 private:
 	bool Active = true;
-	
-	bool Attached;
 
 	float Lifetime = InitialLifetime;
 

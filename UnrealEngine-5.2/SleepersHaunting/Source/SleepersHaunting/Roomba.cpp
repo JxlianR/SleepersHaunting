@@ -76,6 +76,7 @@ void ARoomba::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 	DOREPLIFETIME(ARoomba, StartLocation);
 	DOREPLIFETIME(ARoomba, Characters);
 	DOREPLIFETIME(ARoomba, ShortestDistance);
+	DOREPLIFETIME(ARoomba, Attached);
 }
 
 void ARoomba::GetClosestPlayer_Implementation()
@@ -154,12 +155,12 @@ void ARoomba::OnOverlapFunction_Implementation(UPrimitiveComponent* OverlappedCo
 	}
 }
 
-void ARoomba::TriggerRoombaAttachedEvent()
+void ARoomba::TriggerRoombaAttachedEvent_Implementation()
 {
 	OnRoombaAttachedEvent.Broadcast(AttachedCharacter);
 }
 
-void ARoomba::TriggerRoombaDetachedEvent()
+void ARoomba::TriggerRoombaDetachedEvent_Implementation()
 {
 	OnRoombaDetachedEvent.Broadcast();
 }
