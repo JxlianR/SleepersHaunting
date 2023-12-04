@@ -156,9 +156,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		}
 
 		if (GrabInputAction)
-			{
-				PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Grab);
-			}
+		{
+			PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Grab);
+		}
 		
 		if (TestDebugInputAction) 
 		{
@@ -173,20 +173,20 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		if (CloseRightSlideDoor)
 		{
-			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Started, this, &APlayerCharacter::OnCloseRightSlideDoor);
-			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Canceled, this, &APlayerCharacter::OnCloseRightSlideDoorEnd);
+			PlayerEnhancedInputComponent->BindAction(CloseRightSlideDoor, ETriggerEvent::Started, this, &APlayerCharacter::OnCloseRightSlideDoor);
+			PlayerEnhancedInputComponent->BindAction(CloseRightSlideDoor, ETriggerEvent::Canceled, this, &APlayerCharacter::OnCloseRightSlideDoorEnd);
 		}
 		
 		if (UseLeftHandler)
 		{
-			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Started, this, &APlayerCharacter::OnUseLeftHandler);
-			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Canceled, this, &APlayerCharacter::OnUseLeftHandlerEnd);
+			PlayerEnhancedInputComponent->BindAction(UseLeftHandler, ETriggerEvent::Started, this, &APlayerCharacter::OnUseLeftHandler);
+			PlayerEnhancedInputComponent->BindAction(UseLeftHandler, ETriggerEvent::Canceled, this, &APlayerCharacter::OnUseLeftHandlerEnd);
 		}
 
 		if (UseRightHandler)
 		{
-			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Started, this, &APlayerCharacter::OnUseRightHandler);
-			PlayerEnhancedInputComponent->BindAction(CloseLeftSlideDoor, ETriggerEvent::Canceled, this, &APlayerCharacter::OnUseRightHandlerEnd);
+			PlayerEnhancedInputComponent->BindAction(UseRightHandler, ETriggerEvent::Started, this, &APlayerCharacter::OnUseRightHandler);
+			PlayerEnhancedInputComponent->BindAction(UseRightHandler, ETriggerEvent::Canceled, this, &APlayerCharacter::OnUseRightHandlerEnd);
 		}
 	}
 }
@@ -305,44 +305,52 @@ void APlayerCharacter::CallRoomManagerDebugFunctions()
 //Julian Code:
 void APlayerCharacter::OnCloseLeftSlideDoor()
 {
-	SlideDoorLeftRef->SetDoorTrue();
+	if (SlideDoorLeftRef)
+		SlideDoorLeftRef->SetDoorTrue();
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Close slide door")));
 
 }
 
 void APlayerCharacter::OnCloseLeftSlideDoorEnd()
 {
-	SlideDoorLeftRef->SetDoorFalse();
+	if (SlideDoorLeftRef)
+		SlideDoorLeftRef->SetDoorFalse();
 }
 
 void APlayerCharacter::OnCloseRightSlideDoor()
 {
-	SlideDoorRightRef->SetDoorTrue();
+	if (SlideDoorRightRef)
+		SlideDoorRightRef->SetDoorTrue();
 }
 
 void APlayerCharacter::OnCloseRightSlideDoorEnd()
 {
-	SlideDoorRightRef->SetDoorFalse();
+	if (SlideDoorRightRef)
+		SlideDoorRightRef->SetDoorFalse();
 }
 
 void APlayerCharacter::OnUseLeftHandler()
 {
-	GarageHandlerLeftRef->SetHandlerTrue();
+	if (GarageHandlerLeftRef)
+		GarageHandlerLeftRef->SetHandlerTrue();
 }
 
 void APlayerCharacter::OnUseLeftHandlerEnd()
 {
-	GarageHandlerLeftRef->SetHandlerFalse();
+	if (GarageHandlerLeftRef)
+		GarageHandlerLeftRef->SetHandlerFalse();
 }
 
 void APlayerCharacter::OnUseRightHandler()
 {
-	GarageHandlerRightRef->SetHandlerTrue();
+	if (GarageHandlerRightRef)
+		GarageHandlerRightRef->SetHandlerTrue();
 }
 
 void APlayerCharacter::OnUseRightHandlerEnd()
 {
-	GarageHandlerRightRef->SetHandlerFalse();
+	if (GarageHandlerRightRef)
+		GarageHandlerRightRef->SetHandlerFalse();
 }
 
 //Function that gets triggered through Roomba Event
