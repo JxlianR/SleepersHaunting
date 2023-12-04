@@ -354,7 +354,7 @@ void APlayerCharacter::OnUseRightHandlerEnd()
 //Function that gets triggered through Roomba Event
 void APlayerCharacter::HandleRoombaAttachedEvent_Implementation(APlayerCharacter* Character)
 {
-	//if (Character != this) return;
+	if (Character != this) return;
 	MovementSpeed = 0.5f;
 }
 
@@ -372,7 +372,7 @@ void APlayerCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPr
 
 	IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Other);
 	if (JumpableInterface)
-		JumpableInterface->Execute_JumpedOn(Other);
+		JumpableInterface->Execute_JumpedOn(Other, this);
 	
 	/*if (NormalImpulse.Y > 0.0f)
 	{

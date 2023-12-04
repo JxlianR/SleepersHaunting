@@ -40,7 +40,7 @@ public:
 	UFUNCTION(Server, Reliable)
 	void TriggerRoombaDetachedEvent();
 
-	virtual void JumpedOn_Implementation() override;
+	virtual void JumpedOn_Implementation(APlayerCharacter* Character) override;
 
 	UFUNCTION()
 	void GetCharacters();

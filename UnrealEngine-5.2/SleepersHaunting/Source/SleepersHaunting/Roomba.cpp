@@ -107,8 +107,11 @@ void ARoomba::AttachToPlayer_Implementation(APlayerCharacter* Player)
 	// Needs to be tested in terms of how the roomba is behaving (where does it snap to and what happens when the player is moving)
 	const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, false);
 	AttachToActor(Player, AttachmentRules, "Roomba");
-	TriggerRoombaAttachedEvent();
+
 	Attached = true;
+	AttachedCharacter = Player;
+	
+	TriggerRoombaAttachedEvent();
 }
 
 void ARoomba::ChangeActiveState_Implementation(bool active)
@@ -165,9 +168,10 @@ void ARoomba::TriggerRoombaDetachedEvent_Implementation()
 	OnRoombaDetachedEvent.Broadcast();
 }
 
-void ARoomba::JumpedOn_Implementation()
+void ARoomba::JumpedOn_Implementation(APlayerCharacter* Character)
 {
 	if (Attached == false) return;
+	if (Character == AttachedCharacter) return;
 	ChangeActiveState(false);
 }
 
