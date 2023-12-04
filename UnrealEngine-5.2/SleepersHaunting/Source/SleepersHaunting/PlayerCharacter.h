@@ -70,6 +70,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	ASlideDoors* FindSlideDoorsByName(const FString& DoorName);
+
+	AGarageHandler* FindGarageHandlerByName(const FString& HandlerName);
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -86,16 +90,11 @@ public:
 
 	UFUNCTION()
 	void HandleRoombaDetachedEvent();
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Class")
-		class ASlideDoors* SlideDoorLeftReference;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Class")
-		class ASlideDoors* SlideDoorRightReference;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Class")
-		class AGarageHandler* GarageHandlerLeftReference;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Class")
-		class AGarageHandler* GarageHandlerRightReference;
 	
+	ASlideDoors* SlideDoorRightRef;
+	ASlideDoors* SlideDoorLeftRef;
+	AGarageHandler* GarageHandlerLeftRef;
+	AGarageHandler* GarageHandlerRightRef;
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -108,10 +107,7 @@ private:
 	//Joao Code---------------------------------------------------------------------------------------
 	//Getting the ARoomManager Class
 	ARoomsManager* RoomManagerVariable;
-	ASlideDoors* SlideDoorRightRef;
-	ASlideDoors* SlideDoorLeftRef;
-	AGarageHandler* GarageHandlerLeftRef;
-	AGarageHandler* GarageHandlerRightRef;
+	
 
 	
 protected:
