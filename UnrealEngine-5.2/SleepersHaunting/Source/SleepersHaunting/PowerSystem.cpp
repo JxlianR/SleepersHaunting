@@ -31,8 +31,7 @@ void APowerSystem::BeginPlay()
 	
 	PowerLevelConsumption = PowerConsumptionLow; // Default to low power consumption
 	CurrentPowerLevel = EPowerLevel::Low; // Default to low power level
-	IncreasePowerConsumption();
-	IncreasePowerConsumption();
+
 
 }
 
@@ -45,32 +44,29 @@ void APowerSystem::Tick(float DeltaTime)
 		// Update power level based on consumption
 		if (CurrentPower > 0)
 		{
-			CurrentPower -= PowerLevelConsumption * DeltaTime;
+			CurrentPower = FMath::Clamp(CurrentPower - PowerLevelConsumption * DeltaTime, 0.0f, TotalPower);
 		}
 
-		// Calculate power level percentage and format to show only the first two digits
-		int32 DisplayPercentage = FMath::RoundToInt(CurrentPower);
+		// Calculate power level percentage
+		PowerLevelPercentage = (CurrentPower / TotalPower) * 100.0f;
 
 		// Update TextRenderComponent
-		FString PowerInfo = FString::Printf(TEXT("Power: %d%%\nLevel: %s"), DisplayPercentage, *UEnum::GetValueAsString(CurrentPowerLevel).RightChop(13));
+		FString PowerInfo = FString::Printf(TEXT("Power: %.0f%%\nLevel: %s"), PowerLevelPercentage, *UEnum::GetValueAsString(CurrentPowerLevel).RightChop(13));
 		TextRenderComponent->SetText(FText::FromString(PowerInfo));
 
 		// Check if power is depleted
 		if (CurrentPower <= 0 && !bLosingConditionDisplayed)
 		{
-			//Losing Condition
+			// Losing Condition
 			UGameplayStatics::OpenLevel(GetWorld(), FName("GameOverMenu"));
-			//
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Power Depleted!"));
 			bLosingConditionDisplayed = true;
-			
+
 			bOnDepletion = false;
 			bIsStopped = true;
-			
 		}
 	}
 }
-
 void APowerSystem::IncreasePowerConsumption()
 {
 	// Increase power consumption level (Low -> Medium -> High -> Loop back to Low)
