@@ -57,12 +57,12 @@ void APlayerCharacter::BeginPlay()
 	// GetCharacterMovement()->JumpZVelocity = 420.0f;
 	// GetCharacterMovement()->AirControl = 0.2f;
 	RoomManagerVariable = Cast<ARoomsManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ARoomsManager::StaticClass()));
+
+	SlideDoorLeftRef = FindSlideDoorsByTag(TEXT("SlideDoorL"));
+	SlideDoorRightRef = FindSlideDoorsByTag(TEXT("SlideDoorR"));
 	
-	SlideDoorRightRef = FindSlideDoorsByName(TEXT("BP_SlideDoorsRight"));
-	SlideDoorLeftRef = FindSlideDoorsByName(TEXT("BP_SlideDoorsLeft"));
-	
-	GarageHandlerLeftRef = FindGarageHandlerByName(TEXT("BA_GarageHandler"));
-	GarageHandlerRightRef = FindGarageHandlerByName(TEXT("BA_GarageHandler2"));
+	GarageHandlerLeftRef = FindGarageHandlerByTag(TEXT("GarageHandlerL"));
+	GarageHandlerRightRef = FindGarageHandlerByTag(TEXT("GarageHandlerR"));
 
 	PowerSystem = Cast<APowerSystem>(UGameplayStatics::GetActorOfClass(GetWorld(), APowerSystem::StaticClass()));
 
@@ -180,14 +180,14 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
-ASlideDoors* APlayerCharacter::FindSlideDoorsByName(const FString& DoorName)
+ASlideDoors* APlayerCharacter::FindSlideDoorsByTag(const FName& DoorTag)
 {
 	ASlideDoors* DoorRef = nullptr;
 	
 	UWorld* World = GetWorld();
 	for(ASlideDoors* Door : TActorRange<ASlideDoors>(World))
 	{
-		if (Door->GetActorNameOrLabel() == DoorName)
+		if (Door->ActorHasTag(DoorTag))
 		{
 			DoorRef = Cast<ASlideDoors>(Door);
 			break;
@@ -197,14 +197,14 @@ ASlideDoors* APlayerCharacter::FindSlideDoorsByName(const FString& DoorName)
 	return DoorRef;
 }
 
-AGarageHandler* APlayerCharacter::FindGarageHandlerByName(const FString& HandlerName)
+AGarageHandler* APlayerCharacter::FindGarageHandlerByTag(const FName& HandlerTag)
 {
 	AGarageHandler* HandlerRef = nullptr;
 
 	UWorld* World = GetWorld();
 	for(AGarageHandler* GarageHandler : TActorRange<AGarageHandler>(World))
 	{
-		if (GarageHandler->GetActorNameOrLabel() == HandlerName)
+		if (GarageHandler->ActorHasTag(HandlerTag))
 		{
 			HandlerRef = Cast<AGarageHandler>(GarageHandler);
 			break;
@@ -263,7 +263,7 @@ void APlayerCharacter::Jump()
 {
 	if (CanJump())
 	{
-		FVector JumpImpulse = FVector(0.0f, 0.0f, 100.0f);
+		FVector JumpImpulse = FVector(0.0f, 0.0f, 50.0f);
 		GetCharacterMovement()->AddImpulse(JumpImpulse, true);
 		Super::Jump();
 

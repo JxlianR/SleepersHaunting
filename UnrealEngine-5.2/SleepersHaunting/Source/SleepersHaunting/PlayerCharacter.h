@@ -81,9 +81,9 @@ public:
 
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	ASlideDoors* FindSlideDoorsByName(const FString& DoorName);
+	ASlideDoors* FindSlideDoorsByTag(const FName& DoorTag);
 
-	AGarageHandler* FindGarageHandlerByName(const FString& HandlerName);
+	AGarageHandler* FindGarageHandlerByTag(const FName& HandlerTag);
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
