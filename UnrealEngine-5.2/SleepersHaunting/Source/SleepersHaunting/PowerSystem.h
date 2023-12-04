@@ -5,8 +5,16 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/TextRenderComponent.h"
-
 #include "PowerSystem.generated.h"
+
+UENUM(BlueprintType)
+enum class EPowerLevel : uint8
+{
+	Low UMETA(DisplayName = "Low"),
+	Medium UMETA(DisplayName = "Medium"),
+	High UMETA(DisplayName = "High"),
+	Count UMETA(Hidden)
+};
 
 UCLASS()
 class SLEEPERSHAUNTING_API APowerSystem : public AActor
@@ -23,38 +31,46 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Power")
-		void PausePowerSystem();
+		void IncreasePowerConsumption();
 
 	UFUNCTION(BlueprintCallable, Category = "Power")
-		void ResumePowerSystem();
+		void DecreasePowerConsumption();
 
-	UPROPERTY(EditAnywhere, Category = "Power")
-		float TotalPower;
+	void AddPower(float PowerToAdd);
 
-	UPROPERTY(EditAnywhere, Category = "Power")
-		float CurrentPower;
 
-	UPROPERTY(EditAnywhere, Category = "Power")
-		float PowerConsumptionLow;
-
-	UPROPERTY(EditAnywhere, Category = "Power")
-		float PowerConsumptionMedium;
-
-	UPROPERTY(EditAnywhere, Category = "Power")
-		float PowerConsumptionHigh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		UTextRenderComponent* TextRenderComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
+		float TotalPower;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Power")
+		float CurrentPower;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
+		float PowerConsumptionLow;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
+		float PowerConsumptionMedium;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
+		float PowerConsumptionHigh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Power")
 		float PowerLevelPercentage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
 		float PowerLevelConsumption;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
+		EPowerLevel CurrentPowerLevel;
+
 	UPROPERTY(EditAnywhere, Category = "Power")
-		bool bPauseOnDepletion;
+		bool bOnDepletion;
 
 private:
-	bool bIsPaused;
+	bool bIsStopped;
+	bool bLosingConditionDisplayed;
 };

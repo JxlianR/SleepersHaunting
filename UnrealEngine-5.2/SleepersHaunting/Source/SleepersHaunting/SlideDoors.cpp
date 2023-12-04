@@ -2,6 +2,8 @@
 
 
 #include "SlideDoors.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 ASlideDoors::ASlideDoors()
@@ -15,7 +17,8 @@ ASlideDoors::ASlideDoors()
 void ASlideDoors::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	powerSystemReference = Cast<APowerSystem>(UGameplayStatics::GetActorOfClass(GetWorld(), APowerSystem::StaticClass()));
+
 }
 
 // Called every frame
@@ -33,10 +36,14 @@ bool ASlideDoors::IsDoorLocked()
 void ASlideDoors::SetDoorFalse()
 {
 	lockedDoor = false;
+	if (powerSystemReference)
+		powerSystemReference->DecreasePowerConsumption();
 }
 
 void ASlideDoors::SetDoorTrue()
 {
 	lockedDoor = true;
+	if (powerSystemReference)
+		powerSystemReference->IncreasePowerConsumption();
 }
 

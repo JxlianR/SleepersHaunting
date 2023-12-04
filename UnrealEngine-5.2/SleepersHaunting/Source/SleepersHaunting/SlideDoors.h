@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "PowerSystem.h"
 #include "SlideDoors.generated.h"
 
 UCLASS()
@@ -39,5 +40,5 @@ public:
 
 	
 private:
-	
+	APowerSystem* powerSystemReference;
 };
