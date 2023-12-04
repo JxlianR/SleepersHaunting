@@ -187,4 +187,8 @@ void AA_FatherGarage::SetLosingConditionTrue()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("You Lose!"));
 	bLosingCondition = true;
+	//Losing condition
+	FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+	UGameplayStatics::OpenLevel(GetWorld(), FName(*CurrentLevelName));
+
 }

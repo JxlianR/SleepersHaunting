@@ -58,15 +58,16 @@ void APowerSystem::Tick(float DeltaTime)
 		// Check if power is depleted
 		if (CurrentPower <= 0 && !bLosingConditionDisplayed)
 		{
-			// Handle power depletion (e.g., trigger blackout, game over, etc.)
+			//Losing Condition
+			FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+			UGameplayStatics::OpenLevel(GetWorld(), FName(*CurrentLevelName));
+			//
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Power Depleted!"));
 			bLosingConditionDisplayed = true;
-			// Automatically pause the power system when bOnDepletion is true
-			if (bOnDepletion)
-			{
-				bOnDepletion = false;
-				bIsStopped = true;
-			}
+			
+			bOnDepletion = false;
+			bIsStopped = true;
+			
 		}
 	}
 }

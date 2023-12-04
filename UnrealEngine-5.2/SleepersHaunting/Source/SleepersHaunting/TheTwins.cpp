@@ -2,6 +2,8 @@
 
 
 #include "TheTwins.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 ATheTwins::ATheTwins()
@@ -142,6 +144,9 @@ void ATheTwins::TwinAttack()
 		}
 		else
 		{
+			//Player losing condition
+			FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+			UGameplayStatics::OpenLevel(GetWorld(), FName(*CurrentLevelName));
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Player lost!"));
 		}
 	}
