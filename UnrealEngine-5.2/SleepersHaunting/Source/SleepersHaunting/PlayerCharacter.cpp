@@ -13,6 +13,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GrabbableInterface.h"
 #include "Net/UnrealNetwork.h"
+#include "EngineUtils.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -65,6 +66,11 @@ void APlayerCharacter::BeginPlay()
 
 	PowerSystem = Cast<APowerSystem>(UGameplayStatics::GetActorOfClass(GetWorld(), APowerSystem::StaticClass()));
 
+	UWorld* World = GetWorld();
+	for(ATheTwins* Twin : TActorRange<ATheTwins>(World))
+	{
+		Twins.Add(Twin);
+	}
 
 	if(APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -160,6 +166,16 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		if (IncreasePowerAction)
 		{
 			PlayerEnhancedInputComponent->BindAction(IncreasePowerAction, ETriggerEvent::Started, this, &APlayerCharacter::OnIncreasePower);
+		}
+
+		if (StopTwins)
+		{
+			PlayerEnhancedInputComponent->BindAction(StopTwins, ETriggerEvent::Started, this, &APlayerCharacter::OnStopTwins);
+		}
+
+		if (ResumeTwins)
+		{
+			PlayerEnhancedInputComponent->BindAction(ResumeTwins, ETriggerEvent::Started, this, &APlayerCharacter::OnResumeTwins);
 		}
 	}
 }
@@ -377,6 +393,22 @@ void APlayerCharacter::OnIncreasePower()
 {
 	if (PowerSystem)
 		PowerSystem->AddPower(100.0f);
+}
+
+void APlayerCharacter::OnStopTwins()
+{
+	for(ATheTwins* Twin : Twins)
+	{
+		Twin->PauseAllTwinTimers();
+	}
+}
+
+void APlayerCharacter::OnResumeTwins()
+{
+	for(ATheTwins* Twin : Twins)
+	{
+		Twin->ResumeAllTwinTimers();
+	}
 }
 
 //Function that gets triggered through Roomba Event
