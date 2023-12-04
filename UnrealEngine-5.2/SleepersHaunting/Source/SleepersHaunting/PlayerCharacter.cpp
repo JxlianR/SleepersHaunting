@@ -12,6 +12,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GrabbableObject.h"
+#include "GrabbableInterface.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -110,9 +111,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		if (GrabInputAction)
 			{
-				// Bind the input functions
 				PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Grab);
-				PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Release);
 			}
 		
 		if (TestDebugInputAction) 
@@ -167,19 +166,28 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 
 void APlayerCharacter::Grab()
 {
-	// Assuming you have a reference to the currently grabbed object
-	if (CurrentlyGrabbedObject.GetObject())
-	{
-		CurrentlyGrabbedObject->GrabObject(this);  // Pass a reference to the player character
-	}
-}
+	TArray<FOverlapResult> OverlappingActors;
+    
+	FCollisionShape CollisionShape = FCollisionShape::MakeSphere(200.0f);
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
 
-void APlayerCharacter::Release()
-{
-	// Assuming you have a reference to the currently grabbed object
-	if (CurrentlyGrabbedObject.GetObject())
+	// Get overlapping actors
+	if (GetWorld()->OverlapMultiByChannel(OverlappingActors, GetActorLocation(), FQuat::Identity, ECC_Visibility, CollisionShape, CollisionParams))
 	{
-		CurrentlyGrabbedObject->ReleaseObject();
+		for (const FOverlapResult& OverlapResult : OverlappingActors)
+		{
+			if (OverlapResult.GetActor()->GetClass()->ImplementsInterface(UGrabbableInterface::StaticClass()))
+			{
+				IGrabbableInterface* GrabbableActor = Cast<IGrabbableInterface>(OverlapResult.GetActor());
+				
+				if (GrabbableActor)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("GrabbabgleObject detected"));
+					GrabbableActor->Grab_Implementation();
+				}
+			}
+		}
 	}
 }
 

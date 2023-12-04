@@ -17,9 +17,6 @@ class SLEEPERSHAUNTING_API IGrabbableInterface
 	GENERATED_BODY()
 
 public:
-    // Function to grab the object
-    virtual void GrabObject(ACharacter* PlayerCharacter) = 0;
-
-    // Function to release the object
-    virtual void ReleaseObject() = 0;
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Grabbable")
+	void Grab();
 };	

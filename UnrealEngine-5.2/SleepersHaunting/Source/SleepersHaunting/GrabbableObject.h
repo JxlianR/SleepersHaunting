@@ -8,22 +8,22 @@
 #include "GameFramework/Actor.h"
 #include "GrabbableObject.generated.h"
 
+class UMeshComponent;
+
 UCLASS()
 class SLEEPERSHAUNTING_API AGrabbableObject : public AActor, public IGrabbableInterface
 {
     GENERATED_BODY()
 	
-private:
+protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* GrabbableMesh;
 	
+	
 public:
-    AGrabbableObject();
+	AGrabbableObject();
 
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
-	
-    // Implement the interface functions
-    virtual void GrabObject(ACharacter* PlayerCharacter) override;
-    virtual void ReleaseObject() override;
+
+	virtual void Grab_Implementation() override;
 };
