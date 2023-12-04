@@ -8,11 +8,18 @@
 APowerSystem::APowerSystem()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	bPauseOnDepletion = false;
-
+	bOnDepletion = false;
+	bIsStopped = false;
+	bLosingConditionDisplayed = false;
 	// Create TextRenderComponent and attach it to the root
 	TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
 	TextRenderComponent->SetupAttachment(RootComponent);
+
+	//Default
+	TotalPower = 100.0f;  
+	PowerConsumptionLow = 1.0f;
+	PowerConsumptionMedium = 2.0f;
+	PowerConsumptionHigh = 3.0f;
 }
 
 void APowerSystem::BeginPlay()
@@ -20,21 +27,20 @@ void APowerSystem::BeginPlay()
 	Super::BeginPlay();
 
 	// Initialize power values
-	TotalPower = 100.0f;  // Set your desired total power value
 	CurrentPower = TotalPower;
-	PowerConsumptionLow = 1.0f;
-	PowerConsumptionMedium = 2.0f;
-	PowerConsumptionHigh = 3.0f;
+	
 	PowerLevelConsumption = PowerConsumptionLow; // Default to low power consumption
+	CurrentPowerLevel = EPowerLevel::Low; // Default to low power level
+	IncreasePowerConsumption();
+	IncreasePowerConsumption();
 
-	// Set initial power level
 }
 
 void APowerSystem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!bIsPaused) // Check if not manually paused
+	if (!bIsStopped) // Check if not manually paused
 	{
 		// Update power level based on consumption
 		if (CurrentPower > 0)
@@ -42,35 +48,75 @@ void APowerSystem::Tick(float DeltaTime)
 			CurrentPower -= PowerLevelConsumption * DeltaTime;
 		}
 
-		// Calculate power level percentage
-		PowerLevelPercentage = (CurrentPower / TotalPower) * 100.0f;
+		// Calculate power level percentage and format to show only the first two digits
+		int32 DisplayPercentage = FMath::RoundToInt(CurrentPower);
 
 		// Update TextRenderComponent
-		FString PowerInfo = FString::Printf(TEXT("Power: %.2f / %.2f\nConsumption: %.2f\nRemaining: %.2f%%"),
-			CurrentPower, TotalPower, PowerLevelConsumption, PowerLevelPercentage);
+		FString PowerInfo = FString::Printf(TEXT("Power: %d%%\nLevel: %s"), DisplayPercentage, *UEnum::GetValueAsString(CurrentPowerLevel).RightChop(13));
 		TextRenderComponent->SetText(FText::FromString(PowerInfo));
 
 		// Check if power is depleted
-		if (CurrentPower <= 0)
+		if (CurrentPower <= 0 && !bLosingConditionDisplayed)
 		{
 			// Handle power depletion (e.g., trigger blackout, game over, etc.)
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Power Depleted!"));
-
-			// Automatically pause the power system when bPauseOnDepletion is true
-			if (bPauseOnDepletion)
+			bLosingConditionDisplayed = true;
+			// Automatically pause the power system when bOnDepletion is true
+			if (bOnDepletion)
 			{
-				bIsPaused = true;
+				bOnDepletion = false;
+				bIsStopped = true;
 			}
 		}
 	}
 }
 
-void APowerSystem::PausePowerSystem()
+void APowerSystem::IncreasePowerConsumption()
 {
-	bIsPaused = true;
+	// Increase power consumption level (Low -> Medium -> High -> Loop back to Low)
+	CurrentPowerLevel = static_cast<EPowerLevel>((static_cast<int32>(CurrentPowerLevel) + 1) % static_cast<int32>(EPowerLevel::Count));
+
+	// Set the corresponding power consumption value based on the new level
+	switch (CurrentPowerLevel)
+	{
+	case EPowerLevel::Low:
+		PowerLevelConsumption = PowerConsumptionLow;
+		break;
+	case EPowerLevel::Medium:
+		PowerLevelConsumption = PowerConsumptionMedium;
+		break;
+	case EPowerLevel::High:
+		PowerLevelConsumption = PowerConsumptionHigh;
+		break;
+	default:
+		break;
+	}
 }
 
-void APowerSystem::ResumePowerSystem()
+void APowerSystem::DecreasePowerConsumption()
 {
-	bIsPaused = false;
+	// Decrease power consumption level (High -> Medium -> Low -> Loop back to High)
+	CurrentPowerLevel = static_cast<EPowerLevel>((static_cast<int32>(CurrentPowerLevel) - 1 + static_cast<int32>(EPowerLevel::Count)) % static_cast<int32>(EPowerLevel::Count));
+
+	// Set the corresponding power consumption value based on the new level
+	switch (CurrentPowerLevel)
+	{
+	case EPowerLevel::Low:
+		PowerLevelConsumption = PowerConsumptionLow;
+		break;
+	case EPowerLevel::Medium:
+		PowerLevelConsumption = PowerConsumptionMedium;
+		break;
+	case EPowerLevel::High:
+		PowerLevelConsumption = PowerConsumptionHigh;
+		break;
+	default:
+		break;
+	}
+}
+
+void APowerSystem::AddPower(float PowerToAdd)
+{
+	// Increment current power, but ensure it doesn't exceed the total power
+	CurrentPower = FMath::Min(CurrentPower + PowerToAdd, TotalPower);
 }
