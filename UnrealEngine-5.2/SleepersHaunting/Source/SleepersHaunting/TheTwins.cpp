@@ -40,12 +40,12 @@ void ATheTwins::UpdateCurrentRoomID(int32 NewRoomID)
 	CurrentRoomID = NewRoomID;
 	// Display the current room ID on screen
 	if (IsLeftSided) {
-		FString Message = FString::Printf(TEXT("Left Twin is in Room %d"), CurrentRoomID);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Message);
+		//qFString Message = FString::Printf(TEXT("Left Twin is in Room %d"), CurrentRoomID);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Message);
 	}
 	else if (!IsLeftSided) {
-		FString Message = FString::Printf(TEXT("Right Twin is in Room %d"), CurrentRoomID);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Message);
+		//FString Message = FString::Printf(TEXT("Right Twin is in Room %d"), CurrentRoomID);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, Message);
 	}
 }
 

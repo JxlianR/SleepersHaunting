@@ -56,6 +56,10 @@ void APlayerCharacter::BeginPlay()
 	// GetCharacterMovement()->JumpZVelocity = 420.0f;
 	// GetCharacterMovement()->AirControl = 0.2f;
 	RoomManagerVariable = Cast<ARoomsManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ARoomsManager::StaticClass()));
+	SlideDoorRightRef = FindSlideDoorsByName(TEXT("BP_SlideDoorsRight"));
+	SlideDoorLeftRef = FindSlideDoorsByName(TEXT("BP_SlideDoorsLeft"));
+	GarageHandlerLeftRef = FindGarageHandlerByName(TEXT("BA_GarageHandler"));
+	GarageHandlerRightRef = FindGarageHandlerByName(TEXT("BA_GarageHandler2"));
 
 
 	if(APlayerController* PlayerController = Cast<APlayerController>(GetController()))
@@ -90,6 +94,41 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 }
 
+ASlideDoors* APlayerCharacter::FindSlideDoorsByName(const FString& DoorName)
+{
+	ASlideDoors* DoorRef = nullptr;
+	TArray<AActor> SlideDoors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASlideDoors::StaticClass(), SlideDoors);
+
+	for (AActor Actor : SlideDoors)
+	{
+		if (Actor->GetName() == DoorName)
+		{
+			DoorRef = Cast<ASlideDoors>(Actor);
+			break;
+		}
+	}
+
+	return DoorRef;
+}
+
+AGarageHandler* APlayerCharacter::FindGarageHandlerByName(const FString& HandlerName)
+{
+	AGarageHandler* HandlerRef = nullptr;
+	TArray<AActor> GarageHandlers;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGarageHandler::StaticClass(), GarageHandlers);
+
+	for (AActor Actor : GarageHandlers)
+	{
+		if (Actor->GetName() == HandlerName)
+		{
+			HandlerRef = Cast<AGarageHandler>(Actor);
+			break;
+		}
+	}
+
+	return HandlerRef;
+}
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -144,6 +183,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		}
 	}
 }
+
 
 void APlayerCharacter::OnMove(const FInputActionValue& Value)
 {
@@ -258,42 +298,44 @@ void APlayerCharacter::CallRoomManagerDebugFunctions()
 //Julian Code:
 void APlayerCharacter::OnCloseLeftSlideDoor()
 {
-	SlideDoorLeftReference->SetDoorTrue();
+	SlideDoorLeftRef->SetDoorTrue();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Close slide door")));
+
 }
 
 void APlayerCharacter::OnCloseLeftSlideDoorEnd()
 {
-	SlideDoorLeftReference->SetDoorFalse();
+	SlideDoorLeftRef->SetDoorFalse();
 }
 
 void APlayerCharacter::OnCloseRightSlideDoor()
 {
-	SlideDoorRightReference->SetDoorTrue();
+	SlideDoorRightRef->SetDoorTrue();
 }
 
 void APlayerCharacter::OnCloseRightSlideDoorEnd()
 {
-	SlideDoorRightReference->SetDoorFalse();
+	SlideDoorRightRef->SetDoorFalse();
 }
 
 void APlayerCharacter::OnUseLeftHandler()
 {
-	GarageHandlerLeftReference->SetHandlerTrue();
+	GarageHandlerLeftRef->SetHandlerTrue();
 }
 
 void APlayerCharacter::OnUseLeftHandlerEnd()
 {
-	GarageHandlerLeftReference->SetHandlerFalse();
+	GarageHandlerLeftRef->SetHandlerFalse();
 }
 
 void APlayerCharacter::OnUseRightHandler()
 {
-	GarageHandlerRightReference->SetHandlerTrue();
+	GarageHandlerRightRef->SetHandlerTrue();
 }
 
 void APlayerCharacter::OnUseRightHandlerEnd()
 {
-	GarageHandlerRightReference->SetHandlerFalse();
+	GarageHandlerRightRef->SetHandlerFalse();
 }
 
 //Function that gets triggered through Roomba Event

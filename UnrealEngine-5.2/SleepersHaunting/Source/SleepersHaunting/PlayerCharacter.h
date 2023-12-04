@@ -108,7 +108,10 @@ private:
 	//Joao Code---------------------------------------------------------------------------------------
 	//Getting the ARoomManager Class
 	ARoomsManager* RoomManagerVariable;
-
+	ASlideDoors* SlideDoorRightRef;
+	ASlideDoors* SlideDoorLeftRef;
+	AGarageHandler* GarageHandlerLeftRef;
+	AGarageHandler* GarageHandlerRightRef;
 
 	
 protected:
