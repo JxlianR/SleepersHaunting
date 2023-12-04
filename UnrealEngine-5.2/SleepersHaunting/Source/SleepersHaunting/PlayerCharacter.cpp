@@ -183,14 +183,13 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 ASlideDoors* APlayerCharacter::FindSlideDoorsByName(const FString& DoorName)
 {
 	ASlideDoors* DoorRef = nullptr;
-	TArray<AActor*> SlideDoors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASlideDoors::StaticClass(), SlideDoors);
-
-	for (AActor* Actor : SlideDoors)
+	
+	UWorld* World = GetWorld();
+	for(ASlideDoors* Door : TActorRange<ASlideDoors>(World))
 	{
-		if (Actor->GetActorLabel() == DoorName)
+		if (Door->GetActorLabel() == DoorName)
 		{
-			DoorRef = Cast<ASlideDoors>(Actor);
+			DoorRef = Cast<ASlideDoors>(Door);
 			break;
 		}
 	}
@@ -201,14 +200,13 @@ ASlideDoors* APlayerCharacter::FindSlideDoorsByName(const FString& DoorName)
 AGarageHandler* APlayerCharacter::FindGarageHandlerByName(const FString& HandlerName)
 {
 	AGarageHandler* HandlerRef = nullptr;
-	TArray<AActor*> GarageHandlers;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGarageHandler::StaticClass(), GarageHandlers);
 
-	for (AActor* Actor : GarageHandlers)
+	UWorld* World = GetWorld();
+	for(AGarageHandler* GarageHandler : TActorRange<AGarageHandler>(World))
 	{
-		if (Actor->GetActorLabel() == HandlerName)
+		if (GarageHandler->GetActorLabel() == HandlerName)
 		{
-			HandlerRef = Cast<AGarageHandler>(Actor);
+			HandlerRef = Cast<AGarageHandler>(GarageHandler);
 			break;
 		}
 	}
