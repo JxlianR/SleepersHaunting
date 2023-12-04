@@ -84,10 +84,10 @@ protected:
 	float Speed = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	float InitialLifetime = 10.0f;
+	float InitialLifetime;
 
 	UPROPERTY(EditAnywhere)
-	float InitialTimerToActivate = 10.0f;
+	float InitialTimerToActivate;
 
 	UPROPERTY(Replicated, VisibleAnywhere)
 	APlayerCharacter* ClosestCharacter;

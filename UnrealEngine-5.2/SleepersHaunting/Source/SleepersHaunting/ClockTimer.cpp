@@ -40,6 +40,7 @@ void AClockTimer::Tick(float DeltaTime)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, TEXT("You Survived!"));
 		bWinCondition = true;
+		UGameplayStatics::OpenLevel(GetWorld(), FName("WinMenu"));
 		//Also make it here to stop all other timers and Ai
 	}
 }
