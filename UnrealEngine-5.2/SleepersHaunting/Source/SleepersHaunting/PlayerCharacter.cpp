@@ -63,6 +63,8 @@ void APlayerCharacter::BeginPlay()
 	GarageHandlerLeftRef = FindGarageHandlerByName(TEXT("BA_GarageHandler"));
 	GarageHandlerRightRef = FindGarageHandlerByName(TEXT("BA_GarageHandler2"));
 
+	PowerSystem = Cast<APowerSystem>(UGameplayStatics::GetActorOfClass(GetWorld(), APowerSystem::StaticClass()));
+
 
 	if(APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -153,6 +155,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		{
 			PlayerEnhancedInputComponent->BindAction(UseRightHandler, ETriggerEvent::Started, this, &APlayerCharacter::OnUseRightHandler);
 			PlayerEnhancedInputComponent->BindAction(UseRightHandler, ETriggerEvent::Completed, this, &APlayerCharacter::OnUseRightHandlerEnd);
+		}
+
+		if (IncreasePowerAction)
+		{
+			PlayerEnhancedInputComponent->BindAction(IncreasePowerAction, ETriggerEvent::Started, this, &APlayerCharacter::OnIncreasePower);
 		}
 	}
 }
@@ -363,6 +370,12 @@ void APlayerCharacter::OnUseRightHandlerEnd()
 		GarageHandlerRightRef->SetHandlerFalse();
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Open  right handler door")));
 
+}
+
+void APlayerCharacter::OnIncreasePower()
+{
+	if (PowerSystem)
+		PowerSystem->AddPower(100.0f);
 }
 
 //Function that gets triggered through Roomba Event

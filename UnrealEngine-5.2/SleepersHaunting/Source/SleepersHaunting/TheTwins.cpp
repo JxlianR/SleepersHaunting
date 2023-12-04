@@ -25,9 +25,6 @@ void ATheTwins::BeginPlay()
 	TwinMesh = FindComponentByClass<USkeletalMeshComponent>();
 	MoveTwinToWaypoint();
 	GetWorldTimerManager().SetTimer(CDMovementTimerHandle, this, &ATheTwins::MoveToRandomConnectedRoom, CDmovementDuration, false);
-
-
-
 }
 
 // Called every frame
@@ -145,8 +142,7 @@ void ATheTwins::TwinAttack()
 		else
 		{
 			//Player losing condition
-			FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
-			UGameplayStatics::OpenLevel(GetWorld(), FName(*CurrentLevelName));
+			UGameplayStatics::OpenLevel(GetWorld(), FName("GameOverMenu"));
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Player lost!"));
 		}
 	}

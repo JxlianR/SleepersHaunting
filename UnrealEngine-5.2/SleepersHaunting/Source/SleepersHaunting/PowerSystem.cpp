@@ -59,8 +59,7 @@ void APowerSystem::Tick(float DeltaTime)
 		if (CurrentPower <= 0 && !bLosingConditionDisplayed)
 		{
 			//Losing Condition
-			FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
-			UGameplayStatics::OpenLevel(GetWorld(), FName(*CurrentLevelName));
+			UGameplayStatics::OpenLevel(GetWorld(), FName("GameOverMenu"));
 			//
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Power Depleted!"));
 			bLosingConditionDisplayed = true;

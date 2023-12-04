@@ -62,6 +62,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* UseRightHandler;
 
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* IncreasePowerAction;
+
 	UPROPERTY(EditAnywhere, Replicated)
 	float MovementSpeed = 1.0f;
 
@@ -93,9 +96,15 @@ public:
 	void HandleRoombaDetachedEvent();
 	
 	ASlideDoors* SlideDoorRightRef;
+	
 	ASlideDoors* SlideDoorLeftRef;
+	
 	AGarageHandler* GarageHandlerLeftRef;
+	
 	AGarageHandler* GarageHandlerRightRef;
+
+	APowerSystem* PowerSystem;
+	
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -108,8 +117,6 @@ private:
 	//Joao Code---------------------------------------------------------------------------------------
 	//Getting the ARoomManager Class
 	ARoomsManager* RoomManagerVariable;
-	
-
 	
 protected:
 	UFUNCTION()
@@ -146,6 +153,9 @@ protected:
 
 	UFUNCTION()
 	void OnUseRightHandlerEnd();
+
+	UFUNCTION()
+	void OnIncreasePower();
 	
 	UFUNCTION()
 	void NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
