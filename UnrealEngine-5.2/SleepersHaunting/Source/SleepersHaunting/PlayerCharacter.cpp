@@ -305,7 +305,7 @@ void APlayerCharacter::OnCloseLeftSlideDoor()
 {
 	if (SlideDoorLeftRef)
 		SlideDoorLeftRef->SetDoorTrue();
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Close slide door")));
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Close left slide door")));
 
 }
 
@@ -313,42 +313,66 @@ void APlayerCharacter::OnCloseLeftSlideDoorEnd()
 {
 	if (SlideDoorLeftRef)
 		SlideDoorLeftRef->SetDoorFalse();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Open  left Slide door")));
 }
 
 void APlayerCharacter::OnCloseRightSlideDoor()
 {
 	if (SlideDoorRightRef)
 		SlideDoorRightRef->SetDoorTrue();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Close right slide door")));
+
 }
 
 void APlayerCharacter::OnCloseRightSlideDoorEnd()
 {
 	if (SlideDoorRightRef)
 		SlideDoorRightRef->SetDoorFalse();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Open right slide door")));
+
 }
 
 void APlayerCharacter::OnUseLeftHandler()
 {
 	if (GarageHandlerLeftRef)
 		GarageHandlerLeftRef->SetHandlerTrue();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Close left handler door")));
+
 }
 
 void APlayerCharacter::OnUseLeftHandlerEnd()
 {
 	if (GarageHandlerLeftRef)
 		GarageHandlerLeftRef->SetHandlerFalse();
-}
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Open left handler door")));
 
+}
 void APlayerCharacter::OnUseRightHandler()
 {
 	if (GarageHandlerRightRef)
 		GarageHandlerRightRef->SetHandlerTrue();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Close right handler door")));
+
 }
 
 void APlayerCharacter::OnUseRightHandlerEnd()
 {
 	if (GarageHandlerRightRef)
 		GarageHandlerRightRef->SetHandlerFalse();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Open  right handler door")));
+
+}
+
+//Function that gets triggered through Roomba Event
+void APlayerCharacter::HandleRoombaAttachedEvent_Implementation(APlayerCharacter* Character)
+{
+	//if (Character != this) return;
+	MovementSpeed = 0.5f;
+}
+
+void APlayerCharacter::HandleRoombaDetachedEvent_Implementation()
+{
+	MovementSpeed = 1.0f;
 }
 
 //Function that gets triggered through Roomba Event
