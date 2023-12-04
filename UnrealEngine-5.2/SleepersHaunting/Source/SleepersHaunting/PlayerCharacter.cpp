@@ -252,22 +252,23 @@ void APlayerCharacter::Jump()
 		FVector JumpImpulse = FVector(0.0f, 0.0f, 100.0f);
 		GetCharacterMovement()->AddImpulse(JumpImpulse, true);
 		Super::Jump();
+
+		//Detache the Roomba
+		TArray<AActor*> Actors;
+		GetOverlappingActors(Actors);
+	
+		for(AActor* Actor : Actors)
+		{
+			IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Actor);
+			if (JumpableInterface)
+				JumpableInterface->Execute_JumpedOn(Actor, this);
+		}
 	}
 
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Jump Called"));
 	}
-
-	// TArray<AActor*> Actors;
-	// GetOverlappingActors(Actors);
-	//
-	// for(AActor* Actor : Actors)
-	// {
-	// 	IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Actor);
-	// 	if (JumpableInterface)
-	// 		JumpableInterface->Execute_JumpedOn(Actor);
-	// }
 }
 
 void APlayerCharacter::StopJumping()
@@ -394,12 +395,12 @@ void APlayerCharacter::HandleRoombaDetachedEvent_Implementation()
 void APlayerCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,
 	bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
-	Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
-	float CharacterZVelocity = NormalImpulse.Z;
-
-	IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Other);
-	if (JumpableInterface)
-		JumpableInterface->Execute_JumpedOn(Other, this);
+	// Super::NotifyHit(MyComp, Other, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
+	// float CharacterZVelocity = NormalImpulse.Z;
+	//
+	// IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Other);
+	// if (JumpableInterface)
+	// 	JumpableInterface->Execute_JumpedOn(Other, this);
 	
 	/*if (NormalImpulse.Y > 0.0f)
 	{

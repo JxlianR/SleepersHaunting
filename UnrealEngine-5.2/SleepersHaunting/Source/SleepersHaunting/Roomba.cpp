@@ -171,7 +171,7 @@ void ARoomba::TriggerRoombaDetachedEvent_Implementation()
 void ARoomba::JumpedOn_Implementation(APlayerCharacter* Character)
 {
 	if (Attached == false) return;
-	if (Character == AttachedCharacter) return;
+	//if (Character == AttachedCharacter) return;
 	ChangeActiveState(false);
 }
 
