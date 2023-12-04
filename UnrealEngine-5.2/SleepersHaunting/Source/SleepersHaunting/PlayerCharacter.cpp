@@ -187,7 +187,7 @@ ASlideDoors* APlayerCharacter::FindSlideDoorsByName(const FString& DoorName)
 	UWorld* World = GetWorld();
 	for(ASlideDoors* Door : TActorRange<ASlideDoors>(World))
 	{
-		if (Door->GetActorLabel() == DoorName)
+		if (Door->GetActorNameOrLabel() == DoorName)
 		{
 			DoorRef = Cast<ASlideDoors>(Door);
 			break;
@@ -204,7 +204,7 @@ AGarageHandler* APlayerCharacter::FindGarageHandlerByName(const FString& Handler
 	UWorld* World = GetWorld();
 	for(AGarageHandler* GarageHandler : TActorRange<AGarageHandler>(World))
 	{
-		if (GarageHandler->GetActorLabel() == HandlerName)
+		if (GarageHandler->GetActorNameOrLabel() == HandlerName)
 		{
 			HandlerRef = Cast<AGarageHandler>(GarageHandler);
 			break;
