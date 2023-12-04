@@ -63,12 +63,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* UseRightHandler;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Replicated)
 	float MovementSpeed = 1.0f;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	ASlideDoors* FindSlideDoorsByName(const FString& DoorName);
 
@@ -85,10 +87,10 @@ public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
 	// Julian Code:
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void HandleRoombaAttachedEvent(APlayerCharacter* Character);
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void HandleRoombaDetachedEvent();
 	
 	ASlideDoors* SlideDoorRightRef;

@@ -13,6 +13,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GrabbableObject.h"
 #include "GrabbableInterface.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -94,13 +95,19 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 }
 
+void APlayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(APlayerCharacter, MovementSpeed);
+}
+
 ASlideDoors* APlayerCharacter::FindSlideDoorsByName(const FString& DoorName)
 {
 	ASlideDoors* DoorRef = nullptr;
-	TArray<AActor> SlideDoors;
+	TArray<AActor*> SlideDoors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASlideDoors::StaticClass(), SlideDoors);
 
-	for (AActor Actor : SlideDoors)
+	for (AActor* Actor : SlideDoors)
 	{
 		if (Actor->GetName() == DoorName)
 		{
@@ -115,10 +122,10 @@ ASlideDoors* APlayerCharacter::FindSlideDoorsByName(const FString& DoorName)
 AGarageHandler* APlayerCharacter::FindGarageHandlerByName(const FString& HandlerName)
 {
 	AGarageHandler* HandlerRef = nullptr;
-	TArray<AActor> GarageHandlers;
+	TArray<AActor*> GarageHandlers;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AGarageHandler::StaticClass(), GarageHandlers);
 
-	for (AActor Actor : GarageHandlers)
+	for (AActor* Actor : GarageHandlers)
 	{
 		if (Actor->GetName() == HandlerName)
 		{
@@ -339,13 +346,13 @@ void APlayerCharacter::OnUseRightHandlerEnd()
 }
 
 //Function that gets triggered through Roomba Event
-void APlayerCharacter::HandleRoombaAttachedEvent(APlayerCharacter* Character)
+void APlayerCharacter::HandleRoombaAttachedEvent_Implementation(APlayerCharacter* Character)
 {
 	//if (Character != this) return;
 	MovementSpeed = 0.5f;
 }
 
-void APlayerCharacter::HandleRoombaDetachedEvent()
+void APlayerCharacter::HandleRoombaDetachedEvent_Implementation()
 {
 	MovementSpeed = 1.0f;
 }
