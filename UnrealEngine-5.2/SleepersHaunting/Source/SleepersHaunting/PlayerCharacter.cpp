@@ -11,7 +11,6 @@
 #include "Roomba.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "GrabbableObject.h"
 #include "GrabbableInterface.h"
 #include "Net/UnrealNetwork.h"
 
@@ -157,7 +156,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		if (GrabInputAction)
 		{
-			PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Grab);
+			PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::OnGrab);
 		}
 		
 		if (TestDebugInputAction) 
@@ -211,7 +210,7 @@ void APlayerCharacter::OnMove(const FInputActionValue& Value)
 	}
 }
 
-void APlayerCharacter::Grab()
+void APlayerCharacter::OnGrab()
 {
 	TArray<FOverlapResult> OverlappingActors;
     
@@ -226,12 +225,11 @@ void APlayerCharacter::Grab()
 		{
 			if (OverlapResult.GetActor()->GetClass()->ImplementsInterface(UGrabbableInterface::StaticClass()))
 			{
-				IGrabbableInterface* GrabbableActor = Cast<IGrabbableInterface>(OverlapResult.GetActor());
-				
-				if (GrabbableActor)
+				IGrabbableInterface* GrabbableInterface = Cast<IGrabbableInterface>(OverlapResult.GetActor());
+				if (GrabbableInterface)
 				{
-					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("GrabbabgleObject detected"));
-					GrabbableActor->Grab_Implementation();
+					GrabbableInterface->Execute_Grab(OverlapResult.GetActor());
+					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Grabbable Object Detected"));
 				}
 			}
 		}
@@ -242,7 +240,7 @@ void APlayerCharacter::Jump()
 {
 	if (CanJump())
 	{
-		FVector JumpImpulse = FVector(0.0f, 0.0f, 420.0f);
+		FVector JumpImpulse = FVector(0.0f, 0.0f, 100.0f);
 		GetCharacterMovement()->AddImpulse(JumpImpulse, true);
 		Super::Jump();
 	}

@@ -9,7 +9,6 @@
 //Classes
 #include "RoomsManager.h"
 #include "GarageHandler.h"
-#include "GrabbableInterface.h"
 #include "SlideDoors.h"
 
 #include "PlayerCharacter.generated.h"
@@ -116,7 +115,7 @@ protected:
 	UFUNCTION()
 	void OnMove(const FInputActionValue& Value);
 	
-	void Grab();
+	void OnGrab();
 
 	//Joao Code---------------------------------------------------------------------------------------
 protected:
