@@ -69,6 +69,7 @@ void ARoomba::Tick(float DeltaTime)
 void ARoomba::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
 	DOREPLIFETIME(ARoomba, ClosestCharacter);
 	DOREPLIFETIME(ARoomba, AttachedCharacter);
 	DOREPLIFETIME(ARoomba, StartLocation);
