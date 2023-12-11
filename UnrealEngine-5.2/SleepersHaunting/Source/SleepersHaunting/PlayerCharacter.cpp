@@ -263,8 +263,7 @@ void APlayerCharacter::Jump()
 {
 	if (CanJump())
 	{
-		FVector JumpImpulse = FVector(0.0f, 0.0f, 50.0f);
-		GetCharacterMovement()->AddImpulse(JumpImpulse, true);
+		GetCharacterMovement()->JumpZVelocity = JumpVelocity;
 		Super::Jump();
 
 		//Detache the Roomba

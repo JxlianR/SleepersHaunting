@@ -42,8 +42,8 @@ void ARoomba::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//if (Attached)
-	//	return;
+	if (Attached)
+		return;
 	
 	if (Active)
 	{
@@ -51,8 +51,6 @@ void ARoomba::Tick(float DeltaTime)
 
 		if (Lifetime <= 0)
 			ChangeActiveState(false);
-
-		if (Attached) return;
 
 		GetClosestPlayer();
 		FollowPlayer();
@@ -171,7 +169,7 @@ void ARoomba::TriggerRoombaDetachedEvent_Implementation()
 void ARoomba::JumpedOn_Implementation(APlayerCharacter* Character)
 {
 	if (Attached == false) return;
-	//if (Character == AttachedCharacter) return;
+	if (Characters.Num() > 1 && Character == AttachedCharacter) return;
 	ChangeActiveState(false);
 }
 

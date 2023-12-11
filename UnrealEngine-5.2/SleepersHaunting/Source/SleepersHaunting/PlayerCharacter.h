@@ -75,6 +75,9 @@ protected:
 	UPROPERTY(EditAnywhere, Replicated)
 	float MovementSpeed = 1.0f;
 
+	UPROPERTY(EditAnywhere)
+	float JumpVelocity;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
