@@ -290,7 +290,7 @@ void APlayerCharacter::StopJumping()
 
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("StopJumping Called"));
+		GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Red, TEXT("StopJumping Called"));
 	}
 }
 
@@ -384,7 +384,7 @@ void APlayerCharacter::OnUseRightHandlerEnd()
 
 }
 
-void APlayerCharacter::OnIncreasePower()
+void APlayerCharacter::OnIncreasePower_Implementation()
 {
 	if (PowerSystem)
 		PowerSystem->AddPower(100.0f);

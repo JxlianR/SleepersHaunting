@@ -4,6 +4,7 @@
 #include "PowerSystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Engine.h"
+#include "Net/UnrealNetwork.h"
 
 APowerSystem::APowerSystem()
 {
@@ -31,8 +32,6 @@ void APowerSystem::BeginPlay()
 	
 	PowerLevelConsumption = PowerConsumptionLow; // Default to low power consumption
 	CurrentPowerLevel = EPowerLevel::Low; // Default to low power level
-
-
 }
 
 void APowerSystem::Tick(float DeltaTime)
@@ -67,6 +66,16 @@ void APowerSystem::Tick(float DeltaTime)
 		}
 	}
 }
+
+void APowerSystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(APowerSystem, CurrentPower);
+	DOREPLIFETIME(APowerSystem, CurrentPowerLevel);
+	//DOREPLIFETIME(APowerSystem, TextRenderComponent);
+}
+
 void APowerSystem::IncreasePowerConsumption()
 {
 	// Increase power consumption level (Low -> Medium -> High -> Loop back to Low)

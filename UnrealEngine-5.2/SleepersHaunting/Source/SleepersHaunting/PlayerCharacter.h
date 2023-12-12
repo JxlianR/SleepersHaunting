@@ -167,7 +167,7 @@ protected:
 	UFUNCTION()
 	void OnUseRightHandlerEnd();
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void OnIncreasePower();
 
 	UFUNCTION()

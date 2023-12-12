@@ -30,12 +30,15 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	UFUNCTION(BlueprintCallable, Category = "Power")
 		void IncreasePowerConsumption();
 
 	UFUNCTION(BlueprintCallable, Category = "Power")
 		void DecreasePowerConsumption();
 
+	UFUNCTION()
 	void AddPower(float PowerToAdd);
 
 
@@ -46,7 +49,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
 		float TotalPower;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Power")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Power", Replicated)
 		float CurrentPower;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
@@ -64,7 +67,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
 		float PowerLevelConsumption;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power", Replicated)
 		EPowerLevel CurrentPowerLevel;
 
 	UPROPERTY(EditAnywhere, Category = "Power")
