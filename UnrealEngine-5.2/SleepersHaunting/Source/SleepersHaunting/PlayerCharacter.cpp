@@ -362,7 +362,6 @@ void APlayerCharacter::OnUseLeftHandler()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Close left handler door")));
 
 }
-
 void APlayerCharacter::OnUseLeftHandlerEnd()
 {
 	if (GarageHandlerLeftRef)
@@ -377,7 +376,6 @@ void APlayerCharacter::OnUseRightHandler()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Close right handler door")));
 
 }
-
 void APlayerCharacter::OnUseRightHandlerEnd()
 {
 	if (GarageHandlerRightRef)

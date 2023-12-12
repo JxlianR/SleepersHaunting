@@ -192,3 +192,15 @@ void AA_FatherGarage::SetLosingConditionTrue()
 	UGameplayStatics::OpenLevel(GetWorld(), FName("GameOverMenu"));
 
 }
+
+
+//Server Code
+
+void AA_FatherGarage::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AA_FatherGarage, bLosingCondition); //Goes Gamestate class that exists
+	DOREPLIFETIME(AA_FatherGarage, bHandler1);
+	DOREPLIFETIME(AA_FatherGarage, bHandler2);
+}

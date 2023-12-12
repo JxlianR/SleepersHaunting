@@ -1,9 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/PlayerState.h"
+#include "Net/UnrealNetwork.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/TimelineComponent.h"
 #include "A_FatherGarage.generated.h"
@@ -11,110 +11,106 @@
 UCLASS()
 class SLEEPERSHAUNTING_API AA_FatherGarage : public AActor
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
-	AA_FatherGarage();
+    // Sets default values for this actor's properties
+    AA_FatherGarage();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
 
 public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
 
-	//UFUNCTION()
-		//void OpenDoor();
+    void SetHandler1(bool NewValue);
 
-	UFUNCTION(BlueprintCallable)
-		void SetHandler1(bool NewValue);
+    void SetHandler2(bool NewValue);
 
-	UFUNCTION(BlueprintCallable)
-		void SetHandler2(bool NewValue);
+	//SetMulticast is something it should be executed in all clients when the server calls this function.
+    UFUNCTION(BlueprintCallable)
+    void SetLosingConditionTrue();
 
-	UFUNCTION(BlueprintCallable)
-		void SetLosingConditionTrue();
+    UFUNCTION()
+    void StartCooldownTimer();
 
+    UFUNCTION()
+    void StartOpenDoorTimeline();
 
-	UFUNCTION()
-		void StartCooldownTimer();
+    UFUNCTION()
+    void OnOpenDoorTimelineCompleted();
 
-	UFUNCTION()
-		void StartOpenDoorTimeline();
+    UFUNCTION()
+    void StartResetTimeline();
 
-	UFUNCTION()
-		void OnOpenDoorTimelineCompleted();
+    UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+    bool bLosingCondition;
 
+    UPROPERTY(Replicated, BlueprintReadOnly)
+    bool bHandler1;
 
-	UFUNCTION()
-		void StartResetTimeline(); // Renamed from StartCloseDoorTimeline
+    UPROPERTY(Replicated, BlueprintReadOnly)
+    bool bHandler2;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		UStaticMeshComponent* GarageDoorMesh;
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UStaticMeshComponent* GarageDoorMesh;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float ZOffset;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    float ZOffset;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float OpenDoorDuration;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    float OpenDoorDuration;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float ResetDoorDuration; // Renamed from CloseDoorDuration
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    float ResetDoorDuration;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		float CooldownDuration; // Added CooldownDuration
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    float CooldownDuration;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
-		UCurveFloat* OpenDoorCurve;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+    UCurveFloat* OpenDoorCurve;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
-		UCurveFloat* ResetDoorCurve;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+    UCurveFloat* ResetDoorCurve;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UTimelineComponent* OpenDoorTimeline;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    UTimelineComponent* OpenDoorTimeline;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UTimelineComponent* ResetDoorTimeline;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    UTimelineComponent* ResetDoorTimeline;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UTimelineComponent* CooldownDoorTimeline;
+    UPROPERTY(EditAnywhere, BlueprintReadOnly)
+    UTimelineComponent* CooldownDoorTimeline;
 
-
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
-		//UCurveFloat* CooldownCurve;
-
-	UPROPERTY(BlueprintReadOnly)
-		bool bLosingCondition;
-
-	UPROPERTY(BlueprintReadOnly)
-		bool bHandler1;
-
-	UPROPERTY(BlueprintReadOnly)
-		bool bHandler2;
+    // Uncommented-out sections
+    // UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+    // UCurveFloat* CooldownCurve;
 
 private:
-	FVector InitialDoorLocation;
-	FVector TargetDoorLocation;
+    FVector InitialDoorLocation;
+    FVector TargetDoorLocation;
 
-	FTimerHandle CooldownTimerHandle;
-	FTimerHandle OpenDoorTimerHandle;
-	FTimerHandle ResetDoorTimerHandle;
+    FTimerHandle CooldownTimerHandle;
+    FTimerHandle OpenDoorTimerHandle;
+    FTimerHandle ResetDoorTimerHandle;
 
+    UFUNCTION()
+    void OpenDoorUpdate(float Value);
 
-	UFUNCTION()
-		void OpenDoorUpdate(float Value);
+    UFUNCTION()
+    void ResetDoorUpdate(float Value);
 
-	UFUNCTION()
-		void ResetDoorUpdate(float Value); // Renamed from CloseDoorUpdate
+    // Uncommented-out sections
+    // UFUNCTION(Server, Reliable, WithValidation)
+    // void CooldownDoorUpdate(float Value);
 
-	//UFUNCTION()
-		//void CooldownDoorUpdate(float Value);
+    // UFUNCTION(Server, Reliable, WithValidation)
+    // void StartResetDoorTimer();
 
-	//UFUNCTION()
-		//void StartResetDoorTimer();
+    // UFUNCTION(Server, Reliable, WithValidation)
+    // void ResetDoor();
 
-	//UFUNCTION()
-		//void ResetDoor();
+    virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const override;
 };
