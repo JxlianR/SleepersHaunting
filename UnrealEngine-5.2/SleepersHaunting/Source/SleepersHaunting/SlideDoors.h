@@ -3,12 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GrabbableInterface.h"
 #include "GameFramework/Actor.h"
 #include "PowerSystem.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "SlideDoors.generated.h"
 
+class UBoxComponent;
+
 UCLASS()
-class SLEEPERSHAUNTING_API ASlideDoors : public AActor
+class SLEEPERSHAUNTING_API ASlideDoors : public AActor, public IGrabbableInterface
 {
 	GENERATED_BODY()
 
@@ -24,21 +28,44 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DoorVariables")
-		bool lockedDoor;
+	bool lockedDoor;
 
 	// Function to check if the door is locked
 	UFUNCTION(BlueprintCallable, Category = "DoorFunctions")
-		bool IsDoorLocked();
+	bool IsDoorLocked();
 
 	// Function to set the door status to false (unlocked)
 	UFUNCTION(BlueprintCallable, Category = "DoorFunctions")
-		void SetDoorFalse();
+	void SetDoorFalse();
 
 	// Function to set the door status to true (locked)
 	UFUNCTION(BlueprintCallable, Category = "DoorFunctions")
-		void SetDoorTrue();
+	void SetDoorTrue();
 
+	virtual void Grab_Implementation() override;
+	virtual void Release_Implementation() override;
 	
+	void SmoothMoveToInitialLocation(float DeltaTime);
+	void GrabTick(float DeltaTime);
+
 private:
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* MainMeshComponent;
+
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* SlideDoorMeshComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* TriggerVolume;
+	
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	// FVector InitialLocation;
+	bool bShouldMoveSmoothly;
+
 	APowerSystem* powerSystemReference;
 };
