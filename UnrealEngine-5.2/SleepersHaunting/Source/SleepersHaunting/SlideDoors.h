@@ -1,12 +1,9 @@
-// SlideDoors.h
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GrabbableInterface.h"
 #include "GameFramework/Actor.h"
 #include "PowerSystem.h"
-#include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "SlideDoors.generated.h"
 
 class UBoxComponent;

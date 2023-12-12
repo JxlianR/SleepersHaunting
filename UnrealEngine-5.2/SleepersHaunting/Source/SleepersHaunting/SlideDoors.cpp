@@ -96,7 +96,6 @@ void ASlideDoors::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	if (OtherComp == SlideDoorMeshComponent)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Triggered"));
-		// The SlideDoorMeshComponent has started overlapping with the TriggerVolume
 		SetDoorTrue();
 	}
 }
