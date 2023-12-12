@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "A_FatherGarage.h"
+#include "Net/UnrealNetwork.h"
+
 #include "GarageHandler.generated.h"
 
 UCLASS()
@@ -27,6 +29,9 @@ public:
 		class AA_FatherGarage* GarageReference;
 
 	// Boolean to determine if this represents bHandler1 or bHandler2
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Garage Handler")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = "Garage Handler")
 		bool bIsHandler1;
+
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
+
 };

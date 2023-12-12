@@ -49,3 +49,10 @@ void AGarageHandler::SetHandlerTrue()
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("GarageReference is null"));
 	}
 }
+
+void AGarageHandler::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AGarageHandler, bIsHandler1);
+}
