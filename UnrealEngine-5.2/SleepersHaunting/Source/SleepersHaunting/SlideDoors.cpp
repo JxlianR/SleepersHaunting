@@ -109,3 +109,11 @@ void ASlideDoors::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Othe
 		SetDoorFalse();
 	}
 }
+
+void ASlideDoors::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(ASlideDoors, lockedDoor);
+
+}

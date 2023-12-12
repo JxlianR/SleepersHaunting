@@ -24,7 +24,7 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "DoorVariables")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = "DoorVariables")
 	bool lockedDoor;
 
 	// Function to check if the door is locked
@@ -65,4 +65,6 @@ private:
 	bool bShouldMoveSmoothly;
 
 	APowerSystem* powerSystemReference;
+
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 };
