@@ -4,6 +4,7 @@
 #include "GrabbableInterface.h"
 #include "GameFramework/Actor.h"
 #include "PowerSystem.h"
+#include "Net/UnrealNetwork.h"
 #include "SlideDoors.generated.h"
 
 class UBoxComponent;
