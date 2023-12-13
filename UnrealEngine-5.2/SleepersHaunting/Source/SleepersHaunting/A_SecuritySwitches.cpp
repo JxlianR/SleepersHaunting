@@ -79,7 +79,10 @@ void AA_SecuritySwitches::OnOverlapBegin(UPrimitiveComponent* OverlappedComponen
 	}
 	*/
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("TouchedSwitch!"));
-	ActivateSwitch();
+	if (OtherActor->GetClass()->IsChildOf(APlayerCharacter::StaticClass()))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("TouchedSwitch!"));
+		ActivateSwitch();
+	}
 	
 }
