@@ -28,7 +28,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
 		bool IsLeftSided;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = "Twins")
 		bool CanAttack;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
 		TArray<int32> AccessRooms;
