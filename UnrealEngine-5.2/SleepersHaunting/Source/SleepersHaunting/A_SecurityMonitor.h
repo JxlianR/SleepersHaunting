@@ -20,10 +20,13 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+public:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		TArray<UTextureRenderTarget2D*> CameraRenderTargets;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", Replicated)
 		int32 CurrentCameraIndex;
 
 	UFUNCTION(BlueprintCallable, Category = "Camera")
@@ -38,8 +41,6 @@ public:
 private:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		TArray<UMaterialInterface*> CameraMaterials;
-
-
 
 	int32 NumCameras = 0; // Automatically set during BeginPlay
 

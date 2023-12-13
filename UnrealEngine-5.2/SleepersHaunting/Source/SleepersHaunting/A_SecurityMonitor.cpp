@@ -3,6 +3,8 @@
 
 #include "A_SecurityMonitor.h"
 
+#include "Net/UnrealNetwork.h"
+
 // Sets default values
 AA_SecurityMonitor::AA_SecurityMonitor()
 {
@@ -19,6 +21,13 @@ void AA_SecurityMonitor::BeginPlay()
 	Super::BeginPlay();
 	SetNumCameras();
 
+}
+
+void AA_SecurityMonitor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(AA_SecurityMonitor, CurrentCameraIndex);
 }
 
 void AA_SecurityMonitor::SetNumCameras()
