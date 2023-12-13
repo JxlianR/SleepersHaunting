@@ -30,7 +30,7 @@ public:
 		bool bWinCondition;
 
 private:
-	UPROPERTY(Reliable)
+	UPROPERTY(Replicated)
 	float ElapsedTime;
 
 	// TextRenderComponent for displaying the time
