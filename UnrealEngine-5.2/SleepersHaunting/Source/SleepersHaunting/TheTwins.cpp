@@ -194,6 +194,13 @@ void ATheTwins::ResumeAllTwinTimers()
 	}
 }
 
+void ATheTwins::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATheTwins, CanAttack);
+}
+
 void ATheTwins::EnableAttack()
 {
 	CanAttack = true;

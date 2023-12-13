@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/TextRenderComponent.h"
+#include "Net/UnrealNetwork.h"
 #include "ClockTimer.generated.h"
 
 
@@ -29,10 +30,12 @@ public:
 		bool bWinCondition;
 
 private:
+	UPROPERTY(Reliable)
 	float ElapsedTime;
 
 	// TextRenderComponent for displaying the time
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		UTextRenderComponent* TextRenderComponent;
 
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 };

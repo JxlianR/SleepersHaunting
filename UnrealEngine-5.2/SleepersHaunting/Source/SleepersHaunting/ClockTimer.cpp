@@ -44,3 +44,10 @@ void AClockTimer::Tick(float DeltaTime)
 		//Also make it here to stop all other timers and Ai
 	}
 }
+
+void AClockTimer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AClockTimer, ElapsedTime);
+}

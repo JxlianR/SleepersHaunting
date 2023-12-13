@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Net/UnrealNetwork.h"
 
 #include "RoomsManager.h"  
 #include "SlideDoors.h"   
@@ -80,4 +81,7 @@ private:
 	FTimerHandle CDMovementTimerHandle;
 	FTimerHandle SAttackTimerHandle;
 	FTimerHandle CDAttackTimerHandle;
+
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
+
 };
