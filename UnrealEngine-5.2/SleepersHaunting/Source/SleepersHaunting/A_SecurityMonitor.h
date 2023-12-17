@@ -21,8 +21,7 @@ protected:
 
 public:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-public:
+	
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		TArray<UTextureRenderTarget2D*> CameraRenderTargets;
 
@@ -35,8 +34,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Camera")
 		void PreviousCamera();
 
-	UFUNCTION(BlueprintCallable, Category = "Camera")
+	UFUNCTION(BlueprintCallable, Category = "Camera", Server, Reliable)
 		void UpdateMonitorView();
+
+	//UFUNCTION()
+	//OnCurrentCameraIndexChange();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Camera")

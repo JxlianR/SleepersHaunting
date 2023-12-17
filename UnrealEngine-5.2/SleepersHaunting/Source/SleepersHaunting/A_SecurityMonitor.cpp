@@ -11,8 +11,6 @@ AA_SecurityMonitor::AA_SecurityMonitor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	CurrentCameraIndex = 0;
-
-
 }
 
 // Called when the game starts or when spawned
@@ -20,7 +18,6 @@ void AA_SecurityMonitor::BeginPlay()
 {
 	Super::BeginPlay();
 	SetNumCameras();
-
 }
 
 void AA_SecurityMonitor::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -34,7 +31,6 @@ void AA_SecurityMonitor::SetNumCameras()
 {
 	NumCameras = FMath::Min(CameraRenderTargets.Num(), CameraMaterials.Num());
 }
-
 
 void AA_SecurityMonitor::NextCamera()
 {
@@ -50,7 +46,7 @@ void AA_SecurityMonitor::PreviousCamera()
 	UpdateMonitorView();
 }
 
-void AA_SecurityMonitor::UpdateMonitorView()
+void AA_SecurityMonitor::UpdateMonitorView_Implementation()
 {
 	UStaticMeshComponent* MonitorScreenMesh = FindComponentByClass<UStaticMeshComponent>();
 
