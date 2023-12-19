@@ -4,7 +4,9 @@
 #include "Roomba.h"
 
 #include "EngineUtils.h"
+#include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
+#include "GameFramework/MovementComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 
@@ -22,8 +24,13 @@ ARoomba::ARoomba()
 
 	Collider = CreateDefaultSubobject<USphereComponent>(TEXT("Collider"));
 	Collider->SetupAttachment(Roomba);
-
+	
 	Collider->OnComponentBeginOverlap.AddDynamic(this, &ARoomba::OnOverlapBegin);
+
+	// BoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
+	// BoxCollider->SetupAttachment(Roomba);
+	//
+	// BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &ARoomba::OnOverlapBegin);
 
 	SetReplicates(true);
 }
@@ -35,6 +42,8 @@ void ARoomba::BeginPlay()
 
 	StartLocation = GetActorLocation();
 	GetCharacters();
+	Lifetime = InitialLifetime;
+	TimerToActivate = InitialTimerToActivate;
 }
 
 // Called every frame
@@ -98,13 +107,13 @@ void ARoomba::FollowPlayer_Implementation()
 	if (ClosestCharacter == nullptr) return;
 	FVector Direction = ClosestCharacter->GetActorLocation() - GetActorLocation();
 	Direction.Z = 0.0f;
-	SetActorLocation(GetActorLocation() + (Direction * Speed * GetWorld()->DeltaTimeSeconds));
+	SetActorLocation(GetActorLocation() + (Direction * Speed * GetWorld()->DeltaTimeSeconds), true);
 }
 
 void ARoomba::AttachToPlayer_Implementation(APlayerCharacter* Player)
 {
 	// Needs to be tested in terms of how the roomba is behaving (where does it snap to and what happens when the player is moving)
-	const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, false);
+	const FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, true);
 	AttachToActor(Player, AttachmentRules, "Roomba");
 
 	Attached = true;
@@ -129,12 +138,6 @@ void ARoomba::ChangeActiveState_Implementation(bool active)
 		SetActorLocation(StartLocation);
 		SetActorRotation(StartRotation);
 		Lifetime = InitialLifetime;
-
-		UWorld* World = GetWorld();
-		for(APlayerCharacter* Character : TActorRange<APlayerCharacter>(World))
-		{
-			Characters.Add(Character);
-		}
 	}
 	else
 	{
@@ -149,7 +152,7 @@ void ARoomba::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 }
 
 void ARoomba::OnOverlapFunction_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                               UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor == ClosestCharacter && AttachedCharacter == nullptr)
 	{
@@ -181,7 +184,7 @@ void ARoomba::GetCharacters()
 	
 	for(APlayerCharacter* Character : TActorRange<APlayerCharacter>(World))
 	{
-		Characters.Add(Character);
+		Characters.AddUnique(Character);
 	}
 }
 

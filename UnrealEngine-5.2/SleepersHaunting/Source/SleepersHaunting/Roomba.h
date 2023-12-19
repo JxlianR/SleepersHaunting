@@ -61,7 +61,7 @@ protected:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UFUNCTION(NetMulticast, Reliable)
+	UFUNCTION(Server, Reliable)
 	void OnOverlapFunction(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 protected:
@@ -73,6 +73,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere);
 	TObjectPtr<USphereComponent> Collider;
+	
+	// UPROPERTY(VisibleAnywhere);
+	// TObjectPtr<UBoxComponent> BoxCollider;
 
 	UPROPERTY(Replicated)
 	FVector StartLocation;
