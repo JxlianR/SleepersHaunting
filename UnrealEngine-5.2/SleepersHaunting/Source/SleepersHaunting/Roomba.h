@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AIController.h"
 #include "PlayerCharacter.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/Actor.h"
@@ -13,7 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttachedToPlayer, APlayerCharacte
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDetachedFromPlayer);
 
 UCLASS()
-class SLEEPERSHAUNTING_API ARoomba : public AActor, public IJumpableInterface
+class SLEEPERSHAUNTING_API ARoomba : public APawn, public IJumpableInterface
 {
 	GENERATED_BODY()
 	
@@ -106,6 +107,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Replicated)
 	TArray<APlayerCharacter*> Characters;
+
+	UPROPERTY()
+	AAIController* AIController;
 
 private:
 	bool Active = true;

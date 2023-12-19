@@ -3,7 +3,9 @@
 
 #include "Roomba.h"
 
+#include "AIController.h"
 #include "EngineUtils.h"
+#include "AI/NavigationSystemBase.h"
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/MovementComponent.h"
@@ -40,6 +42,8 @@ void ARoomba::BeginPlay()
 {
 	Super::BeginPlay();
 
+	AIController = Cast<AAIController>(GetController());
+	
 	StartLocation = GetActorLocation();
 	GetCharacters();
 	Lifetime = InitialLifetime;
@@ -107,7 +111,10 @@ void ARoomba::FollowPlayer_Implementation()
 	if (ClosestCharacter == nullptr) return;
 	FVector Direction = ClosestCharacter->GetActorLocation() - GetActorLocation();
 	Direction.Z = 0.0f;
-	SetActorLocation(GetActorLocation() + (Direction * Speed * GetWorld()->DeltaTimeSeconds), true);
+
+	//UNavigationQueryFilter Filter = UNavigationQueryFilter::();
+	AIController->MoveToActor(ClosestCharacter, -1, true, true, false);
+	//SetActorLocation(GetActorLocation() + (Direction * Speed * GetWorld()->DeltaTimeSeconds), true);
 }
 
 void ARoomba::AttachToPlayer_Implementation(APlayerCharacter* Player)
