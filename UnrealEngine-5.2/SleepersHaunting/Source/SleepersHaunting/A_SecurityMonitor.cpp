@@ -46,10 +46,13 @@ void AA_SecurityMonitor::PreviousCamera()
 	UpdateMonitorView();
 }
 
-void AA_SecurityMonitor::UpdateMonitorView_Implementation()
+void AA_SecurityMonitor::UpdateMonitorView()
 {
 	UStaticMeshComponent* MonitorScreenMesh = FindComponentByClass<UStaticMeshComponent>();
-
+	UWorld* World = GetWorld();
+	if (World->IsClient())
+		int CamIndex = CurrentCameraIndex;
+	
 	if (MonitorScreenMesh)
 	{
 		if (CurrentCameraIndex >= 0 && CurrentCameraIndex < CameraMaterials.Num())

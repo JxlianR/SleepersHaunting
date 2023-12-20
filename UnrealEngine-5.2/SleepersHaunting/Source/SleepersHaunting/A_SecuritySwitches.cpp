@@ -73,7 +73,7 @@ void AA_SecuritySwitches::OnOverlapBegin(UPrimitiveComponent* OverlappedComponen
 {
 	UWorld* World = GetWorld();
 	
-	if (OtherActor->GetClass()->IsChildOf(APlayerCharacter::StaticClass()) && OtherActor->Owner)
+	if (OtherActor->GetClass()->IsChildOf(APlayerCharacter::StaticClass()) && World->IsServer())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("TouchedSwitch!"));
 		ActivateSwitch();

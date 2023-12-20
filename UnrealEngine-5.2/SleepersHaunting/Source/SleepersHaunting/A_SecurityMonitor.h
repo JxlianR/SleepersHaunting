@@ -25,7 +25,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		TArray<UTextureRenderTarget2D*> CameraRenderTargets;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", Replicated)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", ReplicatedUsing = UpdateMonitorView)
 		int32 CurrentCameraIndex;
 
 	UFUNCTION(BlueprintCallable, Category = "Camera")
@@ -34,11 +34,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Camera")
 		void PreviousCamera();
 
-	UFUNCTION(BlueprintCallable, Category = "Camera", Server, Reliable)
+	UFUNCTION(BlueprintCallable, Category = "Camera")
 		void UpdateMonitorView();
-
-	//UFUNCTION()
-	//OnCurrentCameraIndexChange();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Camera")
