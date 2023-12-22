@@ -34,8 +34,7 @@ void ASlideDoors::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FVector Force = FVector(-1000.0f, 0.0f, 0.0f); // Adjust the force as needed
-	SlideDoorMeshComponent->AddForce(Force);
+	
 }
 
 bool ASlideDoors::IsDoorLocked()
@@ -59,6 +58,9 @@ void ASlideDoors::SetDoorTrue()
 
 void ASlideDoors::SmoothMoveToInitialLocation(float DeltaTime)
 {
+	FVector Force = FVector(-1000.0f * 1000, 0.0f, 0.0f);
+	SlideDoorMeshComponent->AddForce(Force);
+	
 	// Get initial location
 	FVector InitialLocation = SlideDoorMeshComponent->GetComponentLocation();
 

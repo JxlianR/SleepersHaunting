@@ -21,6 +21,7 @@ class SLEEPERSHAUNTING_API IGrabbableInterface
 	GENERATED_BODY()
 
 public:
+	FVector GetGrabLocation();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Grabbable")
 	void Grab();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Grabbable")

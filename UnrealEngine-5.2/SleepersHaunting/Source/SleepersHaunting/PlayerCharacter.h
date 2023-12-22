@@ -11,6 +11,8 @@
 #include "GarageHandler.h"
 #include "SlideDoors.h"
 #include "TheTwins.h"
+#include "Components/SphereComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 
 #include "PlayerCharacter.generated.h"
 
@@ -47,6 +49,12 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* GrabInputAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* RightHandGrabInputAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* LeftHandGrabInputAction;
 	
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* TestDebugInputAction;
@@ -90,14 +98,37 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	// virtual void PawnClientRestart() override;
 	
 	/** Returns TopDownCameraComponent subobject **/
 	FORCEINLINE UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
+	USphereComponent* RightHandSphereCollision;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
+	USphereComponent* LeftHandSphereCollision;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Handlers")
+	UPhysicsHandleComponent* LeftPhysicsHandle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Handlers")
+	UPhysicsHandleComponent* RightPhysicsHandle;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "IK", meta = (AllowPrivateAccess = "true"))
+	USceneComponent* LeftHandIKTarget;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "IK", meta = (AllowPrivateAccess = "true"))
+	USceneComponent* RightHandIKTarget;
+	
+	// Constants
+	UPROPERTY(EditDefaultsOnly, Category = "Grabbable")
+	float MaxGrabDistance = 200.0f; // Adjust the value based on your game's requirements
+
+	UPROPERTY(EditDefaultsOnly, Category = "Grabbable")
+	float StretchSpeed = 500.0f;
+	
 	// Julian Code:
 	UFUNCTION(Server, Reliable)
 	void HandleRoombaAttachedEvent(APlayerCharacter* Character);
@@ -135,6 +166,12 @@ protected:
 	UFUNCTION()
 	void OnMove(const FInputActionValue& Value);
 	
+	void StretchToNearestGrabbable(bool bIsLeftHand);
+	void GrabLeft();
+	void GrabRight();
+	void ReleaseLeft();
+	void ReleaseRight();
+	void GrabObject(UPrimitiveComponent* GrabbedComponent, bool bIsLeftHand);
 	void OnGrab();
 
 	//Joao Code---------------------------------------------------------------------------------------
