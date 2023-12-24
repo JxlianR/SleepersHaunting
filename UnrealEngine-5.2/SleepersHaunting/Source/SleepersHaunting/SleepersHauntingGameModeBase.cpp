@@ -2,4 +2,12 @@
 
 
 #include "SleepersHauntingGameModeBase.h"
+#include "MyGameState.h"
 
+//#include "MyGameState.h"
+
+ASleepersHauntingGameModeBase::ASleepersHauntingGameModeBase() {
+	GameStateClass = AMyGameState::StaticClass();
+
+	
+}

@@ -41,7 +41,8 @@ public:
 	UFUNCTION()
 	void AddPower(float PowerToAdd);
 
-
+	UFUNCTION()
+		void StopPower();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		UTextRenderComponent* TextRenderComponent;
@@ -73,7 +74,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Power")
 		bool bOnDepletion;
 
+	class AMyGameState* AMyGameStateInstance;
+
 private:
+	UFUNCTION()
+		void GetAllInstanceClasses();
+
 	bool bIsStopped;
 	bool bLosingConditionDisplayed;
 };
