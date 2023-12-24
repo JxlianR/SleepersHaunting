@@ -29,20 +29,9 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Timer")
 		bool bWinCondition;
 
-	UFUNCTION(BlueprintCallable, Category = "Timer")
-		void StopTimer();
-
-	class AMyGameState* AMyGameStateInstance;
-
 private:
-	UFUNCTION()
-		void GetAllInstanceClasses();
-
 	UPROPERTY(Replicated)
 	float ElapsedTime;
-
-	UPROPERTY(Replicated)
-	bool bShouldTick;
 
 	// TextRenderComponent for displaying the time
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))

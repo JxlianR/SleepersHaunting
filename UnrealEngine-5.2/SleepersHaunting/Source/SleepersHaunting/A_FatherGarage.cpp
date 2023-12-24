@@ -1,10 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "A_FatherGarage.h"
-
-//CLasses include
-#include "MyGameState.h"
-
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -55,7 +51,6 @@ void AA_FatherGarage::BeginPlay()
 	Super::BeginPlay();
 
 	// Get Initial positions of the garage door
-	GetAllInstanceClasses();
 	InitialDoorLocation = GetActorLocation();
 	TargetDoorLocation = InitialDoorLocation + FVector(0.0f, 0.0f, ZOffset);
 	GarageDoorMesh = FindComponentByClass<UStaticMeshComponent>();
@@ -92,6 +87,12 @@ void AA_FatherGarage::BeginPlay()
 	StartCooldownTimer();
 }
 
+void AA_FatherGarage::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	// Your additional tick logic goes here
+}
 
 void AA_FatherGarage::StartCooldownTimer()
 {
@@ -121,47 +122,22 @@ void AA_FatherGarage::StartResetTimeline()
 	// Check if both handlers are true before starting the timeline
 	if (bHandler1 && bHandler2)
 	{
-		StopCooldownTimer();
-		StopOpenDoorTimeline();
-		
+		// Stop the Cooldown timer if it's active
+		GetWorldTimerManager().ClearTimer(CooldownTimerHandle);
+
+		// Stop the OpenDoor timeline if it's active
+		if (OpenDoorTimeline->IsPlaying())
+		{
+			OpenDoorTimeline->Stop();
+		}
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Reset timer started!"));
 
 		// Start the ResetDoorTimeline from the beginning
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Reset timer started!"));
 		ResetDoorTimeline->PlayFromStart();
+
 		// Set a timer to call CooldownTimerFinished after ResetDoorDuration seconds
 		GetWorldTimerManager().SetTimer(ResetDoorTimerHandle, this, &AA_FatherGarage::StartCooldownTimer, ResetDoorDuration, false);
 	}
-}
-
-void AA_FatherGarage::StopCooldownTimer()
-{
-	if (GetWorldTimerManager().IsTimerActive(CooldownTimerHandle))
-	{
-		GetWorldTimerManager().ClearTimer(CooldownTimerHandle);
-	}
-}
-
-void AA_FatherGarage::StopOpenDoorTimeline()
-{
-	if (OpenDoorTimeline->IsPlaying())
-	{
-		OpenDoorTimeline->Stop();
-	}
-}
-
-void AA_FatherGarage::StopResetTimeline()
-{
-	if (ResetDoorTimeline->IsPlaying())
-	{
-		ResetDoorTimeline->Stop();
-	}
-}
-
-void AA_FatherGarage::StopAllTimers()
-{
-	StopCooldownTimer();
-	StopOpenDoorTimeline();
-	StopResetTimeline();
 }
 
 void AA_FatherGarage::OpenDoorUpdate(float Value)
@@ -197,20 +173,6 @@ void AA_FatherGarage::ResetDoorUpdate(float Value)
 	}
 }
 
-
-void AA_FatherGarage::GetAllInstanceClasses()
-{
-	if (AMyGameState* GameState = Cast<AMyGameState>(UGameplayStatics::GetGameState(GetWorld())))
-	{
-		AMyGameStateInstance = GameState;
-	}
-	else if (!AMyGameStateInstance)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Game State Instance not found!"));
-	}
-}
-
-
 void AA_FatherGarage::SetHandler1(bool NewValue)
 {
 	bHandler1 = NewValue;
@@ -223,11 +185,9 @@ void AA_FatherGarage::SetHandler2(bool NewValue)
 
 void AA_FatherGarage::SetLosingConditionTrue()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("You Lose!"));
+	bLosingCondition = true;
 	
-	if (AMyGameStateInstance)
-	{
-		AMyGameStateInstance->SetLoseCondition(2);
-	}
 	//Losing condition
 	UGameplayStatics::OpenLevel(GetWorld(), FName("GameOverMenu"));
 

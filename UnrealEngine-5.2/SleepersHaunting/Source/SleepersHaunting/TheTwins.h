@@ -4,7 +4,8 @@
 #include "GameFramework/Actor.h"
 #include "Net/UnrealNetwork.h"
 
-
+#include "RoomsManager.h"  
+#include "SlideDoors.h"   
 
 #include "TheTwins.generated.h"
 
@@ -47,9 +48,11 @@ public:
 	// Duration for attack cooldown
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
 		float CDattackDuration;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		float SsuccessDuration;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
+		class ARoomsManager* RoomsManagerInstance;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
+		class ASlideDoors* SlideDoorsInstance;
 
 	// Function to move the twin to a random connected room
 	UFUNCTION(BlueprintCallable, Category = "Twins")
@@ -63,41 +66,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Twins")
 		void TwinAttack();
 	UFUNCTION(BlueprintCallable, Category = "Twins")
-		void SuccessAttack();
-	UFUNCTION(BlueprintCallable, Category = "Twins")
-		void FailedAttack();
-	UFUNCTION(BlueprintCallable, Category = "Twins")
 		void EnableAttack();
 	UFUNCTION(BlueprintCallable, Category = "Twins")
 		void PauseAllTwinTimers();
 	UFUNCTION(BlueprintCallable, Category = "Twins")
 		void ResumeAllTwinTimers();
-	UFUNCTION(BlueprintCallable, Category = "Twins")
-		bool ReturnLockedDoor();
 
-	
-	//Classes
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		class ARoomsManager* RoomsManagerInstance;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		class ASlideDoors* SlideDoorsInstance;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		class AGroupAttack* GroupAttackInstance;
-
-
-	class AMyGameState* AMyGameStateInstance;
 
 private:
 
 
-	UFUNCTION()
-		void GetAllInstanceClasses();
 
 	// Timer handles for managing cooldowns
 	FTimerHandle CDMovementTimerHandle;
 	FTimerHandle SAttackTimerHandle;
 	FTimerHandle CDAttackTimerHandle;
-	FTimerHandle SuccessAttackTimerHandle;
 
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 
