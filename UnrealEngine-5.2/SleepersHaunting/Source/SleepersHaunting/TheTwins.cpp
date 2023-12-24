@@ -4,13 +4,6 @@
 #include "TheTwins.h"
 #include "Kismet/GameplayStatics.h"
 
-//Classes include
-#include "GroupAttack.h"
-#include "RoomsManager.h"  
-#include "SlideDoors.h"   
-#include "MyGameState.h"
-
-
 
 // Sets default values
 ATheTwins::ATheTwins()
@@ -29,7 +22,6 @@ ATheTwins::ATheTwins()
 void ATheTwins::BeginPlay()
 {
 	Super::BeginPlay();
-	GetAllInstanceClasses();
 	TwinMesh = FindComponentByClass<USkeletalMeshComponent>();
 	MoveTwinToWaypoint();
 	GetWorldTimerManager().SetTimer(CDMovementTimerHandle, this, &ATheTwins::MoveToRandomConnectedRoom, CDmovementDuration, false);
@@ -115,7 +107,6 @@ void ATheTwins::MoveToRandomConnectedRoom()
 			{
 				// Start the special attack timer
 				GetWorldTimerManager().SetTimer(SAttackTimerHandle, this, &ATheTwins::TwinAttack, SattackDuration, false);
-				GroupAttackInstance->AttemptGroupAttack(IsLeftSided);
 			}
 			else
 			{
@@ -143,37 +134,22 @@ void ATheTwins::TwinAttack()
 
 		if (IsDoorLocked)
 		{
-			FailedAttack();
+			MoveToRandomConnectedRoom();
+			// Start the cooldown timer
+			GetWorldTimerManager().SetTimer(CDAttackTimerHandle, this, &ATheTwins::EnableAttack, CDattackDuration, false);
+			CanAttack = false;
 		}
 		else
 		{
-			
+			//Player losing condition
+			UGameplayStatics::OpenLevel(GetWorld(), FName("GameOverMenu"));
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Player lost!"));
-			GetWorldTimerManager().SetTimer(SuccessAttackTimerHandle, this, &ATheTwins::SuccessAttack, SsuccessDuration, false);
-
 		}
 	}
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "SlideDoors instance is not valid");
 	}
-}
-
-void ATheTwins::SuccessAttack()
-{
-	//Player losing condition
-	if (AMyGameStateInstance) {
-		AMyGameStateInstance->SetLoseCondition(1);
-	}
-}
-
-void ATheTwins::FailedAttack()
-{
-	GroupAttackInstance->LeaveAttemptGroupAttack(IsLeftSided);
-	MoveToRandomConnectedRoom();
-	// Start the cooldown timer
-	GetWorldTimerManager().SetTimer(CDAttackTimerHandle, this, &ATheTwins::EnableAttack, CDattackDuration, false);
-	CanAttack = false;
 }
 
 void ATheTwins::PauseAllTwinTimers()
@@ -194,11 +170,6 @@ void ATheTwins::PauseAllTwinTimers()
 	if (GetWorldTimerManager().IsTimerActive(CDAttackTimerHandle))
 	{
 		GetWorldTimerManager().PauseTimer(CDAttackTimerHandle);
-	}
-
-	if (GetWorldTimerManager().IsTimerActive(SuccessAttackTimerHandle))
-	{
-		GetWorldTimerManager().PauseTimer(SuccessAttackTimerHandle);
 	}
 }
 
@@ -221,35 +192,6 @@ void ATheTwins::ResumeAllTwinTimers()
 	{
 		GetWorldTimerManager().UnPauseTimer(CDAttackTimerHandle);
 	}
-
-	if (GetWorldTimerManager().IsTimerPaused(SuccessAttackTimerHandle))
-	{
-		GetWorldTimerManager().UnPauseTimer(SuccessAttackTimerHandle);
-	}
-}
-
-bool ATheTwins::ReturnLockedDoor()
-{
-	bool IsDoorLocked = SlideDoorsInstance->IsDoorLocked();
-
-	return IsDoorLocked;
-}
-
-void ATheTwins::EnableAttack()
-{
-	CanAttack = true;
-}
-
-void ATheTwins::GetAllInstanceClasses()
-{
-	if (AMyGameState* GameState = Cast<AMyGameState>(UGameplayStatics::GetGameState(GetWorld())))
-	{
-		AMyGameStateInstance = GameState;
-	}
-	else if (!AMyGameStateInstance)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Game State Instance not found!"));
-	}
 }
 
 void ATheTwins::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -257,4 +199,9 @@ void ATheTwins::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetim
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ATheTwins, CanAttack);
+}
+
+void ATheTwins::EnableAttack()
+{
+	CanAttack = true;
 }

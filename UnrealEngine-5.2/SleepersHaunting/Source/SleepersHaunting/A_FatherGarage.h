@@ -6,8 +6,6 @@
 #include "Net/UnrealNetwork.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/TimelineComponent.h"
-
-
 #include "A_FatherGarage.generated.h"
 
 UCLASS()
@@ -24,7 +22,8 @@ protected:
     virtual void BeginPlay() override;
 
 public:
-    
+    // Called every frame
+    virtual void Tick(float DeltaTime) override;
 
     void SetHandler1(bool NewValue);
 
@@ -45,20 +44,6 @@ public:
 
     UFUNCTION()
     void StartResetTimeline();
-
-	UFUNCTION()
-	void StopCooldownTimer();
-
-	UFUNCTION()
-	void StopOpenDoorTimeline();
-
-	UFUNCTION()
-	void StopResetTimeline();
-
-	UFUNCTION()
-	void StopAllTimers();
-
-	
 
     UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
     bool bLosingCondition;
@@ -98,8 +83,6 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     UTimelineComponent* CooldownDoorTimeline;
-	
-	class AMyGameState* AMyGameStateInstance;
 
     // Uncommented-out sections
     // UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
@@ -118,9 +101,6 @@ private:
 
     UFUNCTION()
     void ResetDoorUpdate(float Value);
-
-	UFUNCTION()
-	void GetAllInstanceClasses();
 
     // Uncommented-out sections
     // UFUNCTION(Server, Reliable, WithValidation)

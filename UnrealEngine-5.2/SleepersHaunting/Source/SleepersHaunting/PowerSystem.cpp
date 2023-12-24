@@ -4,9 +4,6 @@
 #include "PowerSystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Engine.h"
-
-#include "MyGameState.h"
-
 #include "Net/UnrealNetwork.h"
 
 APowerSystem::APowerSystem()
@@ -29,7 +26,7 @@ APowerSystem::APowerSystem()
 void APowerSystem::BeginPlay()
 {
 	Super::BeginPlay();
-	GetAllInstanceClasses();
+
 	// Initialize power values
 	CurrentPower = TotalPower;
 	
@@ -57,30 +54,16 @@ void APowerSystem::Tick(float DeltaTime)
 		TextRenderComponent->SetText(FText::FromString(PowerInfo));
 
 		// Check if power is depleted
-		if (CurrentPower <= 0 && !bLosingConditionDisplayed )
+		if (CurrentPower <= 0 && !bLosingConditionDisplayed)
 		{
 			// Losing Condition
-			if (AMyGameStateInstance) {
-				AMyGameStateInstance->SetLoseCondition(3);
-			}
+			UGameplayStatics::OpenLevel(GetWorld(), FName("GameOverMenu"));
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Power Depleted!"));
 			bLosingConditionDisplayed = true;
 
 			bOnDepletion = false;
 			bIsStopped = true;
 		}
-	}
-}
-
-void APowerSystem::GetAllInstanceClasses()
-{
-	if (AMyGameState* GameState = Cast<AMyGameState>(UGameplayStatics::GetGameState(GetWorld())))
-	{
-		AMyGameStateInstance = GameState;
-	}
-	else if (!AMyGameStateInstance)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Game State Instance not found!"));
 	}
 }
 
@@ -141,9 +124,4 @@ void APowerSystem::AddPower(float PowerToAdd)
 {
 	// Increment current power, but ensure it doesn't exceed the total power
 	CurrentPower = FMath::Min(CurrentPower + PowerToAdd, TotalPower);
-}
-
-void APowerSystem::StopPower()
-{
-	bIsStopped = true;
 }
