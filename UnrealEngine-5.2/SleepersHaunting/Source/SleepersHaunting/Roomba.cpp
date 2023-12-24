@@ -48,6 +48,11 @@ void ARoomba::BeginPlay()
 	GetCharacters();
 	Lifetime = InitialLifetime;
 	TimerToActivate = InitialTimerToActivate;
+
+	GetClosestPlayer();
+	FVector MoveToLocation = ClosestCharacter->GetActorLocation();
+	MoveToLocation.Z = GetActorLocation().Z;
+	AIController->MoveToLocation(MoveToLocation);
 }
 
 // Called every frame
@@ -65,8 +70,8 @@ void ARoomba::Tick(float DeltaTime)
 		if (Lifetime <= 0)
 			ChangeActiveState(false);
 
-		GetClosestPlayer();
-		FollowPlayer();
+		//GetClosestPlayer();
+		//FollowPlayer();
 
 		return;
 	}
@@ -109,11 +114,15 @@ void ARoomba::GetClosestPlayer_Implementation()
 void ARoomba::FollowPlayer_Implementation()
 {
 	if (ClosestCharacter == nullptr) return;
-	FVector Direction = ClosestCharacter->GetActorLocation() - GetActorLocation();
-	Direction.Z = 0.0f;
-
+	//FVector Direction = ClosestCharacter->GetActorLocation() - GetActorLocation();
+	//Direction.Z = 0.0f;
+	
+	FVector MoveToLocation = ClosestCharacter->GetActorLocation();
+	MoveToLocation.Z = 0.0f;
+	if (AIController)
+		AIController->MoveToLocation(MoveToLocation);
+	
 	//UNavigationQueryFilter Filter = UNavigationQueryFilter::();
-	AIController->MoveToActor(ClosestCharacter, -1, true, true, false);
 	//SetActorLocation(GetActorLocation() + (Direction * Speed * GetWorld()->DeltaTimeSeconds), true);
 }
 
@@ -161,7 +170,7 @@ void ARoomba::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* O
 void ARoomba::OnOverlapFunction_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                                UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor == ClosestCharacter && AttachedCharacter == nullptr)
+	if (OtherActor == ClosestCharacter && AttachedCharacter == nullptr && Active == true)
 	{
 		AttachToPlayer(ClosestCharacter);
 	}
