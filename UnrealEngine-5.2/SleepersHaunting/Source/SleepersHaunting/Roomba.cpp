@@ -50,9 +50,12 @@ void ARoomba::BeginPlay()
 	TimerToActivate = InitialTimerToActivate;
 
 	GetClosestPlayer();
-	FVector MoveToLocation = ClosestCharacter->GetActorLocation();
-	MoveToLocation.Z = GetActorLocation().Z;
-	AIController->MoveToLocation(MoveToLocation);
+	if (ClosestCharacter)
+	{
+		FVector MoveToLocation = ClosestCharacter->GetActorLocation();
+		MoveToLocation.Z = GetActorLocation().Z;
+		AIController->MoveToLocation(MoveToLocation);
+	}
 }
 
 // Called every frame
