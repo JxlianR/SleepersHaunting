@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
+#include "GameFramework/GameMode.h"
 
 
 
@@ -12,7 +12,7 @@
 
 
 UCLASS()
-class SLEEPERSHAUNTING_API ASleepersHauntingGameModeBase : public AGameModeBase
+class SLEEPERSHAUNTING_API ASleepersHauntingGameModeBase : public AGameMode
 {
 	GENERATED_BODY()
 
