@@ -37,6 +37,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Camera")
 		void UpdateMonitorView();
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
+		class ACameraMap* CameraMapInstance1;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		TArray<UMaterialInterface*> CameraMaterials;

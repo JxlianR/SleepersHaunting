@@ -2,6 +2,7 @@
 
 
 #include "A_SecurityMonitor.h"
+#include "CameraMap.h"
 
 #include "Net/UnrealNetwork.h"
 
@@ -37,6 +38,9 @@ void AA_SecurityMonitor::NextCamera()
 	CurrentCameraIndex = (CurrentCameraIndex + 1) % NumCameras;
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("CurrentCameraIndex: %d"), CurrentCameraIndex));
 	UpdateMonitorView();
+	if (CameraMapInstance1) {
+		CameraMapInstance1->NextMaterial();
+	}
 }
 
 void AA_SecurityMonitor::PreviousCamera()
@@ -44,6 +48,9 @@ void AA_SecurityMonitor::PreviousCamera()
 	CurrentCameraIndex = (CurrentCameraIndex - 1 + NumCameras) % NumCameras;
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("CurrentCameraIndex: %d"), CurrentCameraIndex));
 	UpdateMonitorView();
+	if (CameraMapInstance1) {
+		CameraMapInstance1->PreviousMaterial();
+	}
 }
 
 void AA_SecurityMonitor::UpdateMonitorView()
