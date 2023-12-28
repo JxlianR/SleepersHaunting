@@ -3,6 +3,8 @@
 
 #include "A_SecuritySwitches.h"
 
+#include "Components/CapsuleComponent.h"
+
 // Sets default values
 AA_SecuritySwitches::AA_SecuritySwitches()
 {
@@ -73,7 +75,7 @@ void AA_SecuritySwitches::OnOverlapBegin(UPrimitiveComponent* OverlappedComponen
 {
 	UWorld* World = GetWorld();
 	
-	if (OtherActor->GetClass()->IsChildOf(APlayerCharacter::StaticClass()) && World->IsServer())
+	if (OtherActor->GetClass()->IsChildOf(APlayerCharacter::StaticClass()) && OtherComponent->IsA(UCapsuleComponent::StaticClass()) && World->IsServer())
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("TouchedSwitch!"));
 		ActivateSwitch();
