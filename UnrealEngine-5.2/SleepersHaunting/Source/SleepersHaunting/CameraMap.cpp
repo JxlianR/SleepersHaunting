@@ -3,6 +3,8 @@
 
 #include "CameraMap.h"
 
+#include "Net/UnrealNetwork.h"
+
 ACameraMap::ACameraMap()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -34,6 +36,13 @@ void ACameraMap::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ACameraMap::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(ACameraMap, CurrentMaterialIndex);
 }
 
 void ACameraMap::NextMaterial()

@@ -25,6 +25,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	// Array to store textures
 	UPROPERTY(EditAnywhere, Category = "Material")
 		TArray<UMaterialInterface*> MaterialArray;
@@ -39,12 +41,14 @@ public:
 
 private:
 	// Index of the current material
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = SetCubeMaterial)
 	int32 CurrentMaterialIndex;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Cube", meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* CubeMesh;
 
 	// Function to set the cube's texture based on the current index
+	UFUNCTION()
 	void SetCubeMaterial();
 
 };
