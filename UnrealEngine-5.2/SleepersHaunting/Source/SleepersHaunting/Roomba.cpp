@@ -54,7 +54,8 @@ void ARoomba::BeginPlay()
 	{
 		FVector MoveToLocation = ClosestCharacter->GetActorLocation();
 		MoveToLocation.Z = GetActorLocation().Z;
-		AIController->MoveToLocation(MoveToLocation);
+		if (AIController)
+			AIController->MoveToLocation(MoveToLocation);
 	}
 }
 
@@ -73,8 +74,8 @@ void ARoomba::Tick(float DeltaTime)
 		if (Lifetime <= 0)
 			ChangeActiveState(false);
 
-		//GetClosestPlayer();
-		//FollowPlayer();
+		GetClosestPlayer();
+		FollowPlayer();
 
 		return;
 	}
