@@ -228,9 +228,6 @@ void AA_FatherGarage::SetLosingConditionTrue()
 	{
 		AMyGameStateInstance->SetLoseCondition(2);
 	}
-	//Losing condition
-	UGameplayStatics::OpenLevel(GetWorld(), FName("GameOverMenu"));
-
 }
 
 

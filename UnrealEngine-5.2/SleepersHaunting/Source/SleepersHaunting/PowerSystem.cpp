@@ -15,6 +15,7 @@ APowerSystem::APowerSystem()
 	bOnDepletion = false;
 	bIsStopped = false;
 	bLosingConditionDisplayed = false;
+	
 	// Create TextRenderComponent and attach it to the root
 	TextRenderComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("TextRenderComponent"));
 	TextRenderComponent->SetupAttachment(RootComponent);
@@ -30,6 +31,7 @@ void APowerSystem::BeginPlay()
 {
 	Super::BeginPlay();
 	GetAllInstanceClasses();
+	
 	// Initialize power values
 	CurrentPower = TotalPower;
 	
@@ -60,7 +62,8 @@ void APowerSystem::Tick(float DeltaTime)
 		if (CurrentPower <= 0 && !bLosingConditionDisplayed )
 		{
 			// Losing Condition
-			if (AMyGameStateInstance) {
+			if (AMyGameStateInstance)
+			{
 				AMyGameStateInstance->SetLoseCondition(3);
 			}
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Power Depleted!"));
