@@ -46,6 +46,9 @@ public:
 	UFUNCTION()
 	void GetCharacters();
 
+	UFUNCTION()
+	void SetStopped(bool NewStopped);
+
 protected:
 	UFUNCTION(Server, Reliable)
 	void ChangeActiveState(bool active);
@@ -101,6 +104,9 @@ protected:
 
 	UPROPERTY(Replicated)
 	bool Attached;
+
+	UPROPERTY(Replicated)
+	bool Stopped = false;
 
 	UPROPERTY(Replicated)
 	float ShortestDistance = 100000.0f;

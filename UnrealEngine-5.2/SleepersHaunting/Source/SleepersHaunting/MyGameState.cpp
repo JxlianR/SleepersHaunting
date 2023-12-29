@@ -105,29 +105,43 @@ void AMyGameState::GetAllClassesInstances()
 			else if (APowerSystem* PowerSystem = Cast<APowerSystem>(CurrentActor)) {
 				PowerSystemInstance = PowerSystem;
 			}
+			else if (ARoomba* Roomba = Cast<ARoomba>(CurrentActor))
+			{
+				RoombaInstance = Roomba;
+			}
 		}
 	}
 }
 
 void AMyGameState::StopAllEventsTimers()
 {
-	if (FatherGarageInstance) {
+	if (FatherGarageInstance)
+	{
 		FatherGarageInstance->StopAllTimers();
 	}
-	if (TheTwinsInstance_1) {
+	if (TheTwinsInstance_1)
+	{
 		TheTwinsInstance_1->PauseAllTwinTimers();
 	}
-	if (TheTwinsInstance_2) {
+	if (TheTwinsInstance_2)
+	{
 		TheTwinsInstance_2->PauseAllTwinTimers();
 	}
-	if (ClockTimerInstance) {
+	if (ClockTimerInstance)
+	{
 		ClockTimerInstance->StopTimer();
 	}
-	if (GroupAttackInstance) {
+	if (GroupAttackInstance)
+	{
 		GroupAttackInstance->CancelGroupAttackTimer();
 	}
-	if (PowerSystemInstance) {
+	if (PowerSystemInstance)
+	{
 		PowerSystemInstance->StopPower();
+	}
+	if (RoombaInstance)
+	{
+		RoombaInstance->SetStopped(true);
 	}
 }
 

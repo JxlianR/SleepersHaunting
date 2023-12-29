@@ -64,8 +64,9 @@ void ARoomba::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Attached)
-		return;
+	if(Stopped) return;
+
+	if (Attached) return;
 	
 	if (Active)
 	{
@@ -98,6 +99,7 @@ void ARoomba::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 	DOREPLIFETIME(ARoomba, Characters);
 	DOREPLIFETIME(ARoomba, ShortestDistance);
 	DOREPLIFETIME(ARoomba, Attached);
+	DOREPLIFETIME(ARoomba, Stopped);
 }
 
 void ARoomba::GetClosestPlayer_Implementation()
@@ -206,6 +208,11 @@ void ARoomba::GetCharacters()
 	{
 		Characters.AddUnique(Character);
 	}
+}
+
+void ARoomba::SetStopped(bool NewStopped)
+{
+	Stopped = NewStopped;
 }
 
 

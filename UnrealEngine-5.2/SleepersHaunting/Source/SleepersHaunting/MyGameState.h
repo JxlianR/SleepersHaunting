@@ -37,7 +37,7 @@ public:
 	class AA_FatherGarage* FatherGarageInstance;
 	class ATheTwins* TheTwinsInstance_1;
 	class ATheTwins* TheTwinsInstance_2;
-	//ARoomba* RoombaInstance; //Someone do this
+	class ARoomba* RoombaInstance;
 	class AClockTimer* ClockTimerInstance;
 	class AGroupAttack* GroupAttackInstance;
 	class APowerSystem* PowerSystemInstance;
