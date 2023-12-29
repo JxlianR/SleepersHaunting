@@ -12,8 +12,7 @@
 
 #include "Engine/World.h"
 #include "EngineUtils.h"
-
-
+#include "Kismet/GameplayStatics.h"
 
 
 AMyGameState::AMyGameState() : 
@@ -56,13 +55,17 @@ void AMyGameState::SetLoseCondition(int nKiller)
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Oops no power oh well i guess i will die!"));
 		//Run the double twin jumpscare
 	}
+	
 	StopAllEventsTimers();
+
+	OnActivateUIEvent.Broadcast();
+	//UGameplayStatics::OpenLevel(GetWorld(), FName("GameOverMenu"));
 }
 
 void AMyGameState::WinConditionEvent()
 {
 	//Call a function to make it true or something
-
+	UGameplayStatics::OpenLevel(GetWorld(), FName("WinMenu"));
 
 	StopAllEventsTimers();
 }

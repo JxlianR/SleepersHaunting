@@ -12,6 +12,8 @@
 
 #include "MyGameState.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnActivateUI);
+
 /**
  * 
  */
@@ -27,6 +29,8 @@ public:
 	AMyGameState();
 
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+
+	FOnActivateUI OnActivateUIEvent;
  
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category = "Conditions")
 		bool losingCondition;

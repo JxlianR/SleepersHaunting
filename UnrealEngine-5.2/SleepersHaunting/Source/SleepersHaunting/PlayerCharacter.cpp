@@ -14,6 +14,8 @@
 #include "GrabbableInterface.h"
 #include "Net/UnrealNetwork.h"
 #include "EngineUtils.h"
+#include "MyGameState.h"
+#include "Blueprint/UserWidget.h"
 #include "DSP/Chorus.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
@@ -118,6 +120,29 @@ void APlayerCharacter::BeginPlay()
 
 		Roomba->GetCharacters();
 	}
+
+	// Bind Event to activate UI Widget
+	AMyGameState* GameState = Cast<AMyGameState>(UGameplayStatics::GetActorOfClass(GetWorld(), AMyGameState::StaticClass()));
+	if (GameState)
+	{
+		FScriptDelegate ActivateUIDelegate;
+		ActivateUIDelegate.BindUFunction(this, "ActivateWidgetEvent");
+		GameState->OnActivateUIEvent.Add(ActivateUIDelegate);
+	}
+
+	// Create and Add Widget to Viewport
+	if (Widget)
+	{
+		APlayerController* PlayerController = Cast<APlayerController>(GetController());
+		WidgetInstance = CreateWidget<UUserWidget>(PlayerController, Widget);
+
+		if (WidgetInstance)
+		{
+			WidgetInstance->AddToViewport();
+			// Hide Widget
+			WidgetInstance->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
 }
 
 // Called every frame
@@ -145,7 +170,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 		if (JumpInputAction)
 		{
-			// Ask nelson if this doesnt make sense or if it needs to be started and canceled as TriggerEvents
 			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 			PlayerEnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		}
@@ -574,6 +598,19 @@ void APlayerCharacter::HandleRoombaDetachedEvent_Implementation()
 	MovementSpeed = 1.0f;
 }
 
+void APlayerCharacter::ActivateWidgetEvent()
+{
+	if (GetWorld()->IsServer())
+		ActivateWidget();
+}
+
+void APlayerCharacter::ActivateWidget_Implementation()
+{
+	if (WidgetInstance)
+	{
+		WidgetInstance->SetVisibility(ESlateVisibility::Visible);
+	}
+}
 
 void APlayerCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,
 	bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
