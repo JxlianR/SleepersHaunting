@@ -29,17 +29,19 @@ ATheTwins::ATheTwins()
 void ATheTwins::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	GetAllInstanceClasses();
 	TwinMesh = FindComponentByClass<USkeletalMeshComponent>();
 	MoveTwinToWaypoint();
 	GetWorldTimerManager().SetTimer(CDMovementTimerHandle, this, &ATheTwins::MoveToRandomConnectedRoom, CDmovementDuration, false);
+
+	World = GetWorld();
 }
 
 // Called every frame
 void ATheTwins::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ATheTwins::UpdateCurrentRoomID(int32 NewRoomID)
@@ -81,6 +83,8 @@ void ATheTwins::MoveTwinToWaypoint()
 
 void ATheTwins::MoveToRandomConnectedRoom()
 {
+	if(!World->IsServer()) return;
+	
 	if (RoomsManagerInstance)
 	{
 		// Get the connected rooms for the current room
@@ -136,6 +140,8 @@ void ATheTwins::MoveToRandomConnectedRoom()
 
 void ATheTwins::TwinAttack()
 {
+	if(!World->IsServer()) return;
+	
 	if (SlideDoorsInstance)
 	{
 		// Check if the door is locked
@@ -147,10 +153,8 @@ void ATheTwins::TwinAttack()
 		}
 		else
 		{
-			
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Player lost!"));
 			GetWorldTimerManager().SetTimer(SuccessAttackTimerHandle, this, &ATheTwins::SuccessAttack, SsuccessDuration, false);
-
 		}
 	}
 	else
@@ -257,4 +261,5 @@ void ATheTwins::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetim
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ATheTwins, CanAttack);
+	DOREPLIFETIME(ATheTwins, CurrentRoomID);
 }

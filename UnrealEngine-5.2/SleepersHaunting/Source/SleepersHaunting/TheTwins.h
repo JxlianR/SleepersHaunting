@@ -33,7 +33,7 @@ public:
 		TArray<int32> AccessRooms;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
 		int32 AttackRoom;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins", ReplicatedUsing = MoveTwinToWaypoint)
 		int32 CurrentRoomID;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Twins")
 		USkeletalMeshComponent* TwinMesh;
@@ -89,6 +89,7 @@ public:
 
 private:
 
+	UWorld* World;
 
 	UFUNCTION()
 		void GetAllInstanceClasses();
