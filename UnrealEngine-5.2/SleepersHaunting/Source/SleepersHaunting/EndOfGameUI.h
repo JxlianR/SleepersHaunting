@@ -20,6 +20,6 @@ public:
 	void ChangeText(FText NewText);
 
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY()
 	UTextBlock* ConditionTextBlock;
 };
