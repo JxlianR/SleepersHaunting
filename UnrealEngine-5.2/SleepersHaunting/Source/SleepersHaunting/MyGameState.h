@@ -12,7 +12,7 @@
 
 #include "MyGameState.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnActivateUI);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActivateUI, FText, NewText);
 
 /**
  * 
@@ -64,4 +64,6 @@ private:
 	//UFUNCTION()
 		//void LoseConditionEvent();
 
+	UPROPERTY()
+	FText ConditionText;
 };

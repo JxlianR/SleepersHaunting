@@ -45,29 +45,34 @@ void AMyGameState::SetLoseCondition(int nKiller)
 
 	if (nKiller == 1) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("You Died from The Twins!"));
+		ConditionText = FText::FromString("You Died from The Twins!");
 		//Run the Twins jumpscare
 	}
 	else if (nKiller == 2) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("You Got Squashed from Father!"));
+		ConditionText = FText::FromString("You Got Squashed from Father!");
 		//Run the Father jumpscare
 	}
 	else if (nKiller == 3) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Oops no power oh well i guess i will die!"));
+		ConditionText = FText::FromString("Oops no power oh well i guess i will die!");
 		//Run the double twin jumpscare
 	}
 	
 	StopAllEventsTimers();
 
-	OnActivateUIEvent.Broadcast();
-	//UGameplayStatics::OpenLevel(GetWorld(), FName("GameOverMenu"));
+	//Activate EndOfGameUI & Change Text
+	OnActivateUIEvent.Broadcast(ConditionText);
 }
 
 void AMyGameState::WinConditionEvent()
 {
 	//Call a function to make it true or something
-	UGameplayStatics::OpenLevel(GetWorld(), FName("WinMenu"));
-
+	
 	StopAllEventsTimers();
+
+	ConditionText = FText::FromString("You survived till 6 AM. Congratulations!");
+	OnActivateUIEvent.Broadcast(ConditionText);
 }
 
 //Get All classes instances here

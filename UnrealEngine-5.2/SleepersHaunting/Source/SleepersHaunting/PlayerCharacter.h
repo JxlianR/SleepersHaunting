@@ -7,11 +7,13 @@
 #include "InputActionValue.h"
 
 //Classes
+#include "EndOfGameUI.h"
 #include "RoomsManager.h"
 #include "GarageHandler.h"
 #include "SlideDoors.h"
 #include "TheTwins.h"
 #include "Components/SphereComponent.h"
+#include "Components/TextBlock.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
 #include "PlayerCharacter.generated.h"
@@ -147,9 +149,10 @@ public:
 	APowerSystem* PowerSystem;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<UUserWidget> Widget;
-	
-	UUserWidget* WidgetInstance;
+	TSubclassOf<UEndOfGameUI> Widget;
+
+	UPROPERTY()
+	UEndOfGameUI* WidgetInstance;
 
 	UPROPERTY()
 	TArray<ATheTwins*> Twins;
@@ -222,8 +225,5 @@ protected:
 	void NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
 	UFUNCTION()
-	void ActivateWidgetEvent();
-	
-	UFUNCTION(NetMulticast, Reliable)
-	void ActivateWidget();
+	void ActivateWidgetEvent(FText NewText);
 };

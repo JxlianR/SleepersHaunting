@@ -16,6 +16,8 @@
 #include "EngineUtils.h"
 #include "MyGameState.h"
 #include "Blueprint/UserWidget.h"
+#include "Blueprint/WidgetTree.h"
+#include "Components/TextBlock.h"
 #include "DSP/Chorus.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
@@ -134,7 +136,7 @@ void APlayerCharacter::BeginPlay()
 	if (Widget)
 	{
 		APlayerController* PlayerController = Cast<APlayerController>(GetController());
-		WidgetInstance = CreateWidget<UUserWidget>(PlayerController, Widget);
+		WidgetInstance = CreateWidget<UEndOfGameUI>(PlayerController, Widget);
 
 		if (WidgetInstance)
 		{
@@ -598,18 +600,9 @@ void APlayerCharacter::HandleRoombaDetachedEvent_Implementation()
 	MovementSpeed = 1.0f;
 }
 
-void APlayerCharacter::ActivateWidgetEvent()
+void APlayerCharacter::ActivateWidgetEvent(FText NewText)
 {
-	if (GetWorld()->IsServer())
-		ActivateWidget();
-}
-
-void APlayerCharacter::ActivateWidget_Implementation()
-{
-	if (WidgetInstance)
-	{
-		WidgetInstance->SetVisibility(ESlateVisibility::Visible);
-	}
+	WidgetInstance->ChangeText(NewText);
 }
 
 void APlayerCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,
