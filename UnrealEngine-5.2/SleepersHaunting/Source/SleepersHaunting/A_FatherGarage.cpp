@@ -95,6 +95,7 @@ void AA_FatherGarage::BeginPlay()
 
 void AA_FatherGarage::StartCooldownTimer()
 {
+	if(!GetWorld()->IsServer()) return;
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Cooldown timer started!"));
 	GetWorldTimerManager().SetTimer(CooldownTimerHandle, this, &AA_FatherGarage::StartOpenDoorTimeline, CooldownDuration, false);
 }
@@ -124,7 +125,6 @@ void AA_FatherGarage::StartResetTimeline()
 		StopCooldownTimer();
 		StopOpenDoorTimeline();
 		
-
 		// Start the ResetDoorTimeline from the beginning
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Reset timer started!"));
 		ResetDoorTimeline->PlayFromStart();
@@ -213,17 +213,18 @@ void AA_FatherGarage::GetAllInstanceClasses()
 
 void AA_FatherGarage::SetHandler1(bool NewValue)
 {
-	bHandler1 = NewValue;
+	if (GetWorld()->IsServer())
+		bHandler1 = NewValue;
 }
 
 void AA_FatherGarage::SetHandler2(bool NewValue)
 {
-	bHandler2 = NewValue;
+	if (GetWorld()->IsServer())
+		bHandler2 = NewValue;
 }
 
 void AA_FatherGarage::SetLosingConditionTrue()
 {
-	
 	if (AMyGameStateInstance)
 	{
 		AMyGameStateInstance->SetLoseCondition(2);
@@ -237,7 +238,7 @@ void AA_FatherGarage::GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& Ou
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AA_FatherGarage, bLosingCondition); //Goes Gamestate class that exists
+	//DOREPLIFETIME(AA_FatherGarage, bLosingCondition); //Goes Gamestate class that exists
 	DOREPLIFETIME(AA_FatherGarage, bHandler1);
 	DOREPLIFETIME(AA_FatherGarage, bHandler2);
 }

@@ -60,13 +60,13 @@ public:
 
 	
 
-    UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     bool bLosingCondition;
 
-    UPROPERTY(Replicated, BlueprintReadOnly)
+    UPROPERTY(Replicatedusing = StartResetTimeline, BlueprintReadOnly)
     bool bHandler1;
 
-    UPROPERTY(Replicated, BlueprintReadOnly)
+    UPROPERTY(Replicated = StartResetTimeline, BlueprintReadOnly)
     bool bHandler2;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

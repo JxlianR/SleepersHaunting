@@ -200,16 +200,16 @@ protected:
 	UFUNCTION()
 	void OnCloseRightSlideDoorEnd();
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void OnUseLeftHandler();
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void OnUseLeftHandlerEnd();
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void OnUseRightHandler();
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void OnUseRightHandlerEnd();
 
 	UFUNCTION(Server, Reliable)

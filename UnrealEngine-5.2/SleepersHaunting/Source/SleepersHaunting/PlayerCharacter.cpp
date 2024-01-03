@@ -537,28 +537,28 @@ void APlayerCharacter::OnCloseRightSlideDoorEnd()
 
 }
 
-void APlayerCharacter::OnUseLeftHandler()
+void APlayerCharacter::OnUseLeftHandler_Implementation()
 {
 	if (GarageHandlerLeftRef)
 		GarageHandlerLeftRef->SetHandlerTrue();
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Close left handler door")));
 
 }
-void APlayerCharacter::OnUseLeftHandlerEnd()
+void APlayerCharacter::OnUseLeftHandlerEnd_Implementation()
 {
 	if (GarageHandlerLeftRef)
 		GarageHandlerLeftRef->SetHandlerFalse();
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Open left handler door")));
 
 }
-void APlayerCharacter::OnUseRightHandler()
+void APlayerCharacter::OnUseRightHandler_Implementation()
 {
 	if (GarageHandlerRightRef)
 		GarageHandlerRightRef->SetHandlerTrue();
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Close right handler door")));
 
 }
-void APlayerCharacter::OnUseRightHandlerEnd()
+void APlayerCharacter::OnUseRightHandlerEnd_Implementation()
 {
 	if (GarageHandlerRightRef)
 		GarageHandlerRightRef->SetHandlerFalse();

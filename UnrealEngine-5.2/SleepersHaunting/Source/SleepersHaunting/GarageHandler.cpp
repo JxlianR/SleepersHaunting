@@ -53,6 +53,4 @@ void AGarageHandler::SetHandlerTrue()
 void AGarageHandler::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(AGarageHandler, bIsHandler1);
 }
