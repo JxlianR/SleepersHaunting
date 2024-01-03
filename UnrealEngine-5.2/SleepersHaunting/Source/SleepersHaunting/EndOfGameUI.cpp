@@ -3,13 +3,20 @@
 
 #include "EndOfGameUI.h"
 
-void UEndOfGameUI::ChangeText(FText NewText)
+#include "Components/TextBlock.h"
+
+void UEndOfGameUI::NativeConstruct()
 {
+	Super::NativeConstruct();
+
 	ConditionTextBlock = Cast<UTextBlock>(GetWidgetFromName(TEXT("Condition")));
-	
-	if (ConditionTextBlock)
+}
+
+void UEndOfGameUI::ChangeConditionText_Implementation(const FText& Text)
+{
+	if(ConditionTextBlock)
 	{
-		ConditionTextBlock->SetText(NewText);
+		ConditionTextBlock->SetText(Text);
 		SetVisibility(ESlateVisibility::Visible);
 	}
 }

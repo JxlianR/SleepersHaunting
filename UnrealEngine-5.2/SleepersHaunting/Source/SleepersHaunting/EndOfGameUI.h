@@ -4,20 +4,26 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/TextBlock.h"
 #include "EndOfGameUI.generated.h"
 
 /**
  * 
  */
-UCLASS()
+
+class UTextBlock;
+
+UCLASS
+
+()
 class SLEEPERSHAUNTING_API UEndOfGameUI : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
-	UFUNCTION()
-	void ChangeText(FText NewText);
+	void NativeConstruct() override;
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void ChangeConditionText(const FText& Text);
 
 protected:
 	UPROPERTY()

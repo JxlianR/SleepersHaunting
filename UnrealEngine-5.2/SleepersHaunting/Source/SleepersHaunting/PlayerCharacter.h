@@ -225,5 +225,8 @@ protected:
 	void NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
 	UFUNCTION()
-	void ActivateWidgetEvent(FText NewText);
+	void ActivateWidgetEvent(const FText& NewText);
+
+	// UFUNCTION(NetMulticast, Reliable)
+	// void ActivateWidget(FText NewText);
 };
