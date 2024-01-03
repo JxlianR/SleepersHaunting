@@ -188,16 +188,16 @@ protected:
 	void CallRoomManagerDebugFunctions();
 	
 	//Julian Code
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void OnCloseLeftSlideDoor();
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void OnCloseLeftSlideDoorEnd();
 	
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void OnCloseRightSlideDoor();
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void OnCloseRightSlideDoorEnd();
 
 	UFUNCTION(Server, Reliable)

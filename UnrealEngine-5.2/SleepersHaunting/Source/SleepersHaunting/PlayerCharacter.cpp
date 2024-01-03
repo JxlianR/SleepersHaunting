@@ -506,7 +506,7 @@ void APlayerCharacter::CallRoomManagerDebugFunctions()
 }
 
 //Julian Code:
-void APlayerCharacter::OnCloseLeftSlideDoor()
+void APlayerCharacter::OnCloseLeftSlideDoor_Implementation()
 {
 	if (SlideDoorLeftRef)
 		SlideDoorLeftRef->SetDoorTrue();
@@ -514,14 +514,14 @@ void APlayerCharacter::OnCloseLeftSlideDoor()
 
 }
 
-void APlayerCharacter::OnCloseLeftSlideDoorEnd()
+void APlayerCharacter::OnCloseLeftSlideDoorEnd_Implementation()
 {
 	if (SlideDoorLeftRef)
 		SlideDoorLeftRef->SetDoorFalse();
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString::Printf(TEXT("Open  left Slide door")));
 }
 
-void APlayerCharacter::OnCloseRightSlideDoor()
+void APlayerCharacter::OnCloseRightSlideDoor_Implementation()
 {
 	if (SlideDoorRightRef)
 		SlideDoorRightRef->SetDoorTrue();
@@ -529,7 +529,7 @@ void APlayerCharacter::OnCloseRightSlideDoor()
 
 }
 
-void APlayerCharacter::OnCloseRightSlideDoorEnd()
+void APlayerCharacter::OnCloseRightSlideDoorEnd_Implementation()
 {
 	if (SlideDoorRightRef)
 		SlideDoorRightRef->SetDoorFalse();

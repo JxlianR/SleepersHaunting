@@ -33,16 +33,16 @@ public:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION(BlueprintCallable, Category = "Power")
-		void IncreasePowerConsumption();
+	void IncreasePowerConsumption();
 
 	UFUNCTION(BlueprintCallable, Category = "Power")
-		void DecreasePowerConsumption();
+	void DecreasePowerConsumption();
 
 	UFUNCTION()
 	void AddPower(float PowerToAdd);
 
 	UFUNCTION()
-		void StopPower();
+	void StopPower();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		UTextRenderComponent* TextRenderComponent;
