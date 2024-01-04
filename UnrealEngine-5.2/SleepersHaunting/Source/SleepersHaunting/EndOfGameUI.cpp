@@ -20,3 +20,12 @@ void UEndOfGameUI::ChangeConditionText(const FText& Text)
 		SetVisibility(ESlateVisibility::Visible);
 	}
 }
+
+void UEndOfGameUI::Update(const FText& Text)
+{
+	if(ConditionTextBlock)
+	{
+		ConditionTextBlock->SetText(Text);
+		SetVisibility(ESlateVisibility::Visible);
+	}
+}

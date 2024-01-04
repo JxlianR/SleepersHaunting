@@ -75,6 +75,11 @@ APlayerCharacter::APlayerCharacter()
 	/***/
 }
 
+APlayerCharacter::~APlayerCharacter()
+{
+	Detach(WidgetInstance);
+}
+
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
@@ -140,6 +145,10 @@ void APlayerCharacter::BeginPlay()
 
 		if (WidgetInstance)
 		{
+			// Add widget to observer list
+			Attach(WidgetInstance);
+			
+			// Add Widget to Viewport
 			WidgetInstance->AddToViewport();
 			// Hide Widget
 			WidgetInstance->SetVisibility(ESlateVisibility::Hidden);
@@ -604,7 +613,7 @@ void APlayerCharacter::ActivateWidgetEvent_Implementation(const FText& NewText)
 {
 	if (WidgetInstance)
 	{
-		WidgetInstance->ChangeConditionText(NewText);
+		Notify(NewText);
 	}
 }
 

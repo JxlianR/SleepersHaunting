@@ -11,6 +11,7 @@
 #include "RoomsManager.h"
 #include "GarageHandler.h"
 #include "SlideDoors.h"
+#include "Subject.h"
 #include "TheTwins.h"
 #include "Components/SphereComponent.h"
 #include "Components/TextBlock.h"
@@ -24,13 +25,14 @@ class UInputAction;
 class UInputMappingContext;
 
 UCLASS()
-class SLEEPERSHAUNTING_API APlayerCharacter : public ACharacter
+class SLEEPERSHAUNTING_API APlayerCharacter : public ACharacter, public Subject
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
+	~APlayerCharacter();
 	
 	virtual void Jump() override;
 	
