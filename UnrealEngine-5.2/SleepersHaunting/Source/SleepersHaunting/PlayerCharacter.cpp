@@ -600,10 +600,12 @@ void APlayerCharacter::HandleRoombaDetachedEvent_Implementation()
 	MovementSpeed = 1.0f;
 }
 
-void APlayerCharacter::ActivateWidgetEvent(const FText& NewText)
+void APlayerCharacter::ActivateWidgetEvent_Implementation(const FText& NewText)
 {
-	if(WidgetInstance)
+	if (WidgetInstance)
+	{
 		WidgetInstance->ChangeConditionText(NewText);
+	}
 }
 
 void APlayerCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,

@@ -22,7 +22,7 @@ class SLEEPERSHAUNTING_API UEndOfGameUI : public UUserWidget
 public:
 	void NativeConstruct() override;
 	
-	UFUNCTION(NetMulticast, Reliable)
+	UFUNCTION()
 	void ChangeConditionText(const FText& Text);
 
 protected:

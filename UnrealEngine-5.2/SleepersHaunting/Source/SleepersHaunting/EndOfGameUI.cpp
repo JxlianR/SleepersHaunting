@@ -12,7 +12,7 @@ void UEndOfGameUI::NativeConstruct()
 	ConditionTextBlock = Cast<UTextBlock>(GetWidgetFromName(TEXT("Condition")));
 }
 
-void UEndOfGameUI::ChangeConditionText_Implementation(const FText& Text)
+void UEndOfGameUI::ChangeConditionText(const FText& Text)
 {
 	if(ConditionTextBlock)
 	{
