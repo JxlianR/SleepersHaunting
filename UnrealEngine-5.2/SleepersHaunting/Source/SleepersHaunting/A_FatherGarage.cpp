@@ -197,7 +197,6 @@ void AA_FatherGarage::ResetDoorUpdate(float Value)
 	}
 }
 
-
 void AA_FatherGarage::GetAllInstanceClasses()
 {
 	if (AMyGameState* GameState = Cast<AMyGameState>(UGameplayStatics::GetGameState(GetWorld())))
@@ -209,7 +208,6 @@ void AA_FatherGarage::GetAllInstanceClasses()
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Game State Instance not found!"));
 	}
 }
-
 
 void AA_FatherGarage::SetHandler1(bool NewValue)
 {

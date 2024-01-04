@@ -166,7 +166,8 @@ void ATheTwins::TwinAttack()
 void ATheTwins::SuccessAttack()
 {
 	//Player losing condition
-	if (AMyGameStateInstance) {
+	if (AMyGameStateInstance)
+	{
 		AMyGameStateInstance->SetLoseCondition(1);
 	}
 }
