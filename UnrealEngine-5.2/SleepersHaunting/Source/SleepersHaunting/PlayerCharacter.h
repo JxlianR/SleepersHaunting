@@ -182,7 +182,9 @@ protected:
 	void ReleaseLeft();
 	void ReleaseRight();
 	void GrabObject(UPrimitiveComponent* GrabbedComponent, bool bIsLeftHand);
-	void OnGrab();
+	bool isGrabbing = false;
+	
+	UPrimitiveComponent* GrabbedComponent = nullptr;
 
 	//Joao Code---------------------------------------------------------------------------------------
 protected:

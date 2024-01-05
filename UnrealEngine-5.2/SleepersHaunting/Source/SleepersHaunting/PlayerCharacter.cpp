@@ -67,11 +67,11 @@ APlayerCharacter::APlayerCharacter()
 	RightPhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("RightPhysicsHandle"));
 	RightPhysicsHandle->SetTargetLocation(RightHandSphereCollision->GetComponentLocation());
 
-	LeftHandIKTarget = CreateDefaultSubobject<USceneComponent>(TEXT("LeftHandIKTarget"));
-	LeftHandIKTarget->SetupAttachment(GetMesh(), "hand_l");
-	
-	RightHandIKTarget = CreateDefaultSubobject<USceneComponent>(TEXT("RightHandIKTarget"));
-	RightHandIKTarget->SetupAttachment(GetMesh(), "hand_r");
+	// LeftHandIKTarget = CreateDefaultSubobject<USceneComponent>(TEXT("LeftHandIKTarget"));
+	// LeftHandIKTarget->SetupAttachment(GetMesh(), "hand_l");
+	//
+	// RightHandIKTarget = CreateDefaultSubobject<USceneComponent>(TEXT("RightHandIKTarget"));
+	// RightHandIKTarget->SetupAttachment(GetMesh(), "hand_r");
 	/***/
 }
 
@@ -190,23 +190,23 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		{
 			PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::OnGrab);
 		}
-
+		*/
 		if (LeftHandGrabInputAction)
 		{
 			PlayerEnhancedInputComponent->BindAction(LeftHandGrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::GrabLeft);
-			PlayerEnhancedInputComponent->BindAction(LeftHandGrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::ReleaseLeft);
+			PlayerEnhancedInputComponent->BindAction(LeftHandGrabInputAction, ETriggerEvent::Completed, this, &APlayerCharacter::ReleaseLeft);
 		}
 		
 		if (RightHandGrabInputAction)
 		{
 			PlayerEnhancedInputComponent->BindAction(RightHandGrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::GrabRight);
-			PlayerEnhancedInputComponent->BindAction(RightHandGrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::ReleaseRight);
+			PlayerEnhancedInputComponent->BindAction(RightHandGrabInputAction, ETriggerEvent::Completed, this, &APlayerCharacter::ReleaseRight);
 		}
-		*/
-		PlayerInputComponent->BindAction("GrabLeft", IE_Pressed, this, &APlayerCharacter::GrabLeft);
-		PlayerInputComponent->BindAction("GrabRight", IE_Pressed, this, &APlayerCharacter::GrabRight);
-		PlayerInputComponent->BindAction("GrabLeft", IE_Released, this, &APlayerCharacter::ReleaseLeft);
-		PlayerInputComponent->BindAction("GrabRight", IE_Released, this, &APlayerCharacter::ReleaseRight);
+		
+		// PlayerInputComponent->BindAction("GrabLeft", IE_Pressed, this, &APlayerCharacter::GrabLeft);
+		// PlayerInputComponent->BindAction("GrabRight", IE_Pressed, this, &APlayerCharacter::GrabRight);
+		// PlayerInputComponent->BindAction("GrabLeft", IE_Released, this, &APlayerCharacter::ReleaseLeft);
+		// PlayerInputComponent->BindAction("GrabRight", IE_Released, this, &APlayerCharacter::ReleaseRight);
 		
 		if (TestDebugInputAction) 
 		{
@@ -320,7 +320,9 @@ void APlayerCharacter::ReleaseLeft()
 {
 	if (LeftPhysicsHandle->GrabbedComponent)
 	{
+		isGrabbing = false;
 		LeftPhysicsHandle->ReleaseComponent();
+		GrabbedComponent = nullptr;
 	}
 }
 
@@ -328,7 +330,9 @@ void APlayerCharacter::ReleaseRight()
 {
 	if (RightPhysicsHandle->GrabbedComponent)
 	{
+		isGrabbing = false;
 		RightPhysicsHandle->ReleaseComponent();
+		GrabbedComponent = nullptr;
 	}
 }
 
@@ -346,6 +350,17 @@ void APlayerCharacter::StretchToNearestGrabbable(bool bIsLeftHand)
 	FCollisionQueryParams CollisionParams;
 	CollisionParams.AddIgnoredActor(this);  // Ignore the player character
 
+	DrawDebugSphere(
+				GetWorld(),
+				StartLocation,
+				HandSphere->GetScaledSphereRadius(),
+				2,
+				FColor::Red,
+				false,
+				5.0f,
+				0,
+				1);
+	
 	FHitResult HitResult;
 	if (GetWorld()->SweepSingleByChannel(HitResult, StartLocation, EndLocation, FQuat::Identity, ECC_Visibility,
 												FCollisionShape::MakeSphere(HandSphere->GetScaledSphereRadius()), CollisionParams))
@@ -360,6 +375,19 @@ void APlayerCharacter::StretchToNearestGrabbable(bool bIsLeftHand)
 			FVector NewLocation = FMath::VInterpTo(CurrentLocation, TargetLocation, GetWorld()->GetDeltaSeconds(), StretchSpeed);
 			PhysicsHandle->SetTargetLocation(NewLocation);
 
+			if (GrabbedComponent && GrabbedComponent->GetOwner())
+			{
+				UStaticMeshComponent* SlideDoorMeshComponent = GrabbedComponent->GetOwner()->FindComponentByClass<UStaticMeshComponent>();
+				if (SlideDoorMeshComponent)
+				{
+					PhysicsHandle->GrabComponentAtLocation(
+						SlideDoorMeshComponent,
+						NAME_None,
+						SlideDoorMeshComponent->GetComponentLocation()
+					);
+				}
+			}
+			
 			// Once the nearest object is found, call GrabObject
 			GrabObject(HitResult.GetComponent(), bIsLeftHand);
 			GrabbableInterface->Execute_Grab(HitResult.GetActor());
@@ -373,82 +401,40 @@ void APlayerCharacter::StretchToNearestGrabbable(bool bIsLeftHand)
 				RightHandIKTarget->SetWorldLocation(TargetLocation);
 			}
 			
-			DrawDebugLine(
+			DrawDebugSphere(
 			GetWorld(),
 			StartLocation,
-			TargetLocation,
-			FColor::Green,  // Change the color if needed
-			true,			// Persistent lines
-			0,				// Depth priority
-			1				// Line thickness
-		);
+			HandSphere->GetScaledSphereRadius(),
+			2,
+			FColor::Green,
+			false,			
+			5.0f,			
+			0,
+			1);
 		}
 	}
 }
 
-void APlayerCharacter::GrabObject(UPrimitiveComponent* GrabbedComponent, bool bIsLeftHand)
+void APlayerCharacter::GrabObject(UPrimitiveComponent* InGrabbedComponent, bool bIsLeftHand)
 {
-	if (!GrabbedComponent || !GrabbedComponent->GetOwner())
+	if (!InGrabbedComponent || !InGrabbedComponent->GetOwner())
 	{
 		return;
 	}
+
+	// Store the grabbed component for future reference
+	GrabbedComponent = InGrabbedComponent;
 
 	UPhysicsHandleComponent* PhysicsHandle = bIsLeftHand ? LeftPhysicsHandle : RightPhysicsHandle;
 
 	// Attach the grabbed object to the hand
 	PhysicsHandle->GrabComponentAtLocation(
-		GrabbedComponent,
+		InGrabbedComponent,
 		NAME_None,
-		GrabbedComponent->GetOwner()->GetActorLocation()
+		InGrabbedComponent->GetOwner()->GetActorLocation()
 	);
-}
-
-void APlayerCharacter::OnGrab()
-{
-	TArray SphereColliders = {RightHandSphereCollision, LeftHandSphereCollision};
-
-    float NearestDistance = TNumericLimits<float>::Max();
-    USphereComponent* NearestSphereCollider = nullptr;
-
-	float InteractionRadius = 50.0f;
-    for (USphereComponent* Sphere : SphereColliders)
-    {
-        // Calculate the distance between the player and the sphere collider
-        float Distance = FVector::Dist(Sphere->GetComponentLocation(), GetActorLocation());
 	
-        if (Distance < InteractionRadius && Distance < NearestDistance)
-        {
-            NearestDistance = Distance;
-            NearestSphereCollider = Sphere;
-        }
-    }
-
-    if (NearestSphereCollider)
-    {
-        TArray<FOverlapResult> OverlappingActors;
-    
-        FCollisionShape CollisionShape = FCollisionShape::MakeSphere(InteractionRadius);
-        FCollisionQueryParams CollisionParams;
-        CollisionParams.AddIgnoredActor(this);
-	
-        // Get overlapping actors using the nearest sphere collider
-        if (GetWorld()->OverlapMultiByChannel(OverlappingActors, NearestSphereCollider->GetComponentLocation(), FQuat::Identity, ECC_GameTraceChannel1, CollisionShape, CollisionParams))
-        {
-            for (const FOverlapResult& OverlapResult : OverlappingActors)
-            {
-                if (OverlapResult.GetActor()->GetClass()->ImplementsInterface(UGrabbableInterface::StaticClass()))
-                {
-                    IGrabbableInterface* GrabbableInterface = Cast<IGrabbableInterface>(OverlapResult.GetActor());
-                    if (GrabbableInterface)
-                    {
-                        GrabbableInterface->Execute_Grab(OverlapResult.GetActor());
-                    	
-                        GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Yellow, FString::Printf(TEXT("Grabbable Object Detected: %s"), *NearestSphereCollider->GetName()));
-                    }
-                }
-            }
-        }
-    }
+	isGrabbing = true;
 }
 
 void APlayerCharacter::Jump()
