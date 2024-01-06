@@ -77,7 +77,7 @@ APlayerCharacter::APlayerCharacter()
 
 APlayerCharacter::~APlayerCharacter()
 {
-	Detach(WidgetInstance);
+	//Detach(WidgetInstance);
 }
 
 // Called when the game starts or when spawned

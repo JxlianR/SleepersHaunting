@@ -10,8 +10,8 @@ Subject::Subject()
 
 Subject::~Subject()
 {
-	for (int i = 0; i < observers.Num(); i++)
-		observers.Remove(observers[i]);
+	//for (int i = 0; i < observers.Num(); i++)
+	//	observers.Remove(observers[i]);
 }
 
 void Subject::Attach(Observer* observer)
