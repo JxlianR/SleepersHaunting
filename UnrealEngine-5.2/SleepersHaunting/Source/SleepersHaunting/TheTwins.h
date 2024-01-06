@@ -73,8 +73,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Twins")
 		void ResumeAllTwinTimers();
 	UFUNCTION(BlueprintCallable, Category = "Twins")
+		void ForceGroupATK();
+	UFUNCTION(BlueprintCallable, Category = "Twins")
 		bool ReturnLockedDoor();
-
+	
 	
 	//Classes
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")

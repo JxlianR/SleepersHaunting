@@ -251,6 +251,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		{
 			PlayerEnhancedInputComponent->BindAction(ResumeTwins, ETriggerEvent::Started, this, &APlayerCharacter::OnResumeTwins);
 		}
+
+		if (FGroupAttack)
+		{
+			PlayerEnhancedInputComponent->BindAction(FGroupAttack, ETriggerEvent::Started, this, &APlayerCharacter::ForceGroupAttack);
+		}
 	}
 }
 
@@ -580,6 +585,15 @@ void APlayerCharacter::OnResumeTwins()
 	for(ATheTwins* Twin : Twins)
 	{
 		Twin->ResumeAllTwinTimers();
+	}
+}
+
+void APlayerCharacter::ForceGroupAttack()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "CalledFunction");
+	for (ATheTwins* Twin : Twins)
+	{
+		Twin->ForceGroupATK();
 	}
 }
 

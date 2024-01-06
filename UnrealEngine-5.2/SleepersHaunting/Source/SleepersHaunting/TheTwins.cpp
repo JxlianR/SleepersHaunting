@@ -233,6 +233,40 @@ void ATheTwins::ResumeAllTwinTimers()
 	}
 }
 
+void ATheTwins::ForceGroupATK()
+{
+	if (!World->IsServer()) return;
+
+	if (RoomsManagerInstance)
+	{
+		// Set the next room to be the AttackRoom
+		int32 NextRoomID = AttackRoom;
+
+		// Update the current room ID
+		UpdateCurrentRoomID(NextRoomID);
+
+		// Move the twin to the chosen waypoint of the new room
+		MoveTwinToWaypoint();
+
+		// Check if the current room is the attack room
+		if (CurrentRoomID == AttackRoom)
+		{
+			// Start the special attack timer
+			GetWorldTimerManager().SetTimer(SAttackTimerHandle, this, &ATheTwins::TwinAttack, SattackDuration, false);
+			GroupAttackInstance->AttemptGroupAttack(IsLeftSided);
+		}
+		else
+		{
+			// Start the movement timer for the next random room
+			GetWorldTimerManager().SetTimer(CDMovementTimerHandle, this, &ATheTwins::MoveToRandomConnectedRoom, CDmovementDuration, false);
+		}
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "RoomsManager instance is not valid");
+	}
+}
+
 bool ATheTwins::ReturnLockedDoor()
 {
 	bool IsDoorLocked = SlideDoorsInstance->IsDoorLocked();

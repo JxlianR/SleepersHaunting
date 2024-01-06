@@ -84,6 +84,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* ResumeTwins;
 
+	UPROPERTY(EditAnywhere, Category = Input)
+	UInputAction* FGroupAttack;
+
 	UPROPERTY(EditAnywhere, Replicated)
 	float MovementSpeed = 1.0f;
 
@@ -225,6 +228,9 @@ protected:
 	UFUNCTION()
 	void OnResumeTwins();
 	
+	UFUNCTION()
+	void ForceGroupAttack();
+
 	UFUNCTION()
 	void NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
