@@ -55,7 +55,6 @@ void UAudioManager::PlaySound(USoundCue*SoundCue, AActor* actor)
 	}
 }
 
-
 void UAudioManager::StopSound(USoundCue* SoundCue)
 {
 	if (SoundCue)
