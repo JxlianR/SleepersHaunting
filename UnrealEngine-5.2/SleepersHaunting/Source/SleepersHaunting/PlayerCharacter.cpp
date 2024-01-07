@@ -374,9 +374,9 @@ void APlayerCharacter::Grabbing()
 					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("This is a SlideDoor"));
 					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("This is grabbable"));
 
-					ConstraintComponent->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Free, 0.f);
-					ConstraintComponent->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0.f);
-					ConstraintComponent->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0.f);
+					// ConstraintComponent->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Free, 0.f);
+					// ConstraintComponent->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0.f);
+					// ConstraintComponent->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0.f);
 					ConstraintComponent->SetConstrainedComponents(GetMesh(), "spine_05", Hit.GetComponent(), NAME_None);
 
 					IGrabbableInterface* GrabInterface = Cast<IGrabbableInterface>(Hit.GetActor());
@@ -722,9 +722,6 @@ void APlayerCharacter::PlayCharacterSound()
 	}
 	else
 	{
-
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("APlayerCharacter::PlayCharacterSound - Invalid SoundCue"));
-		
 	}
-	
 }
