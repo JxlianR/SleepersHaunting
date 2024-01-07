@@ -23,12 +23,12 @@ UAudioManager& UAudioManager::GetInstance()
 	return *Instance;
 }
 
-void UAudioManager::PlaySound(USoundCue* SoundCue, bool bLoop)
+void UAudioManager::PlaySound(USoundCue* SoundCue, bool bLoop, AActor* actor)
 {
-	if (SoundCue)
+	if (SoundCue && actor)
 	{
 		// Play the sound using UGameplayStatics.
-		UGameplayStatics::PlaySound2D(GetWorld(), SoundCue, 1.f, 1.f, 0.f, nullptr, bLoop ? nullptr : UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawnOrSpectator());
+		UGameplayStatics::PlaySound2D(actor, SoundCue);
 		//UGameplayStatics::PlaySound2D(GetWorld(), SoundCue, 1.f, 1.f, 0.f, nullptr, bLoop);
 		//UGameplayStatics::PlaySound2D(GetWorld(), SoundCue, 1.f, 1.f, 0.f, nullptr, nullptr);
 	}

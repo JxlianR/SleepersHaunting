@@ -27,7 +27,7 @@ public:
 	static UAudioManager& GetInstance();
 
 	UFUNCTION(BlueprintCallable, Category = "Audio")
-		void PlaySound(USoundCue* SoundCue, bool bLoop);
+		void PlaySound(USoundCue* SoundCue, bool bLoop, AActor* actor);
 
 	UFUNCTION(BlueprintCallable, Category = "Audio")
 		void StopSound(USoundCue* SoundCue);

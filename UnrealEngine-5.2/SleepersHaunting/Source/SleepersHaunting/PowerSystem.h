@@ -38,7 +38,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Power")
 	void DecreasePowerConsumption();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category= "Power")
 	void AddPower(float PowerToAdd);
 
 	UFUNCTION()

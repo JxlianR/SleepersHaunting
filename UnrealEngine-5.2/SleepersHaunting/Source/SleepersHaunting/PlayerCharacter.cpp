@@ -718,7 +718,7 @@ void APlayerCharacter::PlayCharacterSound()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("~Played sound"));
 		// Play the sound using the UAudioManager.
-		AudioManager.PlaySound(CharacterSoundCue, false);
+		AudioManager.PlaySound(CharacterSoundCue, true, this);
 	}
 	else
 	{
