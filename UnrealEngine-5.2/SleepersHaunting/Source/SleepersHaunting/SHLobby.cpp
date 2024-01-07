@@ -20,13 +20,6 @@ ASHLobby::ASHLobby()
 	LobbyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LobbyMesh"));
 	RootComponent = LobbyMesh;
 
-	// Set the cube mesh for the LobbyMesh component
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("StaticMesh'/Game/Path/To/Your/CubeMesh.CubeMesh'"));
-	if (CubeMeshAsset.Succeeded())
-	{
-		LobbyMesh->SetStaticMesh(CubeMeshAsset.Object);
-	}
-
 	// Bind functions to handle overlap events
 	LobbyMesh->OnComponentBeginOverlap.AddDynamic(this, &ASHLobby::OnLobbyEnter);
 	LobbyMesh->OnComponentEndOverlap.AddDynamic(this, &ASHLobby::OnLobbyExit);
