@@ -1,24 +1,24 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "IngameDeathmatchGamemode.h"
+#include "IngameGamemode.h"
 
-void AIngameDeathmatchGamemode::BeginPlay()
+void AIngameGamemode::BeginPlay()
 {
 	Super::BeginPlay();
 }
 
-void AIngameDeathmatchGamemode::Tick(float DeltaSeconds)
+void AIngameGamemode::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 }
 
-void AIngameDeathmatchGamemode::EndPlay(const EEndPlayReason::Type EndPlayReason)
+void AIngameGamemode::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 }
 
-void AIngameDeathmatchGamemode::PreLogin(const FString& Options, const FString& Address,
+void AIngameGamemode::PreLogin(const FString& Options, const FString& Address,
 	const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
 {
 	Super::PreLogin(Options, Address, UniqueId, ErrorMessage);
@@ -26,13 +26,13 @@ void AIngameDeathmatchGamemode::PreLogin(const FString& Options, const FString& 
 	// Check The Login Tokens
 }
 
-APlayerController* AIngameDeathmatchGamemode::Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal,
+APlayerController* AIngameGamemode::Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal,
 	const FString& Options, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
 {
 	return Super::Login(NewPlayer, InRemoteRole, Portal, Options, UniqueId, ErrorMessage);
 }
 
-void AIngameDeathmatchGamemode::PostLogin(APlayerController* NewPlayer)
+void AIngameGamemode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 }

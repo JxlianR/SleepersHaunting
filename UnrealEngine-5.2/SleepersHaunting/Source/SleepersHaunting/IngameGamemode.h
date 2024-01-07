@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
 #include "GameFramework/PlayerStart.h"
-#include "IngameDeathmatchGamemode.generated.h"
+#include "IngameGamemode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SLEEPERSHAUNTING_API AIngameDeathmatchGamemode : public AGameMode
+class SLEEPERSHAUNTING_API AIngameGamemode : public AGameMode
 {
 	GENERATED_BODY()
 	virtual void BeginPlay() override;
