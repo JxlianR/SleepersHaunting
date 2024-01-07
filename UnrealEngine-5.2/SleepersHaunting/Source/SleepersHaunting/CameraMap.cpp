@@ -14,12 +14,13 @@ ACameraMap::ACameraMap()
 
 	CurrentMaterialIndex = 0;
 
+	/*
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshAsset(TEXT("StaticMesh'/Game/Path/To/Your/CubeMesh.CubeMesh'"));
 	if (CubeMeshAsset.Succeeded())
 	{
 		CubeMesh->SetStaticMesh(CubeMeshAsset.Object);
 	}
-
+	*/
 }
 
 void ACameraMap::BeginPlay()
