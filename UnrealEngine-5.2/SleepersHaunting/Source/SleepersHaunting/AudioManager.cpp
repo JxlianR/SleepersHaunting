@@ -23,7 +23,24 @@ UAudioManager& UAudioManager::GetInstance()
 	return *Instance;
 }
 
-void UAudioManager::PlaySound(USoundCue* SoundCue, bool bLoop, AActor* actor)
+void UAudioManager::PlaySoundAtLocation(USoundCue* SoundCue, AActor* actor)
+{
+	if (SoundCue && actor)
+	{
+		FVector ActorLocation = actor->GetActorLocation();
+		UGameplayStatics::PlaySoundAtLocation(actor, SoundCue, ActorLocation);
+	}
+	else
+	{
+		// Log a warning using GEngine.
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("UAudioManager::PlaySoundAtLocation - Invalid SoundCue"));
+		}
+	}
+}
+
+void UAudioManager::PlaySound(USoundCue*SoundCue, AActor* actor)
 {
 	if (SoundCue && actor)
 	{
@@ -37,6 +54,7 @@ void UAudioManager::PlaySound(USoundCue* SoundCue, bool bLoop, AActor* actor)
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("UAudioManager::PlaySound - Invalid SoundCue"));
 	}
 }
+
 
 void UAudioManager::StopSound(USoundCue* SoundCue)
 {
