@@ -165,6 +165,9 @@ public:
 
 	UPROPERTY()
 	TArray<ATheTwins*> Twins;
+
+	UFUNCTION(BlueprintCallable, Category = "Audio")
+		void PlayCharacterSound();
 	
 private:
 	/** Top down camera */
@@ -198,6 +201,8 @@ protected:
 	UPrimitiveComponent* GrabbedComponent = nullptr;
 
 	//Joao Code---------------------------------------------------------------------------------------
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		class USoundCue* CharacterSoundCue;
 protected:
 	UFUNCTION()
 	void CallRoomManagerDebugFunctions();

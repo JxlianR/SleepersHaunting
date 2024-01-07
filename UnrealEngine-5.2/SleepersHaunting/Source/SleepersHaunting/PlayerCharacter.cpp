@@ -15,6 +15,7 @@
 #include "Net/UnrealNetwork.h"
 #include "EngineUtils.h"
 #include "MyGameState.h"
+#include "AudioManager.h"
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/TextBlock.h"
@@ -520,10 +521,11 @@ void APlayerCharacter::Jump()
 	{
 		Super::Jump();
 
+		PlayCharacterSound();
+
 		//Detach the Roomba
 		TArray<AActor*> Actors;
 		GetOverlappingActors(Actors);
-	
 		for(AActor* Actor : Actors)
 		{
 			IJumpableInterface* JumpableInterface = Cast<IJumpableInterface>(Actor);
@@ -705,4 +707,24 @@ void APlayerCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPr
 	// 	if (JumpableInterface)
 	// 		JumpableInterface->Execute_JumpedOn(Other);
 	// }
+}
+
+void APlayerCharacter::PlayCharacterSound()
+{
+	// Get a reference to the UAudioManager instance.
+	UAudioManager& AudioManager = UAudioManager::GetInstance();
+
+	if (CharacterSoundCue)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("~Played sound"));
+		// Play the sound using the UAudioManager.
+		AudioManager.PlaySound(CharacterSoundCue, false);
+	}
+	else
+	{
+
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("APlayerCharacter::PlayCharacterSound - Invalid SoundCue"));
+		
+	}
+	
 }
