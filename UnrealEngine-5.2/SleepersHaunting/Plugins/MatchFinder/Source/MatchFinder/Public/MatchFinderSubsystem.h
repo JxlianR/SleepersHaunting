@@ -58,16 +58,16 @@ public: // Public Functions
 
 	virtual void Deinitialize() override;
 	
-	UFUNCTION(BlueprintCallable, Category = "Something")
+	UFUNCTION(BlueprintCallable)
 	void RequestGame();
 
-	UFUNCTION(BlueprintCallable, Category = "Something")
+	UFUNCTION(BlueprintCallable)
 	void CancelRequest();
 
-	UFUNCTION(BlueprintPure, Category = "Something")
+	UFUNCTION(BlueprintPure)
 	EMatchFinderSubsystemState GetCurrentState() const;
 
-	UFUNCTION(BlueprintPure, Category = "Something")
+	UFUNCTION(BlueprintPure)
 	EMatchFindingProgress GetMatchFindingProgress() const;
 
 private: // Private Functions
