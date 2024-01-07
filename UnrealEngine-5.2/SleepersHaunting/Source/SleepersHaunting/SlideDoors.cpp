@@ -8,7 +8,8 @@ ASlideDoors::ASlideDoors()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	lockedDoor = false;
-
+	bIsBeingGrabbed = false;
+	
 	MainMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	RootComponent = MainMeshComponent;
 
@@ -33,8 +34,6 @@ void ASlideDoors::BeginPlay()
 void ASlideDoors::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	
 }
 
 bool ASlideDoors::IsDoorLocked()
@@ -58,16 +57,16 @@ void ASlideDoors::SetDoorTrue()
 
 void ASlideDoors::SmoothMoveToInitialLocation(float DeltaTime)
 {
-	FVector Force = FVector(-1000.0f * 1000, 0.0f, 0.0f);
+	FVector Force = FVector(-1000.0f, 0.0f, 0.0f);
 	SlideDoorMeshComponent->AddForce(Force);
 	
 	// Get initial location
 	FVector InitialLocation = SlideDoorMeshComponent->GetComponentLocation();
-
+	
 	// Interpolate towards initial location
 	FVector CurrentLocation = SlideDoorMeshComponent->GetComponentLocation();
 	FVector NewLocation = FMath::VInterpTo(CurrentLocation, InitialLocation, DeltaTime, 100.0f);
-
+	
 	SlideDoorMeshComponent->SetWorldLocation(NewLocation);
 }
 
@@ -75,12 +74,14 @@ void ASlideDoors::Grab_Implementation()
 {
 	// Start smooth movement when grabbed
 	bShouldMoveSmoothly = false;
+	bIsBeingGrabbed = true;
 }
 
 void ASlideDoors::Release_Implementation()
 {
 	// Stop smooth movement when released
 	bShouldMoveSmoothly = true;
+	bIsBeingGrabbed = false;
 }
 
 // Called every frame when grabbed
@@ -97,7 +98,7 @@ void ASlideDoors::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	// Check if the overlapping actor is the SlideDoorMeshComponent
 	if (OtherComp == SlideDoorMeshComponent)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Triggered"));
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Triggered -> Closed"));
 		SetDoorTrue();
 	}
 }

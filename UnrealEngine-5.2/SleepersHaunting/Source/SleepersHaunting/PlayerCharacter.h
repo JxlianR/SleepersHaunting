@@ -15,6 +15,7 @@
 #include "TheTwins.h"
 #include "Components/SphereComponent.h"
 #include "Components/TextBlock.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
 #include "PlayerCharacter.generated.h"
@@ -111,6 +112,9 @@ public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UPhysicsConstraintComponent* ConstraintComponent;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
 	USphereComponent* RightHandSphereCollision;
 
@@ -184,7 +188,11 @@ protected:
 	void GrabRight();
 	void ReleaseLeft();
 	void ReleaseRight();
+	void Grabbing();
+	void Release();
 	void GrabObject(UPrimitiveComponent* GrabbedComponent, bool bIsLeftHand);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isGrabbing = false;
 	
 	UPrimitiveComponent* GrabbedComponent = nullptr;

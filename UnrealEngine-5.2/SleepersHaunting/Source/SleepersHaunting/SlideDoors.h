@@ -45,24 +45,27 @@ public:
 	
 	void SmoothMoveToInitialLocation(float DeltaTime);
 	void GrabTick(float DeltaTime);
-
-private:
+	
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* MainMeshComponent;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UStaticMeshComponent* SlideDoorMeshComponent;
 
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* TriggerVolume;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsBeingGrabbed;
+	
+private:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	// FVector InitialLocation;
+	UPROPERTY(EditAnywhere);
 	bool bShouldMoveSmoothly;
 
 	APowerSystem* powerSystemReference;

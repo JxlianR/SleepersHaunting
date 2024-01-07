@@ -56,22 +56,18 @@ APlayerCharacter::APlayerCharacter()
 	/***/
 	RightHandSphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("RightHandSphereCollision"));
 	RightHandSphereCollision->SetupAttachment(GetMesh(), "hand_r");
-	RightHandSphereCollision->InitSphereRadius(7.5f);
+	RightHandSphereCollision->InitSphereRadius(10.0f);
 
 	LeftHandSphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("LeftHandSphereCollision"));
 	LeftHandSphereCollision->SetupAttachment(GetMesh(), "hand_l");
-	LeftHandSphereCollision->InitSphereRadius(7.5f);
+	LeftHandSphereCollision->InitSphereRadius(10.0f);
 
 	LeftPhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("LeftPhysicsHandle"));
 	LeftPhysicsHandle->SetTargetLocation(LeftHandSphereCollision->GetComponentLocation());
 	RightPhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("RightPhysicsHandle"));
 	RightPhysicsHandle->SetTargetLocation(RightHandSphereCollision->GetComponentLocation());
 
-	// LeftHandIKTarget = CreateDefaultSubobject<USceneComponent>(TEXT("LeftHandIKTarget"));
-	// LeftHandIKTarget->SetupAttachment(GetMesh(), "hand_l");
-	//
-	// RightHandIKTarget = CreateDefaultSubobject<USceneComponent>(TEXT("RightHandIKTarget"));
-	// RightHandIKTarget->SetupAttachment(GetMesh(), "hand_r");
+	ConstraintComponent = CreateDefaultSubobject<UPhysicsConstraintComponent>(TEXT("ConstraintComponent"));
 	/***/
 }
 
@@ -191,22 +187,17 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 			PlayerEnhancedInputComponent->BindAction(GrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::OnGrab);
 		}
 		*/
-		if (LeftHandGrabInputAction)
-		{
-			PlayerEnhancedInputComponent->BindAction(LeftHandGrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::GrabLeft);
-			PlayerEnhancedInputComponent->BindAction(LeftHandGrabInputAction, ETriggerEvent::Completed, this, &APlayerCharacter::ReleaseLeft);
-		}
+		// if (LeftHandGrabInputAction)
+		// {
+		// 	PlayerEnhancedInputComponent->BindAction(LeftHandGrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Grabbing);
+		// 	PlayerEnhancedInputComponent->BindAction(LeftHandGrabInputAction, ETriggerEvent::Completed, this, &APlayerCharacter::Release);
+		// }
 		
 		if (RightHandGrabInputAction)
 		{
-			PlayerEnhancedInputComponent->BindAction(RightHandGrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::GrabRight);
-			PlayerEnhancedInputComponent->BindAction(RightHandGrabInputAction, ETriggerEvent::Completed, this, &APlayerCharacter::ReleaseRight);
+			PlayerEnhancedInputComponent->BindAction(RightHandGrabInputAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Grabbing);
+			PlayerEnhancedInputComponent->BindAction(RightHandGrabInputAction, ETriggerEvent::Completed, this, &APlayerCharacter::Release);
 		}
-		
-		// PlayerInputComponent->BindAction("GrabLeft", IE_Pressed, this, &APlayerCharacter::GrabLeft);
-		// PlayerInputComponent->BindAction("GrabRight", IE_Pressed, this, &APlayerCharacter::GrabRight);
-		// PlayerInputComponent->BindAction("GrabLeft", IE_Released, this, &APlayerCharacter::ReleaseLeft);
-		// PlayerInputComponent->BindAction("GrabRight", IE_Released, this, &APlayerCharacter::ReleaseRight);
 		
 		if (TestDebugInputAction) 
 		{
@@ -323,99 +314,174 @@ void APlayerCharacter::GrabRight()
 
 void APlayerCharacter::ReleaseLeft()
 {
-	if (LeftPhysicsHandle->GrabbedComponent)
-	{
-		isGrabbing = false;
-		LeftPhysicsHandle->ReleaseComponent();
-		GrabbedComponent = nullptr;
-	}
+	// if (LeftPhysicsHandle->GrabbedComponent)
+	// {
+	// 	// LeftPhysicsHandle->ReleaseComponent();
+	// 	GrabbedComponent = nullptr;
+	// }
+	isGrabbing = false;
 }
 
 void APlayerCharacter::ReleaseRight()
 {
-	if (RightPhysicsHandle->GrabbedComponent)
+	// if (RightPhysicsHandle->GrabbedComponent)
+	// {
+	// 	// RightPhysicsHandle->ReleaseComponent();
+	// 	GrabbedComponent = nullptr;
+	// }
+	isGrabbing = false;
+}
+
+void APlayerCharacter::Grabbing()
+{
+    // Perform a sphere sweep to find grabbable objects in the specified direction
+	FVector StartLocation = GetActorLocation();
+	FVector EndLocation = StartLocation;
+	
+	FCollisionQueryParams CollisionParams;
+    CollisionParams.AddIgnoredActor(this);  // Ignore the player character
+
+    TArray<FHitResult> HitResults;
+    GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(100.0f), CollisionParams);
+
+	// Draw the red sphere for visualization
+    DrawDebugSphere(
+        GetWorld(),
+        StartLocation,
+        100.0f,
+        4,
+        FColor::Red,
+        false,
+        5.0f,
+        0,
+        1
+    );
+
+	for (FHitResult& Hit : HitResults)
 	{
-		isGrabbing = false;
-		RightPhysicsHandle->ReleaseComponent();
-		GrabbedComponent = nullptr;
+		if (Hit.Component.IsValid())
+		{
+			FString ComponentName = Hit.Component->GetName();
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, ComponentName);
+			
+			// Check if the owner implements the specific interface
+			if (Hit.Component->GetOwner()->GetClass()->ImplementsInterface(UGrabbableInterface::StaticClass()))
+			{
+				// Check if the component's name is "SlideDoor"
+				if (ComponentName == "SlideDoor")
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("This is a SlideDoor"));
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("This is grabbable"));
+
+					ConstraintComponent->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Free, 0.f);
+					ConstraintComponent->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0.f);
+					ConstraintComponent->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0.f);
+					ConstraintComponent->SetConstrainedComponents(GetMesh(), "spine_05", Hit.GetComponent(), NAME_None);
+
+					IGrabbableInterface* GrabInterface = Cast<IGrabbableInterface>(Hit.GetActor());
+					if (GrabInterface && isGrabbing == true)
+					{
+						GrabInterface->Execute_Grab(Hit.GetActor());
+						isGrabbing = true;
+					}
+					
+					// Draw the red sphere for visualization
+					DrawDebugSphere(
+						GetWorld(),
+						StartLocation,
+						100.0f,
+						4,
+						FColor::Green,
+						false,
+						5.0f,
+						0,
+						1
+					);
+				}
+			}
+		}
 	}
+}
+
+void APlayerCharacter::Release()
+{
+	isGrabbing = false;
+	
+	if (isGrabbing == false)
+		ConstraintComponent->BreakConstraint();
 }
 
 void APlayerCharacter::StretchToNearestGrabbable(bool bIsLeftHand)
 {
-	// Get the hand sphere component for the specified hand
-	USphereComponent* HandSphere = bIsLeftHand ? LeftHandSphereCollision : RightHandSphereCollision;
-	UPhysicsHandleComponent* PhysicsHandle = bIsLeftHand ? LeftPhysicsHandle : RightPhysicsHandle;
-	
-	// Perform a sphere trace to find grabbable objects in the specified direction
-	FVector StartLocation = HandSphere->GetComponentLocation();
-	FVector ForwardVector = GetActorForwardVector();
-	FVector EndLocation = StartLocation + ForwardVector * MaxGrabDistance;
+    // Get the hand sphere component for the specified hand
+    USphereComponent* HandSphere = bIsLeftHand ? LeftHandSphereCollision : RightHandSphereCollision;
+    UPhysicsHandleComponent* PhysicsHandle = bIsLeftHand ? LeftPhysicsHandle : RightPhysicsHandle;
 
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(this);  // Ignore the player character
+    // Perform a sphere sweep to find grabbable objects in the specified direction
+    FVector StartLocation = HandSphere->GetComponentLocation();
+    FVector ForwardVector = GetActorForwardVector();
+    FVector EndLocation = StartLocation + ForwardVector * MaxGrabDistance;
 
-	DrawDebugSphere(
-				GetWorld(),
-				StartLocation,
-				HandSphere->GetScaledSphereRadius(),
-				2,
-				FColor::Red,
-				false,
-				5.0f,
-				0,
-				1);
-	
-	FHitResult HitResult;
-	if (GetWorld()->SweepSingleByChannel(HitResult, StartLocation, EndLocation, FQuat::Identity, ECC_Visibility,
-												FCollisionShape::MakeSphere(HandSphere->GetScaledSphereRadius()), CollisionParams))
+    FCollisionQueryParams CollisionParams;
+    CollisionParams.AddIgnoredActor(this);  // Ignore the player character
+
+    TArray<FHitResult> HitResults;
+    GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(HandSphere->GetScaledSphereRadius()), CollisionParams);
+
+	// Draw the red sphere for visualization
+    DrawDebugSphere(
+        GetWorld(),
+        StartLocation,
+        HandSphere->GetScaledSphereRadius(),
+        1,
+        FColor::Red,
+        false,
+        5.0f,
+        0,
+        1
+    );
+
+	for (FHitResult& Hit : HitResults)
 	{
-		// Check if the hit actor implements the grabbable interface
-		IGrabbableInterface* GrabbableInterface = Cast<IGrabbableInterface>(HitResult.GetActor());
-		if (GrabbableInterface)
+		if (Hit.Component.IsValid())
 		{
-			// Stretch the hand towards the grabbable object
-			FVector TargetLocation = HitResult.ImpactPoint;
-			FVector CurrentLocation = HandSphere->GetComponentLocation();
-			FVector NewLocation = FMath::VInterpTo(CurrentLocation, TargetLocation, GetWorld()->GetDeltaSeconds(), StretchSpeed);
-			PhysicsHandle->SetTargetLocation(NewLocation);
-
-			if (GrabbedComponent && GrabbedComponent->GetOwner())
+			FString ComponentName = Hit.Component->GetName();
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, ComponentName);
+			
+			// Check if the owner implements the specific interface
+			if (Hit.Component->GetOwner()->GetClass()->ImplementsInterface(UGrabbableInterface::StaticClass()))
 			{
-				UStaticMeshComponent* SlideDoorMeshComponent = GrabbedComponent->GetOwner()->FindComponentByClass<UStaticMeshComponent>();
-				if (SlideDoorMeshComponent)
+				// Check if the component's name is "SlideDoor"
+				if (ComponentName == "SlideDoor")
 				{
-					PhysicsHandle->GrabComponentAtLocation(
-						SlideDoorMeshComponent,
-						NAME_None,
-						SlideDoorMeshComponent->GetComponentLocation()
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("This is a SlideDoor"));
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("This is grabbable"));
+
+					// Get the hand to which you want to attach the "SlideDoor" object
+					USceneComponent* Hand = bIsLeftHand ? LeftHandSphereCollision : RightHandSphereCollision;
+
+					// Attach the "SlideDoor" object to the hand
+					Hit.Component->AttachToComponent(Hand, FAttachmentTransformRules::SnapToTargetNotIncludingScale, Hand->GetAttachSocketName());
+					
+					// ConstraintComponent->SetConstrainedComponents(GetMesh(), "spine_05", Hit.GetComponent(), NAME_None);
+
+					isGrabbing = true;
+					// GrabObject(Hit.GetComponent(), bIsLeftHand);
+					
+					// Draw the red sphere for visualization
+					DrawDebugSphere(
+						GetWorld(),
+						StartLocation,
+						HandSphere->GetScaledSphereRadius(),
+						1,
+						FColor::Green,
+						false,
+						5.0f,
+						0,
+						1
 					);
 				}
 			}
-			
-			// Once the nearest object is found, call GrabObject
-			GrabObject(HitResult.GetComponent(), bIsLeftHand);
-			GrabbableInterface->Execute_Grab(HitResult.GetActor());
-			
-			if (bIsLeftHand)
-			{
-				LeftHandIKTarget->SetWorldLocation(TargetLocation);
-			}
-			else
-			{
-				RightHandIKTarget->SetWorldLocation(TargetLocation);
-			}
-			
-			DrawDebugSphere(
-			GetWorld(),
-			StartLocation,
-			HandSphere->GetScaledSphereRadius(),
-			2,
-			FColor::Green,
-			false,			
-			5.0f,			
-			0,
-			1);
 		}
 	}
 }
@@ -423,6 +489,12 @@ void APlayerCharacter::StretchToNearestGrabbable(bool bIsLeftHand)
 void APlayerCharacter::GrabObject(UPrimitiveComponent* InGrabbedComponent, bool bIsLeftHand)
 {
 	if (!InGrabbedComponent || !InGrabbedComponent->GetOwner())
+	{
+		return;
+	}
+
+	// Check if the component's name is "SlideDoor"
+	if (InGrabbedComponent->GetName() != "SlideDoor")
 	{
 		return;
 	}
@@ -436,9 +508,9 @@ void APlayerCharacter::GrabObject(UPrimitiveComponent* InGrabbedComponent, bool 
 	PhysicsHandle->GrabComponentAtLocation(
 		InGrabbedComponent,
 		NAME_None,
-		InGrabbedComponent->GetOwner()->GetActorLocation()
+		InGrabbedComponent->GetComponentLocation()
 	);
-	
+    
 	isGrabbing = true;
 }
 
