@@ -13,10 +13,10 @@ struct FWaypointInfo //All Waypoints Info
 	GENERATED_BODY()
 
 		UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FVector WaypointPosition;
+		FVector WaypointPosition = FVector(0.0f, 0.0f, 0.0f);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		bool IsOccupied;
+		bool IsOccupied = false;
 };
 
 USTRUCT(BlueprintType, Blueprintable)
@@ -25,7 +25,7 @@ struct FRoomInfo //All rooms info
 	GENERATED_BODY()
 
 		UPROPERTY(EditAnywhere, BlueprintReadOnly)//The current room ID
-		int32 RoomID;
+		int32 RoomID = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)//To place which rooms are connected to the current room
 		TArray<int32> ConnectedRooms;
