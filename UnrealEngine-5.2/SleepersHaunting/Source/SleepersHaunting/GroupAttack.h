@@ -17,7 +17,7 @@ public:
 	
 	// Duration for attack cooldown
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Group Attack")
-		float SattackTimer = 0.0f;
+		float SattackTimer = 1.0f;
 
 
 

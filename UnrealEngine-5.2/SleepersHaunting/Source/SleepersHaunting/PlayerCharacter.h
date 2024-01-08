@@ -249,7 +249,7 @@ protected:
 	UFUNCTION()
 	void OnResumeTwins();
 	
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	void ForceGroupAttack();
 
 	UFUNCTION()

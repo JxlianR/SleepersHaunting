@@ -664,7 +664,7 @@ void APlayerCharacter::OnResumeTwins()
 	}
 }
 
-void APlayerCharacter::ForceGroupAttack()
+void APlayerCharacter::ForceGroupAttack_Implementation()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "CalledFunction");
 	for (ATheTwins* Twin : Twins)
