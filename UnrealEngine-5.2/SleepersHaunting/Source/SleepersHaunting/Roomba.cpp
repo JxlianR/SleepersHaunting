@@ -50,13 +50,6 @@ void ARoomba::BeginPlay()
 	TimerToActivate = InitialTimerToActivate;
 
 	GetClosestPlayer();
-	if (ClosestCharacter)
-	{
-		FVector MoveToLocation = ClosestCharacter->GetActorLocation();
-		MoveToLocation.Z = GetActorLocation().Z;
-		if (AIController)
-			AIController->MoveToLocation(MoveToLocation);
-	}
 }
 
 // Called every frame
@@ -120,16 +113,16 @@ void ARoomba::GetClosestPlayer_Implementation()
 void ARoomba::FollowPlayer_Implementation()
 {
 	if (ClosestCharacter == nullptr) return;
-	//FVector Direction = ClosestCharacter->GetActorLocation() - GetActorLocation();
-	//Direction.Z = 0.0f;
+	FVector Direction = ClosestCharacter->GetActorLocation() - GetActorLocation();
+	Direction.Z = 0.0f;
 	
-	FVector MoveToLocation = ClosestCharacter->GetActorLocation();
-	MoveToLocation.Z = 0.0f;
-	if (AIController)
-		AIController->MoveToLocation(MoveToLocation);
+	// FVector MoveToLocation = ClosestCharacter->GetActorLocation();
+	// MoveToLocation.Z = 0.0f;
+	// if (AIController)
+	// 	AIController->MoveToLocation(MoveToLocation);
 	
 	//UNavigationQueryFilter Filter = UNavigationQueryFilter::();
-	//SetActorLocation(GetActorLocation() + (Direction * Speed * GetWorld()->DeltaTimeSeconds), true);
+	SetActorLocation(GetActorLocation() + (Direction * Speed * GetWorld()->DeltaTimeSeconds), true);
 }
 
 void ARoomba::AttachToPlayer_Implementation(APlayerCharacter* Player)
