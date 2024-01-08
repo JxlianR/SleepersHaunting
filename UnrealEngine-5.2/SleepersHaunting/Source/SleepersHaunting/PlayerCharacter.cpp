@@ -81,6 +81,8 @@ APlayerCharacter::~APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UWorld* World = GetWorld();
 	
 	// GetCharacterMovement()->AirControl = 0.2f;
 	GetCharacterMovement()->JumpZVelocity = JumpVelocity;
@@ -94,8 +96,7 @@ void APlayerCharacter::BeginPlay()
 	GarageHandlerRightRef = FindGarageHandlerByTag(TEXT("GarageHandlerR"));
 
 	PowerSystem = Cast<APowerSystem>(UGameplayStatics::GetActorOfClass(GetWorld(), APowerSystem::StaticClass()));
-
-	UWorld* World = GetWorld();
+	
 	for(ATheTwins* Twin : TActorRange<ATheTwins>(World))
 	{
 		Twins.Add(Twin);
