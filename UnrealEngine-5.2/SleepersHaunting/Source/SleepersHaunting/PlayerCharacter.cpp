@@ -523,7 +523,7 @@ void APlayerCharacter::Jump()
 	{
 		Super::Jump();
 
-		PlayCharacterSound();
+		PlayCharacterSound(this);
 
 		//Detach the Roomba
 		TArray<AActor*> Actors;
@@ -715,7 +715,7 @@ void APlayerCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPr
 	// }
 }
 
-void APlayerCharacter::PlayCharacterSound()
+void APlayerCharacter::PlayCharacterSound_Implementation(AActor* Actor)
 {
 	// Get a reference to the UAudioManager instance.
 	UAudioManager& AudioManager = UAudioManager::GetInstance();
@@ -724,7 +724,7 @@ void APlayerCharacter::PlayCharacterSound()
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("~Played sound"));
 		// Play the sound using the UAudioManager.
-		AudioManager.PlaySoundAtLocation(CharacterSoundCue, this);
+		AudioManager.PlaySoundAtLocation(CharacterSoundCue, Actor);
 	}
 	else
 	{

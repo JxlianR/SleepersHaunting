@@ -171,8 +171,8 @@ public:
 	UPROPERTY()
 	TArray<ATheTwins*> Twins;
 
-	UFUNCTION(BlueprintCallable, Category = "Audio")
-		void PlayCharacterSound();
+	UFUNCTION(BlueprintCallable, Category = "Audio", NetMulticast, Unreliable)
+		void PlayCharacterSound(AActor* Actor);
 	
 private:
 	/** Top down camera */
