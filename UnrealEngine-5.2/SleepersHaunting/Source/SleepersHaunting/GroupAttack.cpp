@@ -46,8 +46,8 @@ void AGroupAttack::AttemptGroupAttack(bool whichTwin)
 	if (LeftTwinAtk && RightTwinAtk) {
 		TheTwinsInstance_1->PauseAllTwinTimers();
 		TheTwinsInstance_2->PauseAllTwinTimers();
-		//GetWorldTimerManager().SetTimer(SAttackTimerHandle, this, &AGroupAttack::TryGroupAttack, SattackTimer, false);
-		TryGroupAttack();
+		GetWorldTimerManager().SetTimer(SAttackTimerHandle, this, &AGroupAttack::TryGroupAttack, SattackTimer, false);
+		//TryGroupAttack();
 	}
 }
 
