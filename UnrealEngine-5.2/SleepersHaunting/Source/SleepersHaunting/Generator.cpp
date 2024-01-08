@@ -29,7 +29,22 @@ void AGenerator::Tick(float DeltaTime)
 void AGenerator::EnergyGain()
 {
 	if (powerSystemReference)
-		powerSystemReference->AddPower(energyFloat);
-		GEngine->AddOnScreenDebugMessage(-1, 10.0f, FColor::Blue, TEXT("Triggered -> +5 Power"));
+	{
+		if (bIsInCooldown == false)
+		{
+			bIsInCooldown = true;
+			powerSystemReference->AddPower(energyFloat);
+			GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Blue, TEXT("Triggered -> +5 Power"));
+		}
+		else
+		{
+			GetWorldTimerManager().SetTimer(coolDownTimerHandle, this, &AGenerator::SetbIsInCooldownFalse, fCooldownTimer, false);
+		}
+	}
+}
+
+void AGenerator::SetbIsInCooldownFalse()
+{
+	bIsInCooldown = false;
 }
 
