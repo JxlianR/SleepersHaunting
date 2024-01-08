@@ -16,19 +16,19 @@ Subject::~Subject()
 
 void Subject::Attach(Observer* observer)
 {
-	observers.Add(observer);
+	Observers.Add(observer);
 }
 
 void Subject::Detach(Observer* observer)
 {
 	if (observer == nullptr) return;
-	for (int i = 0; i < observers.Num(); i++)
-		if (observers[i] == observer)
-			observers.Remove(observers[i]);
+	for (int i = 0; i < Observers.Num(); i++)
+		if (Observers[i] == observer)
+			Observers.Remove(Observers[i]);
 }
 
 void Subject::Notify(const FText& Text)
 {
-	for (int i = 0; i < observers.Num(); i++)
-		observers[i]->Update(Text);
+	for (int i = 0; i < Observers.Num(); i++)
+		Observers[i]->Update(Text);
 }
