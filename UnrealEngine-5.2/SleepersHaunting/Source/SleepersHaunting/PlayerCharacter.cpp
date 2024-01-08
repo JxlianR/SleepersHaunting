@@ -131,6 +131,7 @@ void APlayerCharacter::BeginPlay()
 	{
 		FScriptDelegate ActivateUIDelegate;
 		ActivateUIDelegate.BindUFunction(this, "ActivateWidgetEvent");
+		//ActivateUIDelegate.BindUFunction(this, "ActivateWidgetEvent");
 		GameState->OnActivateUIEvent.Add(ActivateUIDelegate);
 	}
 
@@ -690,6 +691,10 @@ void APlayerCharacter::ActivateWidgetEvent_Implementation(const FText& NewText)
 	{
 		Notify(NewText);
 	}
+
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (PC)
+		DisableInput(PC);
 }
 
 void APlayerCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,
