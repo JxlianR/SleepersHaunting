@@ -4,7 +4,7 @@
 
 //CLasses include
 #include "MyGameState.h"
-
+#include "AudioManager.h"
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -178,7 +178,7 @@ void AA_FatherGarage::PlayGarageSound()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("APlayerCharacter::PlayCharacterSound - Invalid SoundCue"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AA_FatherGarage::PlayGarageSound - Invalid SoundCue"));
 	}
 }
 

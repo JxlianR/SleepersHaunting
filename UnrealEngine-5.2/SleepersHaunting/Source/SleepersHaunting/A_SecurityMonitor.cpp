@@ -47,7 +47,7 @@ void AA_SecurityMonitor::PlayMonitorSound()
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("APlayerCharacter::PlayCharacterSound - Invalid SoundCue"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AA_SecurityMonitor::PlayMonitorSound - Invalid SoundCue"));
 	}
 }
 
