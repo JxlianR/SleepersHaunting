@@ -118,7 +118,7 @@ protected:
 	AAIController* AIController = nullptr;
 
 private:
-	bool Active = true;
+	bool Active = false;
 
 	float Lifetime = InitialLifetime;
 

@@ -699,7 +699,10 @@ void APlayerCharacter::ActivateWidgetEvent_Implementation(const FText& NewText)
 
 	APlayerController* PC = Cast<APlayerController>(GetController());
 	if (PC)
+	{
 		DisableInput(PC);
+		PC->bShowMouseCursor = true;
+	}
 }
 
 void APlayerCharacter::NotifyHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp,
