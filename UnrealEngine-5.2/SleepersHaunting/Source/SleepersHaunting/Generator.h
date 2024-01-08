@@ -32,6 +32,16 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	float energyFloat = 5.0f;
+
+private:
+	UPROPERTY()
+	bool bIsInCooldown = false;
+	UPROPERTY()
+	float fCooldownTimer = 0.5f;
+	FTimerHandle coolDownTimerHandle;
+
+	UFUNCTION()
+	void SetbIsInCooldownFalse();
 	
 private:
 	UPROPERTY()

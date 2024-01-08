@@ -94,6 +94,7 @@ void APowerSystem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	
 	DOREPLIFETIME(APowerSystem, CurrentPower);
 	DOREPLIFETIME(APowerSystem, CurrentPowerLevel);
+	DOREPLIFETIME(APowerSystem, TextRenderComponent);
 }
 
 void APowerSystem::IncreasePowerConsumption()

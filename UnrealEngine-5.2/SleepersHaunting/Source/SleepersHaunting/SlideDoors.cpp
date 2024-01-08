@@ -43,14 +43,14 @@ bool ASlideDoors::IsDoorLocked()
 	return lockedDoor;
 }
 
-void ASlideDoors::SetDoorFalse()
+void ASlideDoors::SetDoorFalse_Implementation()
 {
 	lockedDoor = false;
 	if (powerSystemReference)
 		powerSystemReference->DecreasePowerConsumption();
 }
 
-void ASlideDoors::SetDoorTrue()
+void ASlideDoors::SetDoorTrue_Implementation()
 {
 	lockedDoor = true;
 	if (powerSystemReference)
