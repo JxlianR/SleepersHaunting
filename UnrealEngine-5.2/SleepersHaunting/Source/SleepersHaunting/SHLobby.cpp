@@ -107,7 +107,7 @@ void ASHLobby::StopLobbyTimer()
 void ASHLobby::OpenNextLevel()
 {
 	// Open the next level
-	UGameplayStatics::OpenLevel(GetWorld(), FName("PrototypeMap"));
+	UGameplayStatics::OpenLevel(GetWorld(), FName("Modelel"));
 }
 
 void ASHLobby::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
