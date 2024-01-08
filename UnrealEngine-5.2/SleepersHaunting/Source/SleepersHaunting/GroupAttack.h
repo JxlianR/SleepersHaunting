@@ -19,7 +19,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Group Attack")
 		float SattackTimer = 1.0f;
 
-
+	UFUNCTION(BlueprintCallable, Category = "Audio")
+	void PlayGroupAttackSound();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Group Attack")
 		class ATheTwins* TheTwinsInstance_1 = nullptr;
@@ -47,9 +48,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	class USoundCue* GroundAttackSoundCue = nullptr;
+
 private:
-	float LeftTwinAtk = 0.0f;
-	float RightTwinAtk = 0.0f;
+	bool LeftTwinAtk = false;
+	bool RightTwinAtk = false;
 
 	FTimerHandle SAttackTimerHandle;
 

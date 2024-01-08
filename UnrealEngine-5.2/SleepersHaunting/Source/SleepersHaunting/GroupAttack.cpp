@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 
 //Classes
+#include "AudioManager.h"
 #include "TheTwins.h"
 #include "MyGameState.h"
 
@@ -74,6 +75,7 @@ void AGroupAttack::TryGroupAttack()
 	{
 		TheTwinsInstance_1->FailedAttack();
 		TheTwinsInstance_2->FailedAttack();
+		PlayGroupAttackSound();
 	}
 }
 
@@ -94,5 +96,22 @@ void AGroupAttack::GetAllInstanceClasses()
 	else if (!AMyGameStateInstance)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Game State Instance not found!"));
+	}
+}
+
+void AGroupAttack::PlayGroupAttackSound()
+{
+	// Get a reference to the UAudioManager instance.
+	UAudioManager& AudioManager = UAudioManager::GetInstance();
+
+	if (GroundAttackSoundCue)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("~Played sound"));
+		// Play the sound using the UAudioManager.
+		AudioManager.PlaySoundAtLocation(GroundAttackSoundCue, this);
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("AGroupAttack::PlayGroupAttackSound - Invalid SoundCue"));
 	}
 }
