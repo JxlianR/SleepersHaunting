@@ -8,6 +8,8 @@ ASlideDoors::ASlideDoors()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	lockedDoor = false;
+	
+	bShouldMoveSmoothly = false;
 	bIsBeingGrabbed = false;
 	
 	MainMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
@@ -80,8 +82,8 @@ void ASlideDoors::Grab_Implementation()
 void ASlideDoors::Release_Implementation()
 {
 	// Stop smooth movement when released
-	bShouldMoveSmoothly = true;
-	bIsBeingGrabbed = false;
+	bShouldMoveSmoothly = false;
+	bIsBeingGrabbed = true;
 }
 
 // Called every frame when grabbed
@@ -89,7 +91,7 @@ void ASlideDoors::GrabTick(float DeltaTime)
 {
 	if (bShouldMoveSmoothly)
 	{
-		SmoothMoveToInitialLocation(DeltaTime);
+		// SmoothMoveToInitialLocation(DeltaTime);
 	}
 }
 

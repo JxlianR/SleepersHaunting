@@ -26,4 +26,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Function to set the door status to true (locked)
+	UFUNCTION(BlueprintCallable, Category = "Energy")
+	void EnergyGain();
+
+	UPROPERTY(BlueprintReadWrite)
+	float energyFloat = 5.0f;
+	
+private:
+	APowerSystem* powerSystemReference;
 };

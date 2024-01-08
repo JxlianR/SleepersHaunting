@@ -343,13 +343,13 @@ void APlayerCharacter::Grabbing()
     CollisionParams.AddIgnoredActor(this);  // Ignore the player character
 
     TArray<FHitResult> HitResults;
-    GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(100.0f), CollisionParams);
+    GetWorld()->SweepMultiByChannel(HitResults, StartLocation, EndLocation, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(75.0f), CollisionParams);
 
 	// Draw the red sphere for visualization
     DrawDebugSphere(
         GetWorld(),
         StartLocation,
-        100.0f,
+        75.0f,
         4,
         FColor::Red,
         false,
@@ -363,7 +363,7 @@ void APlayerCharacter::Grabbing()
 		if (Hit.Component.IsValid())
 		{
 			FString ComponentName = Hit.Component->GetName();
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, ComponentName);
+			GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, ComponentName);
 			
 			// Check if the owner implements the specific interface
 			if (Hit.Component->GetOwner()->GetClass()->ImplementsInterface(UGrabbableInterface::StaticClass()))
@@ -377,12 +377,13 @@ void APlayerCharacter::Grabbing()
 					// ConstraintComponent->SetAngularSwing1Limit(EAngularConstraintMotion::ACM_Free, 0.f);
 					// ConstraintComponent->SetAngularSwing2Limit(EAngularConstraintMotion::ACM_Locked, 0.f);
 					// ConstraintComponent->SetAngularTwistLimit(EAngularConstraintMotion::ACM_Locked, 0.f);
-					ConstraintComponent->SetConstrainedComponents(GetMesh(), "spine_05", Hit.GetComponent(), NAME_None);
+					ConstraintComponent->SetConstrainedComponents(GetMesh(), NAME_None, Hit.GetComponent(), NAME_None);
 
 					IGrabbableInterface* GrabInterface = Cast<IGrabbableInterface>(Hit.GetActor());
 					if (GrabInterface && isGrabbing == true)
 					{
-						GrabInterface->Execute_Grab(Hit.GetActor());
+						AActor* Actor = Hit.GetActor();
+						GrabInterface->Execute_Grab(Actor);
 						isGrabbing = true;
 					}
 					
@@ -390,7 +391,7 @@ void APlayerCharacter::Grabbing()
 					DrawDebugSphere(
 						GetWorld(),
 						StartLocation,
-						100.0f,
+						75.0f,
 						4,
 						FColor::Green,
 						false,

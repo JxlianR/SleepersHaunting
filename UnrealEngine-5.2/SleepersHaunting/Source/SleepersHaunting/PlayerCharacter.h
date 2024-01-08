@@ -191,6 +191,7 @@ protected:
 	void GrabRight();
 	void ReleaseLeft();
 	void ReleaseRight();
+	UFUNCTION(BlueprintCallable)
 	void Grabbing();
 	void Release();
 	void GrabObject(UPrimitiveComponent* GrabbedComponent, bool bIsLeftHand);

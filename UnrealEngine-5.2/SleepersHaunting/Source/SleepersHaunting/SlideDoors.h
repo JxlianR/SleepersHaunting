@@ -55,7 +55,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* TriggerVolume;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	bool bIsBeingGrabbed;
 	
 private:
