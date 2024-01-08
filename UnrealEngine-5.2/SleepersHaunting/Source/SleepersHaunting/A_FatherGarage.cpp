@@ -129,6 +129,7 @@ void AA_FatherGarage::StartResetTimeline()
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Reset timer started!"));
 		ResetDoorTimeline->PlayFromStart();
 		// Set a timer to call CooldownTimerFinished after ResetDoorDuration seconds
+		PlayGarageSound();
 		GetWorldTimerManager().SetTimer(ResetDoorTimerHandle, this, &AA_FatherGarage::StartCooldownTimer, ResetDoorDuration, false);
 	}
 }
@@ -162,6 +163,23 @@ void AA_FatherGarage::StopAllTimers()
 	StopCooldownTimer();
 	StopOpenDoorTimeline();
 	StopResetTimeline();
+}
+
+void AA_FatherGarage::PlayGarageSound()
+{
+	// Get a reference to the UAudioManager instance.
+	UAudioManager& AudioManager = UAudioManager::GetInstance();
+
+	if (GarageSoundCue)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("~Played sound"));
+		// Play the sound using the UAudioManager.
+		AudioManager.PlaySoundAtLocation(GarageSoundCue, this);
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("APlayerCharacter::PlayCharacterSound - Invalid SoundCue"));
+	}
 }
 
 void AA_FatherGarage::OpenDoorUpdate(float Value)

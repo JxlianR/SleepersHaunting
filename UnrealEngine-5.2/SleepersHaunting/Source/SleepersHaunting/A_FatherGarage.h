@@ -23,11 +23,14 @@ protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	class USoundCue* GarageSoundCue = nullptr;
+
 public:
     
-
+	UFUNCTION()
     void SetHandler1(bool NewValue);
-
+	UFUNCTION()
     void SetHandler2(bool NewValue);
 
 	//SetMulticast is something it should be executed in all clients when the server calls this function.
@@ -58,7 +61,8 @@ public:
 	UFUNCTION()
 	void StopAllTimers();
 
-	
+	UFUNCTION(BlueprintCallable, Category = "Audio")
+		void PlayGarageSound();
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     bool bLosingCondition = false;
