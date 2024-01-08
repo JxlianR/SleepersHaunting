@@ -34,5 +34,6 @@ public:
 	float energyFloat = 5.0f;
 	
 private:
-	APowerSystem* powerSystemReference;
+	UPROPERTY()
+	APowerSystem* powerSystemReference = nullptr;
 };

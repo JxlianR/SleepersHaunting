@@ -38,18 +38,31 @@ public:
 	FOnActivateUI OnActivateUIEvent;
  
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category = "Conditions")
-		bool losingCondition;
+		bool losingCondition = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Replicated, Category = "Conditions")
-		bool winningCondition;
+		bool winningCondition = false;
 
 	//Classes
-	class AA_FatherGarage* FatherGarageInstance;
-	class ATheTwins* TheTwinsInstance_1;
-	class ATheTwins* TheTwinsInstance_2;
-	class ARoomba* RoombaInstance;
-	class AClockTimer* ClockTimerInstance;
-	class AGroupAttack* GroupAttackInstance;
-	class APowerSystem* PowerSystemInstance;
+	UPROPERTY()
+	class AA_FatherGarage* FatherGarageInstance = nullptr;
+
+	UPROPERTY()
+	class ATheTwins* TheTwinsInstance_1 = nullptr;
+
+	UPROPERTY()
+	class ATheTwins* TheTwinsInstance_2 = nullptr;
+
+	UPROPERTY()
+	class ARoomba* RoombaInstance = nullptr;
+
+	UPROPERTY()
+	class AClockTimer* ClockTimerInstance = nullptr;
+
+	UPROPERTY()
+	class AGroupAttack* GroupAttackInstance = nullptr;
+
+	UPROPERTY()
+	class APowerSystem* PowerSystemInstance = nullptr;
 
 
 	//APlayerCharacter* PlayerCharacterInstance; //Someone do this

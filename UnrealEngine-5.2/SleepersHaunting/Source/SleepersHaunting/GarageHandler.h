@@ -26,11 +26,11 @@ public:
 
 	// Reference to the garage class
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Garage Handler")
-		class AA_FatherGarage* GarageReference;
+		class AA_FatherGarage* GarageReference = nullptr;
 
 	// Boolean to determine if this represents bHandler1 or bHandler2
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Garage Handler")
-		bool bIsHandler1;
+		bool bIsHandler1 = false;
 
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 

@@ -82,28 +82,28 @@ protected:
 	// TObjectPtr<UBoxComponent> BoxCollider;
 
 	UPROPERTY(Replicated)
-	FVector StartLocation;
+	FVector StartLocation = FVector::ZeroVector;
 
 	UPROPERTY()
-	FRotator StartRotation;
+	FRotator StartRotation = FRotator::ZeroRotator;
 	
 	UPROPERTY(EditAnywhere)
 	float Speed = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	float InitialLifetime;
+	float InitialLifetime = 0.0f;
 
 	UPROPERTY(EditAnywhere)
-	float InitialTimerToActivate;
+	float InitialTimerToActivate = 0.0f;
 
 	UPROPERTY(Replicated, VisibleAnywhere)
-	APlayerCharacter* ClosestCharacter;
+	APlayerCharacter* ClosestCharacter = nullptr;
 
 	UPROPERTY(Replicated)
-	APlayerCharacter* AttachedCharacter;
+	APlayerCharacter* AttachedCharacter = nullptr;
 
 	UPROPERTY(Replicated)
-	bool Attached;
+	bool Attached = false;
 
 	UPROPERTY(Replicated)
 	bool Stopped = false;
@@ -115,7 +115,7 @@ protected:
 	TArray<APlayerCharacter*> Characters;
 
 	UPROPERTY()
-	AAIController* AIController;
+	AAIController* AIController = nullptr;
 
 private:
 	bool Active = true;

@@ -17,14 +17,14 @@ public:
 	
 	// Duration for attack cooldown
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Group Attack")
-		float SattackTimer;
+		float SattackTimer = 0.0f;
 
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Group Attack")
-		class ATheTwins* TheTwinsInstance_1;
+		class ATheTwins* TheTwinsInstance_1 = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Group Attack")
-		class ATheTwins* TheTwinsInstance_2;
+		class ATheTwins* TheTwinsInstance_2 = nullptr;
 
 	UFUNCTION()
 		void AttemptGroupAttack(bool whichTwin); //true for left, false for right
@@ -36,7 +36,9 @@ public:
 	UFUNCTION()
 		void TryGroupAttack();
 
-	class AMyGameState* AMyGameStateInstance;
+	UPROPERTY()
+	class AMyGameState* AMyGameStateInstance = nullptr;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -46,8 +48,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	float LeftTwinAtk;
-	float RightTwinAtk;
+	float LeftTwinAtk = 0.0f;
+	float RightTwinAtk = 0.0f;
 
 	FTimerHandle SAttackTimerHandle;
 

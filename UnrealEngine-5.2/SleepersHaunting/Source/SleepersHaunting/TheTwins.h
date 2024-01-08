@@ -26,29 +26,29 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		bool IsLeftSided;
+		bool IsLeftSided = false;
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		bool CanAttack;
+		bool CanAttack = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
 		TArray<int32> AccessRooms;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		int32 AttackRoom;
+		int32 AttackRoom = 0;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins", ReplicatedUsing = MoveTwinToWaypoint)
-		int32 CurrentRoomID;
+		int32 CurrentRoomID = 0;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Twins")
-		USkeletalMeshComponent* TwinMesh;
+		USkeletalMeshComponent* TwinMesh = nullptr;
 
 	// Duration for movement cooldown
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		float CDmovementDuration;
+		float CDmovementDuration = 0.0f;
 	// Duration for special attack cooldown
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		float SattackDuration;
+		float SattackDuration = 0.0f;
 	// Duration for attack cooldown
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		float CDattackDuration;
+		float CDattackDuration = 0.0f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		float SsuccessDuration;
+		float SsuccessDuration = 0.0f;
 
 
 	// Function to move the twin to a random connected room
@@ -80,18 +80,19 @@ public:
 	
 	//Classes
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		class ARoomsManager* RoomsManagerInstance;
+		class ARoomsManager* RoomsManagerInstance = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		class ASlideDoors* SlideDoorsInstance;
+		class ASlideDoors* SlideDoorsInstance = nullptr;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Twins")
-		class AGroupAttack* GroupAttackInstance;
+		class AGroupAttack* GroupAttackInstance = nullptr;
 
-
-	class AMyGameState* AMyGameStateInstance;
+	UPROPERTY()
+	class AMyGameState* AMyGameStateInstance = nullptr;
 
 private:
 
-	UWorld* World;
+	UPROPERTY()
+	UWorld* World = nullptr;
 
 	UFUNCTION()
 		void GetAllInstanceClasses();

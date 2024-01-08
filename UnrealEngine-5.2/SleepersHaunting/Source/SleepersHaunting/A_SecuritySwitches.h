@@ -32,13 +32,13 @@ public:
 	TObjectPtr<UStaticMeshComponent> SecuritySwitch;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Garage Handler")
-	class AA_SecurityMonitor* FindSecurityCamera;
+	class AA_SecurityMonitor* FindSecurityCamera = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite);
 	TObjectPtr<UBoxComponent> Collider;
 
 	UPROPERTY()
-	APlayerCharacter* ClosestCharacter;
+	APlayerCharacter* ClosestCharacter = nullptr;
 
 	UPROPERTY()
 	TArray<APlayerCharacter*> Characters;

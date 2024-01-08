@@ -30,5 +30,5 @@ public:
 
 protected:
 	UPROPERTY()
-	UTextBlock* ConditionTextBlock;
+	UTextBlock* ConditionTextBlock = nullptr;
 };

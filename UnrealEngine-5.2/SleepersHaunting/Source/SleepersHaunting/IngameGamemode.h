@@ -57,10 +57,10 @@ class SLEEPERSHAUNTING_API AIngameGamemode : public AGameMode
 
 
 	UPROPERTY()
-	ACharacter* TeamBluePawn;
+	ACharacter* TeamBluePawn = nullptr;
 
 	UPROPERTY()
-	ACharacter* TeamRedPawn;
+	ACharacter* TeamRedPawn = nullptr;
 
 	UPROPERTY()
 	TArray<APlayerStart*> BlueTeamSpawns;

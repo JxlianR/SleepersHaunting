@@ -24,10 +24,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(EditAnywhere, Category = "Timer")
-		float CountdownTime;
+		float CountdownTime = 0.0f;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Timer")
-		bool bWinCondition;
+		bool bWinCondition = false;
 
 	UFUNCTION(BlueprintCallable, Category = "Timer")
 		void StopTimer();
@@ -39,10 +39,10 @@ private:
 		void GetAllInstanceClasses();
 
 	UPROPERTY(Replicated)
-	float ElapsedTime;
+	float ElapsedTime = 0.0f;
 
 	UPROPERTY(Replicated)
-	bool bShouldTick;
+	bool bShouldTick = false;
 
 	// TextRenderComponent for displaying the time
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))

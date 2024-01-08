@@ -13,7 +13,7 @@ struct FWaypointInfo //All Waypoints Info
 	GENERATED_BODY()
 
 		UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		FVector WaypointPosition = FVector(0.0f, 0.0f, 0.0f);
+		FVector WaypointPosition = FVector::ZeroVector;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		bool IsOccupied = false;

@@ -42,10 +42,10 @@ public:
 private:
 	// Index of the current material
 	UPROPERTY(VisibleAnywhere, ReplicatedUsing = SetCubeMaterial)
-	int32 CurrentMaterialIndex;
+	int32 CurrentMaterialIndex = 0;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Cube", meta = (AllowPrivateAccess = "true"))
-		UStaticMeshComponent* CubeMesh;
+		UStaticMeshComponent* CubeMesh = nullptr;
 
 	// Function to set the cube's texture based on the current index
 	UFUNCTION()

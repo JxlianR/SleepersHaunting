@@ -11,7 +11,7 @@ class SLEEPERSHAUNTING_API Observer
 {
 public:
 	Observer();
-	~Observer();
+	virtual ~Observer();
 
 	virtual void Update(const FText& Text) = 0;
 };

@@ -27,13 +27,13 @@ public:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay", Replicated)
-		int32 CountPlayer;
+		int32 CountPlayer = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gameplay")
-		float TimerDuration;
+		float TimerDuration = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
-		UStaticMeshComponent* LobbyMesh;
+		UStaticMeshComponent* LobbyMesh = nullptr;
 private:
 	FTimerHandle LobbyTimerHandle;
 

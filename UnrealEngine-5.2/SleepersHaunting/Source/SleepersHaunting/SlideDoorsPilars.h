@@ -26,7 +26,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = "DoorVariables")
-	bool lockedDoor;
+	bool lockedDoor = false;
 
 	// Function to check if the door is locked
 	UFUNCTION(BlueprintCallable, Category = "DoorFunctions")
@@ -42,10 +42,10 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	USceneComponent* DefaultSceneComponent;
+	USceneComponent* DefaultSceneComponent = nullptr;
 	
 	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* TriggerVolume;
+	UBoxComponent* TriggerVolume = nullptr;
 	
 	// UFUNCTION()
 	// void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -53,7 +53,8 @@ private:
 	// UFUNCTION()
 	// void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	APowerSystem* powerSystemReference;
+	UPROPERTY()
+	APowerSystem* powerSystemReference = nullptr;
 
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 };

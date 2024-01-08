@@ -48,38 +48,39 @@ public:
 		UTextRenderComponent* TextRenderComponent = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
-		float TotalPower;
+		float TotalPower = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Power", Replicated)
-		float CurrentPower;
+		float CurrentPower = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
-		float PowerConsumptionLow;
+		float PowerConsumptionLow = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
-		float PowerConsumptionMedium;
+		float PowerConsumptionMedium = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
-		float PowerConsumptionHigh;
+		float PowerConsumptionHigh = 0.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Power")
-		float PowerLevelPercentage;
+		float PowerLevelPercentage = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
-		float PowerLevelConsumption;
+		float PowerLevelConsumption = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power", Replicated)
-		EPowerLevel CurrentPowerLevel;
+		EPowerLevel CurrentPowerLevel = EPowerLevel::Low;
 
 	UPROPERTY(EditAnywhere, Category = "Power")
-		bool bOnDepletion;
+		bool bOnDepletion = false;
 
-	class AMyGameState* AMyGameStateInstance;
+	UPROPERTY()
+	class AMyGameState* AMyGameStateInstance = nullptr;
 
 private:
 	UFUNCTION()
 		void GetAllInstanceClasses();
 
-	bool bIsStopped;
-	bool bLosingConditionDisplayed;
+	bool bIsStopped = false;
+	bool bLosingConditionDisplayed = false;
 };

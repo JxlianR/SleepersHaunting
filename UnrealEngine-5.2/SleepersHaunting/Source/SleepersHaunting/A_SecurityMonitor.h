@@ -28,7 +28,7 @@ public:
 		TArray<UTextureRenderTarget2D*> CameraRenderTargets;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", ReplicatedUsing = UpdateMonitorView)
-		int32 CurrentCameraIndex;
+		int32 CurrentCameraIndex = 0;
 
 	UFUNCTION(BlueprintCallable, Category = "Camera")
 		void NextCamera();
@@ -40,7 +40,7 @@ public:
 		void UpdateMonitorView();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
-		class ACameraMap* CameraMapInstance1;
+		class ACameraMap* CameraMapInstance1 = nullptr;
 
 	UFUNCTION(BlueprintCallable, Category = "Audio")
 		void PlayMonitorSound();

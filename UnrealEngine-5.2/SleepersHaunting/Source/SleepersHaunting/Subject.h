@@ -12,7 +12,7 @@ class SLEEPERSHAUNTING_API Subject
 {
 public:
 	Subject();
-	~Subject();
+	virtual ~Subject();
 
 	void Attach(Observer* observer);
 	void Detach(Observer* observer);
@@ -21,5 +21,5 @@ protected:
 	void Notify(const FText& Text);
 
 private:
-	TArray<Observer*> observers;
+	TArray<Observer*> Observers;
 };

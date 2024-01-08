@@ -26,7 +26,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = "DoorVariables")
-	bool lockedDoor;
+	bool lockedDoor = false;
 
 	// Function to check if the door is locked
 	UFUNCTION(BlueprintCallable, Category = "DoorFunctions")
@@ -47,16 +47,16 @@ public:
 	void GrabTick(float DeltaTime);
 	
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* MainMeshComponent;
+	UStaticMeshComponent* MainMeshComponent = nullptr;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UStaticMeshComponent* SlideDoorMeshComponent;
+	UStaticMeshComponent* SlideDoorMeshComponent = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* TriggerVolume;
+	UBoxComponent* TriggerVolume = nullptr;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	bool bIsBeingGrabbed;
+	bool bIsBeingGrabbed = false;
 	
 private:
 	UFUNCTION()
@@ -66,9 +66,10 @@ private:
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	UPROPERTY(EditAnywhere);
-	bool bShouldMoveSmoothly;
+	bool bShouldMoveSmoothly = false;
 
-	APowerSystem* powerSystemReference;
+	UPROPERTY()
+	APowerSystem* powerSystemReference = nullptr;
 
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 };

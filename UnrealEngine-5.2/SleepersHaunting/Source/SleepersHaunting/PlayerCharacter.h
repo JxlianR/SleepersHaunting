@@ -33,7 +33,7 @@ class SLEEPERSHAUNTING_API APlayerCharacter : public ACharacter, public Subject
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
-	~APlayerCharacter();
+	virtual ~APlayerCharacter() override;
 	
 	virtual void Jump() override;
 	
@@ -44,55 +44,55 @@ protected:
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputMappingContext* PlayerMappingContext;
+	UInputMappingContext* PlayerMappingContext = nullptr;
 	
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* MoveInputAction;
+	UInputAction* MoveInputAction = nullptr;
 	
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* JumpInputAction;
+	UInputAction* JumpInputAction = nullptr;
 	
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* GrabInputAction;
+	UInputAction* GrabInputAction = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* RightHandGrabInputAction;
+	UInputAction* RightHandGrabInputAction = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* LeftHandGrabInputAction;
+	UInputAction* LeftHandGrabInputAction = nullptr;
 	
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* TestDebugInputAction;
+	UInputAction* TestDebugInputAction = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* CloseLeftSlideDoor;
+	UInputAction* CloseLeftSlideDoor = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* CloseRightSlideDoor;
+	UInputAction* CloseRightSlideDoor = nullptr;
     	
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* UseLeftHandler;
+	UInputAction* UseLeftHandler = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* UseRightHandler;
+	UInputAction* UseRightHandler = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* IncreasePowerAction;
+	UInputAction* IncreasePowerAction = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* StopTwins;
+	UInputAction* StopTwins = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* ResumeTwins;
+	UInputAction* ResumeTwins = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = Input)
-	UInputAction* FGroupAttack;
+	UInputAction* FGroupAttack = nullptr;
 
 	UPROPERTY(EditAnywhere, Replicated)
 	float MovementSpeed = 1.0f;
 
 	UPROPERTY(EditAnywhere)
-	float JumpVelocity;
+	float JumpVelocity = 0.0f;
 
 public:	
 	// Called every frame
@@ -113,25 +113,25 @@ public:
 	FORCEINLINE USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	UPhysicsConstraintComponent* ConstraintComponent;
+	UPhysicsConstraintComponent* ConstraintComponent = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
-	USphereComponent* RightHandSphereCollision;
+	USphereComponent* RightHandSphereCollision = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Collision")
-	USphereComponent* LeftHandSphereCollision;
+	USphereComponent* LeftHandSphereCollision = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Handlers")
-	UPhysicsHandleComponent* LeftPhysicsHandle;
+	UPhysicsHandleComponent* LeftPhysicsHandle = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Handlers")
-	UPhysicsHandleComponent* RightPhysicsHandle;
+	UPhysicsHandleComponent* RightPhysicsHandle = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "IK", meta = (AllowPrivateAccess = "true"))
-	USceneComponent* LeftHandIKTarget;
+	USceneComponent* LeftHandIKTarget = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "IK", meta = (AllowPrivateAccess = "true"))
-	USceneComponent* RightHandIKTarget;
+	USceneComponent* RightHandIKTarget = nullptr;
 	
 	// Constants
 	UPROPERTY(EditDefaultsOnly, Category = "Grabbable")
@@ -146,16 +146,21 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void HandleRoombaDetachedEvent();
-	
-	ASlideDoors* SlideDoorRightRef;
-	
-	ASlideDoors* SlideDoorLeftRef;
-	
-	AGarageHandler* GarageHandlerLeftRef;
-	
-	AGarageHandler* GarageHandlerRightRef;
 
-	APowerSystem* PowerSystem;
+	UPROPERTY()
+	ASlideDoors* SlideDoorRightRef = nullptr;
+
+	UPROPERTY()
+	ASlideDoors* SlideDoorLeftRef = nullptr;
+
+	UPROPERTY()
+	AGarageHandler* GarageHandlerLeftRef = nullptr;
+
+	UPROPERTY()
+	AGarageHandler* GarageHandlerRightRef = nullptr;
+
+	UPROPERTY()
+	APowerSystem* PowerSystem = nullptr;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UEndOfGameUI> Widget;
@@ -172,15 +177,16 @@ public:
 private:
 	/** Top down camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* TopDownCameraComponent;
+	UCameraComponent* TopDownCameraComponent = nullptr;
 
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* CameraBoom;
+	USpringArmComponent* CameraBoom = nullptr;
 
 	//Joao Code---------------------------------------------------------------------------------------
 	//Getting the ARoomManager Class
-	ARoomsManager* RoomManagerVariable;
+	UPROPERTY()
+	ARoomsManager* RoomManagerVariable = nullptr;
 	
 protected:
 	UFUNCTION()
@@ -198,12 +204,13 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool isGrabbing = false;
-	
+
+	UPROPERTY()
 	UPrimitiveComponent* GrabbedComponent = nullptr;
 
 	//Joao Code---------------------------------------------------------------------------------------
 	UPROPERTY(EditAnywhere, Category = "Audio")
-		class USoundCue* CharacterSoundCue;
+		class USoundCue* CharacterSoundCue = nullptr;
 protected:
 	UFUNCTION()
 	void CallRoomManagerDebugFunctions();
@@ -250,7 +257,4 @@ protected:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void ActivateWidgetEvent(const FText& NewText);
-
-	// UFUNCTION(NetMulticast, Reliable)
-	// void ActivateWidget(FText NewText);
 };
