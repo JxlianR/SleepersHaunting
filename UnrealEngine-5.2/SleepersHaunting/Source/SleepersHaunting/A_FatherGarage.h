@@ -61,53 +61,54 @@ public:
 	
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    bool bLosingCondition;
+    bool bLosingCondition = false;
 
     UPROPERTY(Replicatedusing = StartResetTimeline, BlueprintReadOnly)
-    bool bHandler1;
+    bool bHandler1 = false;
 
     UPROPERTY(Replicated = StartResetTimeline, BlueprintReadOnly)
-    bool bHandler2;
+    bool bHandler2 = false;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    UStaticMeshComponent* GarageDoorMesh;
+    UStaticMeshComponent* GarageDoorMesh = nullptr;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    float ZOffset;
+    float ZOffset = 0.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    float OpenDoorDuration;
+    float OpenDoorDuration = 0.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    float ResetDoorDuration;
+    float ResetDoorDuration = 0.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    float CooldownDuration;
+    float CooldownDuration = 0.0f;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
-    UCurveFloat* OpenDoorCurve;
+    UCurveFloat* OpenDoorCurve = nullptr;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
-    UCurveFloat* ResetDoorCurve;
+    UCurveFloat* ResetDoorCurve = nullptr;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    UTimelineComponent* OpenDoorTimeline;
+    UTimelineComponent* OpenDoorTimeline = nullptr;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    UTimelineComponent* ResetDoorTimeline;
+    UTimelineComponent* ResetDoorTimeline = nullptr;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
-    UTimelineComponent* CooldownDoorTimeline;
-	
-	class AMyGameState* AMyGameStateInstance;
+    UTimelineComponent* CooldownDoorTimeline = nullptr;
+
+	UPROPERTY()
+	class AMyGameState* AMyGameStateInstance = nullptr;
 
     // Uncommented-out sections
     // UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
     // UCurveFloat* CooldownCurve;
 
 private:
-    FVector InitialDoorLocation;
-    FVector TargetDoorLocation;
+    FVector InitialDoorLocation = FVector::ZeroVector;
+    FVector TargetDoorLocation = FVector::ZeroVector;
 
     FTimerHandle CooldownTimerHandle;
     FTimerHandle OpenDoorTimerHandle;
