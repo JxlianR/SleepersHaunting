@@ -46,7 +46,7 @@ private:
 
 	// TextRenderComponent for displaying the time
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-		UTextRenderComponent* TextRenderComponent;
+	UTextRenderComponent* TextRenderComponent = nullptr;
 
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 };

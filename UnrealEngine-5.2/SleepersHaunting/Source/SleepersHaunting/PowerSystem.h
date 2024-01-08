@@ -45,7 +45,7 @@ public:
 	void StopPower();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-		UTextRenderComponent* TextRenderComponent;
+		UTextRenderComponent* TextRenderComponent = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Power")
 		float TotalPower;

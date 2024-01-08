@@ -56,7 +56,8 @@ void APowerSystem::Tick(float DeltaTime)
 
 		// Update TextRenderComponent
 		FString PowerInfo = FString::Printf(TEXT("Power: %.0f%%\nLevel: %s"), PowerLevelPercentage, *UEnum::GetValueAsString(CurrentPowerLevel).RightChop(13));
-		TextRenderComponent->SetText(FText::FromString(PowerInfo));
+		if (TextRenderComponent)
+			TextRenderComponent->SetText(FText::FromString(PowerInfo));
 
 		// Check if power is depleted
 		if (CurrentPower <= 0 && !bLosingConditionDisplayed )

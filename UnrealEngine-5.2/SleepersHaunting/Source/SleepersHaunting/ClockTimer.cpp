@@ -22,7 +22,8 @@ void AClockTimer::BeginPlay()
 	Super::BeginPlay();
 	ElapsedTime = 0.0f;
 	GetAllInstanceClasses();
-	TextRenderComponent->SetText(FText::FromString("12:00 AM"));
+	if (TextRenderComponent)
+		TextRenderComponent->SetText(FText::FromString("12:00 AM"));
 }
 
 void AClockTimer::Tick(float DeltaTime)
@@ -37,7 +38,9 @@ void AClockTimer::Tick(float DeltaTime)
 		// Convert the fraction to hours
 		int32 RemainingHours = FMath::RoundToInt(6 * RemainingTimeFraction);
 		FString TimeString = FString::Printf(TEXT("%2d:00 AM"), RemainingHours);
-		TextRenderComponent->SetText(FText::FromString(TimeString));
+
+		if (TextRenderComponent)
+			TextRenderComponent->SetText(FText::FromString(TimeString));
 
 		// If countdown finished
 		if (ElapsedTime >= CountdownTime && !bWinCondition)
