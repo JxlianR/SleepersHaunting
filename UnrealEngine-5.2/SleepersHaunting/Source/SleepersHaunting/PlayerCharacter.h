@@ -171,6 +171,9 @@ public:
 	UPROPERTY()
 	TArray<ATheTwins*> Twins;
 
+	// Checks if Player can jump -> Important when Roomba is attached
+	bool bCanJump = true;
+
 	UFUNCTION(BlueprintCallable, Category = "Audio", NetMulticast, Unreliable)
 		void PlayCharacterSound(AActor* Actor);
 	

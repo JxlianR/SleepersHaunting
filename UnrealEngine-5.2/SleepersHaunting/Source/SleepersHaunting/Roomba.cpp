@@ -41,8 +41,6 @@ ARoomba::ARoomba()
 void ARoomba::BeginPlay()
 {
 	Super::BeginPlay();
-
-	AIController = Cast<AAIController>(GetController());
 	
 	StartLocation = GetActorLocation();
 	GetCharacters();

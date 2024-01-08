@@ -86,6 +86,7 @@ void APlayerCharacter::BeginPlay()
 	
 	// GetCharacterMovement()->AirControl = 0.2f;
 	GetCharacterMovement()->JumpZVelocity = JumpVelocity;
+	bCanJump = true;
 	
 	RoomManagerVariable = Cast<ARoomsManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ARoomsManager::StaticClass()));
 
@@ -520,7 +521,8 @@ void APlayerCharacter::GrabObject(UPrimitiveComponent* InGrabbedComponent, bool 
 
 void APlayerCharacter::Jump()
 {
-	if (CanJump())
+	// Check if Player can jump - First one from APlayerCharacter class (default), second one from us for Roomba
+	if (CanJump() && bCanJump)
 	{
 		Super::Jump();
 
@@ -679,11 +681,13 @@ void APlayerCharacter::HandleRoombaAttachedEvent_Implementation(APlayerCharacter
 {
 	if (Character != this) return;
 	MovementSpeed = 0.5f;
+	bCanJump = false;
 }
 
 void APlayerCharacter::HandleRoombaDetachedEvent_Implementation()
 {
 	MovementSpeed = 1.0f;
+	bCanJump = true;
 }
 
 void APlayerCharacter::ActivateWidgetEvent_Implementation(const FText& NewText)

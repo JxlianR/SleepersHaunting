@@ -14,7 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttachedToPlayer, APlayerCharacte
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDetachedFromPlayer);
 
 UCLASS()
-class SLEEPERSHAUNTING_API ARoomba : public APawn, public IJumpableInterface
+class SLEEPERSHAUNTING_API ARoomba : public AActor, public IJumpableInterface
 {
 	GENERATED_BODY()
 	
