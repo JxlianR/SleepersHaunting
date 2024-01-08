@@ -9,6 +9,7 @@
 #include "TheTwins.h"
 #include "ClockTimer.h"
 #include "PowerSystem.h"
+#include "AudioManager.h"
 
 #include "Engine/World.h"
 #include "EngineUtils.h"
@@ -33,6 +34,7 @@ void AMyGameState::BeginPlay()
 	TheTwinsInstance_1 = nullptr;
 	TheTwinsInstance_2 = nullptr;
 	ClockTimerInstance = nullptr;
+
 
 	GetAllClassesInstances();
 }
@@ -151,6 +153,7 @@ void AMyGameState::StopAllEventsTimers()
 	{
 		RoombaInstance->SetStopped(true);
 	}
+	StopAllSounds();
 }
 
 /*
@@ -186,3 +189,9 @@ void AMyGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 }
 
 
+void AMyGameState::StopAllSounds()
+{
+	// Get a reference to the UAudioManager instance.
+	UAudioManager& AudioManager = UAudioManager::GetInstance();
+	AudioManager.StopAllSounds();
+}

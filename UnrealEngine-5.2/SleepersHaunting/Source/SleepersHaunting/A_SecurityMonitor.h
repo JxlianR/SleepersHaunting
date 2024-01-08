@@ -19,6 +19,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere, Category = "Audio")
+		class USoundCue* MonitorSoundCue = nullptr;
 public:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
@@ -40,6 +42,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
 		class ACameraMap* CameraMapInstance1;
 
+	UFUNCTION(BlueprintCallable, Category = "Audio")
+		void PlayMonitorSound();
 private:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 		TArray<UMaterialInterface*> CameraMaterials;

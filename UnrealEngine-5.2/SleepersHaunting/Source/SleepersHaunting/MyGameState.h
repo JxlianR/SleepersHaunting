@@ -25,10 +25,15 @@ class SLEEPERSHAUNTING_API AMyGameState : public AGameState
 protected:
 	virtual void BeginPlay() override;
 
+
 public:
 	AMyGameState();
 
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+
+
+
+	void StopAllSounds();
 
 	FOnActivateUI OnActivateUIEvent;
  

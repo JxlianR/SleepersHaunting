@@ -3,6 +3,7 @@
 
 #include "A_SecurityMonitor.h"
 #include "CameraMap.h"
+#include "AudioManager.h"
 
 #include "Net/UnrealNetwork.h"
 
@@ -33,6 +34,23 @@ void AA_SecurityMonitor::SetNumCameras()
 	NumCameras = FMath::Min(CameraRenderTargets.Num(), CameraMaterials.Num());
 }
 
+void AA_SecurityMonitor::PlayMonitorSound()
+{
+	// Get a reference to the UAudioManager instance.
+	UAudioManager& AudioManager = UAudioManager::GetInstance();
+
+	if (MonitorSoundCue)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("~Played sound"));
+		// Play the sound using the UAudioManager.
+		AudioManager.PlaySoundAtLocation(MonitorSoundCue, this);
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("APlayerCharacter::PlayCharacterSound - Invalid SoundCue"));
+	}
+}
+
 void AA_SecurityMonitor::NextCamera()
 {
 	CurrentCameraIndex = (CurrentCameraIndex + 1) % NumCameras;
@@ -57,7 +75,7 @@ void AA_SecurityMonitor::UpdateMonitorView()
 {
 	UStaticMeshComponent* MonitorScreenMesh = FindComponentByClass<UStaticMeshComponent>();
 	UWorld* World = GetWorld();
-	
+	PlayMonitorSound();
 	if (MonitorScreenMesh)
 	{
 		if (CurrentCameraIndex >= 0 && CurrentCameraIndex < CameraMaterials.Num())
