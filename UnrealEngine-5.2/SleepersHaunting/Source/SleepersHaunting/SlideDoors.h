@@ -33,11 +33,11 @@ public:
 	bool IsDoorLocked();
 
 	// Function to set the door status to false (unlocked)
-	UFUNCTION(BlueprintCallable, Category = "DoorFunctions")
+	UFUNCTION(BlueprintCallable, Category = "DoorFunctions", Server, Reliable)
 	void SetDoorFalse();
 
 	// Function to set the door status to true (locked)
-	UFUNCTION(BlueprintCallable, Category = "DoorFunctions")
+	UFUNCTION(BlueprintCallable, Category = "DoorFunctions", Server, Reliable)
 	void SetDoorTrue();
 
 	virtual void Grab_Implementation() override;
