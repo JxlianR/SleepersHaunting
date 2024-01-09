@@ -46,16 +46,16 @@ void ASHLobby::Tick(float DeltaTime)
 
 void ASHLobby::ChangeMaterialParameter()
 {
-	if(PostProcessVolume)
-	{
-		PostProcessVolume.
-		UMaterialInstanceDynamic* DynamicMaterialInstance;
-		// Now you can use the Material
-		if(DynamicMaterialInstance)
-		{
-			DynamicMaterialInstance->SetVectorParameterValue(FName("Highlight Color"), FLinearColor(0, 1, 0, 1));
-		}
-	}
+	// if(PostProcessVolume)
+	// {
+	// 	PostProcessVolume.arra
+	// 	UMaterialInstanceDynamic* DynamicMaterialInstance;
+	// 	// Now you can use the Material
+	// 	if(DynamicMaterialInstance)
+	// 	{
+	// 		DynamicMaterialInstance->SetVectorParameterValue(FName("Highlight Color"), FLinearColor(0, 1, 0, 1));
+	// 	}
+	// }
 }
 
 
@@ -79,7 +79,7 @@ void ASHLobby::OnLobbyEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherAc
 			// Start the lobby timer if it's the first player
 			if (CountPlayer == 2)
 			{
-				ChangeMaterialParameter();
+				// ChangeMaterialParameter();
 				StartLobbyTimer();
 			}
 		}
