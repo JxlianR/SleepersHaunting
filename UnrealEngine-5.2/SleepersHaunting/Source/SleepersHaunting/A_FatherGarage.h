@@ -70,7 +70,7 @@ public:
     UPROPERTY(Replicatedusing = StartResetTimeline, BlueprintReadOnly)
     bool bHandler1 = false;
 
-    UPROPERTY(Replicated = StartResetTimeline, BlueprintReadOnly)
+    UPROPERTY(ReplicatedUsing = StartResetTimeline, BlueprintReadOnly)
     bool bHandler2 = false;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
