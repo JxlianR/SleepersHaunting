@@ -20,6 +20,7 @@ public:
 	ASleepersHauntingGameModeBase();
 	//virtual ~ASleepersHauntingGameModeBase() = default; // ~ is a destructor
 
-
+	UFUNCTION()
+	void CallServerTravel();
 
 };

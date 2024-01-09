@@ -11,3 +11,9 @@ ASleepersHauntingGameModeBase::ASleepersHauntingGameModeBase() {
 
 	
 }
+
+void ASleepersHauntingGameModeBase::CallServerTravel()
+{
+	UWorld* World = GetWorld();
+	World->ServerTravel("ModeLel");
+}

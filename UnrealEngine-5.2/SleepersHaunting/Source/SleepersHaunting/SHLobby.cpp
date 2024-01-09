@@ -3,6 +3,8 @@
 
 #include "SHLobby.h"
 
+#include "PlayerCharacter.h"
+#include "SleepersHauntingGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/CapsuleComponent.h"
 #include "Net/UnrealNetwork.h"
@@ -40,7 +42,7 @@ void ASHLobby::Tick(float DeltaTime)
 void ASHLobby::OnLobbyEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// Check if the overlapped actor is a player character
-	ACharacter* PlayerCharacter = Cast<ACharacter>(OtherActor);
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
 	if (PlayerCharacter)
 	{
 		// Check if the overlapped component is a capsule component
@@ -106,8 +108,10 @@ void ASHLobby::StopLobbyTimer()
 
 void ASHLobby::OpenNextLevel()
 {
-	// Open the next level
-	UGameplayStatics::OpenLevel(GetWorld(), FName("Modelel"));
+	// Server Travel to the Main Map
+	ASleepersHauntingGameModeBase* GameMode = Cast<ASleepersHauntingGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GameMode)
+		GameMode->CallServerTravel();
 }
 
 void ASHLobby::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

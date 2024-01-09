@@ -34,10 +34,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 		UStaticMeshComponent* LobbyMesh = nullptr;
+	
 private:
 	FTimerHandle LobbyTimerHandle;
 
-
+	UPROPERTY(EditAnywhere)
+	FString MainLevelName = "";
 
 
 
