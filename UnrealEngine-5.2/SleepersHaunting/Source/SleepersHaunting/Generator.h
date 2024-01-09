@@ -31,7 +31,7 @@ public:
 	void EnergyGain();
 
 	UPROPERTY(BlueprintReadWrite)
-	float energyFloat = 5.0f;
+	float energyFloat = 13.0f;
 
 private:
 	UPROPERTY()
