@@ -33,8 +33,6 @@ ARoomba::ARoomba()
 	// BoxCollider->SetupAttachment(Roomba);
 	//
 	// BoxCollider->OnComponentBeginOverlap.AddDynamic(this, &ARoomba::OnOverlapBegin);
-
-	SetReplicates(true);
 }
 
 // Called when the game starts or when spawned
