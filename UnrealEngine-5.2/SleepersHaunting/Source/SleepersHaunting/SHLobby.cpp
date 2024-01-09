@@ -3,11 +3,16 @@
 
 #include "SHLobby.h"
 
+#include "EngineUtils.h"
 #include "PlayerCharacter.h"
 #include "SleepersHauntingGameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/CapsuleComponent.h"
 #include "Net/UnrealNetwork.h"
+
+#include "Engine/Scene.h"
+#include "Engine/PostProcessVolume.h"
+#include "Components/PostProcessComponent.h"
 
 // Sets default values
 ASHLobby::ASHLobby()
@@ -39,6 +44,21 @@ void ASHLobby::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ASHLobby::ChangeMaterialParameter()
+{
+	if(PostProcessVolume)
+	{
+		PostProcessVolume.
+		UMaterialInstanceDynamic* DynamicMaterialInstance;
+		// Now you can use the Material
+		if(DynamicMaterialInstance)
+		{
+			DynamicMaterialInstance->SetVectorParameterValue(FName("Highlight Color"), FLinearColor(0, 1, 0, 1));
+		}
+	}
+}
+
+
 void ASHLobby::OnLobbyEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	// Check if the overlapped actor is a player character
@@ -59,6 +79,7 @@ void ASHLobby::OnLobbyEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherAc
 			// Start the lobby timer if it's the first player
 			if (CountPlayer == 2)
 			{
+				ChangeMaterialParameter();
 				StartLobbyTimer();
 			}
 		}
@@ -85,6 +106,7 @@ void ASHLobby::OnLobbyExit(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 			// Stop the lobby timer if there are less than 2 players
 			if (CountPlayer < 2)
 			{
+				
 				StopLobbyTimer();
 			}
 		}
